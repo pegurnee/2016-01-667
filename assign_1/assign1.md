@@ -41,4 +41,16 @@
   b. What is the cosine similarity between d1 and d2? What is the cosine similarity between d1 and d3?
   c. What is the euclidean distance based similarity between d1 and d2? What is the euclidean distance based similarity between d1 and d3?
   d. Which similarity measure agrees more with what you expected in part a?
-  
+9.
+  A student record has heterogeneous attributes age, gpa, and grade. The age, gpa, and grade ranges are 10-50, 0-4, and [A, B, C, D], respectively. Two students have the following records:
+    s1 = (20 3.0 C)
+    s2 = (30 2.0 B)
+  a. Transform the records to properly normalized numerical form.
+  b. Find the euclidean distance based similarity between s1 and s1 using the transformed records.
+10.
+  A student record has heterogeneous attributes age, gpa, and grade. The age, gpa, and grade ranges are 10-50, 0-4, and [A, B, C, D], respectively. Two students have the following records:
+    s1 = (20 3.0 C)
+    s2 = (30 2.0 B)
+    s3 = (40 2.0 A)
+  a. Plot the three student records as multi lines using parallel coordinates.
+  b. Show the age-weight scatter plot of animals where ages = [3 5 4 1 6 2 4 8 10] and weights = [20 30 40 10 50 20 30 60 90]
