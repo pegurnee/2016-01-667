@@ -29,6 +29,27 @@ def stdev(arr):
 def sum(arr):
   pass
 
+def percentile(arr, percent):
+  pass
+
+def correlation(arrU, arrV):
+  pass
+
+def euclidean(arrU, arrV):
+  pass
+
+def manhattan(arrU, arrV):
+  pass
+
+def cosine(arrU, arrV):
+  pass
+
+def matching(arrU, arrV):
+  pass
+
+def jacard(arrU, arrV):
+  pass
+
 
 if __name__ == '__main__':
   print(min([1,2,5,-3,7,3.0]))
