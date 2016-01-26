@@ -63,4 +63,13 @@
     s3 & s1 = 7.874007874011811
     as the euclidean distance between s1 & s2 is the smallest among the students, s1 and s2 are the most similar
 7.
+  a.
+    8/10
+  b.
+    3/5
+  c.
+    i. 996/1000
+    ii. 0/4
+    iii. in this situation, Jacard's coefficient gave the most correct result as the people purchased none of the same items, encouraging the thought that they are not alike. matching coefficient gives a false positive of similarity
+8.
   
