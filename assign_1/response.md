@@ -54,3 +54,13 @@
     the correlation is minorly positive, there is a slight trend that as the weight values go up, higher ages are observed
 6.
   a.
+    3.4641016151377544
+  b.
+    16
+  c.
+    s1 & s2 = 3.4641016151377544
+    s2 & s3 = 8.12403840463596
+    s3 & s1 = 7.874007874011811
+    as the euclidean distance between s1 & s2 is the smallest among the students, s1 and s2 are the most similar
+7.
+  
