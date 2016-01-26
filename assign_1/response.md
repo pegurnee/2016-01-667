@@ -49,4 +49,8 @@
     (60, 70, 80, 90, 90)
 5.
   a.
-    
+    0.1954615382218836
+  b.
+    the correlation is minorly positive, there is a slight trend that as the weight values go up, higher ages are observed
+6.
+  a.
