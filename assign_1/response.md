@@ -36,3 +36,17 @@
     median (mean of both values) -> 12
 4.
   a.
+    sort -> [60, 70, 75, 80, 85, 90, 90]
+    max index -> length - 1 = 7 - 1 = 6
+    i.
+      index = ceil(6 * 30 / 100) = ceil(1.8) = 2
+      30th percentile = arr[2] = 75
+    ii.
+      index = ceil(6 * 80 / 100) = ceil(4.8) = 5
+      80th percentile = arr[5] = 90
+  b.
+    five point summary = (min, 25th percentile, median, 75th percentile, max)
+    (60, 70, 80, 90, 90)
+5.
+  a.
+    
