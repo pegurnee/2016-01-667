@@ -4,14 +4,14 @@
     ii. Prediction - forecast the price of stocks
     iii. Pattern analysis - finding items customers purchase together
     iv. Clustering - grouping together similar news articles
-  b.
+  b. NOT COMPLETE
     i. Feature selection - excluding irrelevant data such as identifiers
     ii. Feature construction - create new attributes from original features
     iii. Transformation - formatting raw data to a more usable form
   c.
     supervised learning has an additional step of training the system of what and how to recognize data before the actual algorithm is used with live data that does not exist with unsupervised learning
 2.
-  a.
+  a. NOT COMPLETE
     i. nominal - marital status, color,
     ii. ordinal - age, grade,
     iii. binary - in state, sex, married
@@ -25,6 +25,14 @@
 3.
   a.
     20+10+5+9+14+25+15+9 = 107
-    107 / 8 = 13.375
+    mean => 107 / 8 = 13.375
   b.
-    (20-13.375)+(10-13.375)+(5-13.375)+(9-13.375)+(14-13.375)+(25-13.375)+(15-13.375)+(9-13.375)
+    ((20 - 13.375) ^ 2) + ((10 - 13.375) ^ 2) + ((5 - 13.375) ^ 2) + ((9 - 13.375) ^ 2) + ((14 - 13.375) ^ 2) + ((25 - 13.375) ^ 2) + ((15 - 13.375) ^ 2) + ((9 - 13.375) ^ 2) = 301.875
+    variance => 301.875 / 8 = 37.734375
+    stdev => sqrt(37.734375) = 6.142831187652807
+  c.
+    sort -> [5, 9, 9, 10, 14, 15, 20, 25]
+    middle value(s) -> (10, 14)
+    median (mean of both values) -> 12
+4.
+  a.
