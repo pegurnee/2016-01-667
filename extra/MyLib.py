@@ -49,10 +49,17 @@ def mode(arr):
     else:
       _listing[_elem] = 1
   _keys = _listing.keys()
-  # _max =
-  sorted(_listing, key=lambda _item: )
-  print(_listing)
-  print(sorted(_listing))
+  _max = _listing[_keys[0]]
+
+  for _k in _keys[1:]:
+    if _listing[_k] > _max:
+      _max = _listing[_k]
+
+  _max_k = []
+  for _k in _keys:
+    if _listing[_k] == _max:
+      _max_k.append(_k)
+  return _max_k, _max
 
 def stdev(arr):
   pass
