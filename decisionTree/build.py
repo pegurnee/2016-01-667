@@ -19,11 +19,22 @@ def build(_recs, _atts=None):
     if len(_partitions) == 1:
       _ret_node = DecisionNode(_majority_class(_recs))
     else:
-      
+      _ret_node = DecisionNode(_attribute=_sel_att)
+
+      for _o in _outcomes:
+        _sv = _satisfy(_recs, _sel_att, _o)
+
+        if _sv:
+          _child = build(_sv, _list_minus(_atts, _sel_att))
+        else:
+          _child = DecisionNode(_majority_class(_sv))
+
+        
 
   return _ret_node
 
-
+def _list_minus(_list, _idx):
+  return _list[:_idx] + _list[idx + 1:]
 
 def _best(_recs, _atts):
   pass
