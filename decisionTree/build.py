@@ -29,7 +29,7 @@ def build(_recs, _atts=None):
         else:
           _child = DecisionNode(_majority_class(_sv))
 
-        
+        _ret_node._children[_sel_att] = _child
 
   return _ret_node
 
