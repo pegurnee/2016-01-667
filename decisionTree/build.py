@@ -33,11 +33,32 @@ def build(_recs, _atts=None):
 
   return _ret_node
 
+def _best(_recs, _atts):
+  _decisions = []
+  for _att in _atts:
+    _vals = set([_rec[_att] for _rec in _recs])
+    _groups = []
+    for _v in _vals:
+      _groups.append(len(_satisfy(_recs, _att, _v)))
+
+    _ent = _entropy(_groups)
+
+    _decisions.append((_ent, _vals))
+
+  return sorted(_decisions)[0]
+
+def _entropy(_set):
+  _gini = 0
+
+  _n = sum(_set)
+  for _s in _set:
+    _gini += (_s / _n) ** 2
+
+  return 1 - _gini
+
+
 def _list_minus(_list, _idx):
   return _list[:_idx] + _list[idx + 1:]
-
-def _best(_recs, _atts):
-  pass
 
 def _satisfy(_recs, _attribute, _outcome):
   _ret = []
