@@ -1,6 +1,6 @@
 def minimum(arr):
   _min = arr[0]
-  for _elem in arr:
+  for _elem in arr[1:]:
     if _min > _elem:
       _min = _elem
 
@@ -9,7 +9,7 @@ def minimum(arr):
 def maximum(arr):
   _max = arr[0]
 
-  for _elem in arr:
+  for _elem in arr[1:]:
     if _max < _elem:
       _max = _elem
 
@@ -48,7 +48,8 @@ def mode(arr):
       _listing[_elem] += 1
     else:
       _listing[_elem] = 1
-
+  _keys = _listing.keys()
+  # _max =
   sorted(_listing, key=lambda _item: )
   print(_listing)
   print(sorted(_listing))
