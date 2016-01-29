@@ -10,7 +10,9 @@ def main():
   for _r in _recs:
     print('%s : %s' % (len(_r), _r))
 
-  print(build(_recs))
+  tree = build(_recs, (0, 1, 2, 3, 4))
+
+  tree._print()
 
 if __name__ == '__main__':
   main()

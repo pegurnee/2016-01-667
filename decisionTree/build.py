@@ -19,7 +19,7 @@ def build(_recs, _atts=None):
     if len(_partitions) == 1:
       _ret_node = DecisionNode(_majority_class(_recs))
     else:
-      _ret_node = DecisionNode(_attribute=_sel_att)
+      _ret_node = DecisionNode(None, _attribute=_sel_att)
 
       for _o in _outcomes:
         _sv = _satisfy(_recs, _sel_att, _o)
@@ -29,7 +29,7 @@ def build(_recs, _atts=None):
         else:
           _child = DecisionNode(_majority_class(_sv))
 
-        _ret_node._children[_sel_att] = _child
+        _ret_node._children[_o] = _child
 
   return _ret_node
 
@@ -43,9 +43,9 @@ def _best(_recs, _atts):
 
     _ent = _entropy(_groups)
 
-    _decisions.append((_ent, _vals))
+    _decisions.append([_ent, _att, _vals])
 
-  return sorted(_decisions)[0]
+  return sorted(_decisions)[0][1:]
 
 def _entropy(_set):
   _gini = 0
@@ -56,9 +56,8 @@ def _entropy(_set):
 
   return 1 - _gini
 
-
 def _list_minus(_list, _idx):
-  return _list[:_idx] + _list[idx + 1:]
+  return _list[:_idx] + _list[_idx + 1:]
 
 def _satisfy(_recs, _attribute, _outcome):
   _ret = []
@@ -69,7 +68,7 @@ def _satisfy(_recs, _attribute, _outcome):
 
 def _same_class(_recs):
   _class = _recs[0][-1]
-  for _r in _recs:
+  for _r in _recs[1:]:
     if _class != _r[-1]:
       return False
   return True
