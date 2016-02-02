@@ -1,5 +1,6 @@
 def stdev(_a):
   _tot = 0
+  _mean = mean(_a)
   for _i in _a:
     _subbed = _i - _mean
     _exp = _subbed ** 2
@@ -19,11 +20,16 @@ _mA = mean(a)
 _mB = mean(b)
 _covarSum = 0
 
+print(_mA)
+print(_mB)
+
 for _i in range(len(a)):
   _covarSum += (a[_i] - _mA) * (b[_i] - _mB)
 
 _covar = _covarSum / len(b)
 
 _correl = _covar / (stdev(a) * stdev(b))
+print(stdev(a))
+print(stdev(b))
 
 print(_correl)
