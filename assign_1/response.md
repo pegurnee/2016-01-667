@@ -72,4 +72,13 @@
     ii. 0/4
     iii. in this situation, Jacard's coefficient gave the most correct result as the people purchased none of the same items, encouraging the thought that they are not alike. matching coefficient gives a false positive of similarity
 8.
-  
+  a.
+  b.
+  c.
+  d.
+9.
+  a.
+  b.
+10.
+  a.
+  b.
