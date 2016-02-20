@@ -14,4 +14,4 @@
   c. What is the weighted average class entropy if C is used as the condition?
   d. Which is the best condition? Show the partition of records.
 3.
-  
+  Consider the given training records. Show how the top node of the decision tree will be built. Show quality of possible conditions, best condition, and partition of records for best condition.
