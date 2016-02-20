@@ -3,4 +3,15 @@
   b. Find the shannon's entropy of the grades.
   c. Which of the following set of grades has the highest gini entropy and what is its entropy: {5A, 5B, 5C}, {6A, 5B, 4C}, {10A, 3B, 2C}
 2.
+  A B C class
+  0 1 0 2
+  1 0 1 3
+  1 1 0 2
+  1 1 1 2
+  0 0 0 1
+  a. What is the weighted average class entropy if A is used as the condition?
+  b. What is the weighted average class entropy if B is used as the condition?
+  c. What is the weighted average class entropy if C is used as the condition?
+  d. Which is the best condition? Show the partition of records.
+3.
   
