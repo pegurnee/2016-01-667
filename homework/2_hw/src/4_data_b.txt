@@ -1,0 +1,8 @@
+highschool nonsmoker married    female works   mediumrisk
+college    nonsmoker notmarried female works   lowrisk
+college    nonsmoker married    female works   mediumrisk
+college    smoker    notmarried male   works   undetermined
+college    smoker    notmarried female works   lowrisk
+college    smoker    married    male   works   highrisk
+highschool smoker    notmarried male   works   undetermined
+highschool smoker    married    male   works   highrisk

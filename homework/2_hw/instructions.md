@@ -15,3 +15,8 @@
   d. Which is the best condition? Show the partition of records.
 3.
   Consider the given training records. Show how the top node of the decision tree will be built. Show quality of possible conditions, best condition, and partition of records for best condition.
+4.
+  a. Show how the nodes will be built for the two partitions formed in question 3.
+  b. Show quality of possible conditions, best condition, and partition of records for best condition.
+  c. Show the final decision true.
+5.
