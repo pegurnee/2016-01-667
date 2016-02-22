@@ -35,3 +35,4 @@
   3.5         30            700               3
   3.0         45            650               2
   a. Show normalized records.
+  b. Classify (3.2, 35, 700) using nearest neighbor classifier with euclidean distance, three neighbors, weighted majority rule. Show distances, weights, and class selection.
