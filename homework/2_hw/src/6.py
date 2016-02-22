@@ -41,4 +41,12 @@ if __name__ == '__main__':
 
   raw     = (3.2, 35, 700)
   normed  = make_normal(raw, ranges)
-  print(distances(normed, normal, euclid))
+  distys  = distances(normed, normal, euclid)
+  print(distys)
+
+  _1 = 1 / distys[0]
+  _2 = 1 / distys[3]
+  print(_1)
+  print(1 / distys[2])
+  print(_2)
+  print(_1 + _2)
