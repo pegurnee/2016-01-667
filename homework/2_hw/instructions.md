@@ -20,3 +20,18 @@
   b. Show quality of possible conditions, best condition, and partition of records for best condition.
   c. Show the final decision true.
 5.
+  3   2   10  | 2
+  2   1   2   | 1
+  5   18  9   | 2
+  2   5   4   | 1
+  4   3   2   | 1
+  4   17  12  | 2
+  a. Classify (6, 7, 10) using nearest neighbor classifier with euclidean distance, three neighbors, and weighted majority rule. Show distances, weights, and class selection.
+  b. Classify (4, 9, 5) using nearest neighbor classifier with taxicab distance, four neighbors, and unweighted majority rule. Show distances and class selection.
+6.
+  gpa (0-4)   age (20-60)   score (500-1000)  class
+  3.4         40            600               2
+  2.8         25            800               1
+  3.5         30            700               3
+  3.0         45            650               2
+  a. Show normalized records.
