@@ -9,7 +9,7 @@ public class DecisionTree {
 	
 	private class Record 
 	{
-		private int[] attributes;
+		private int[] attributes; 
 		private int className;
 		
 		private Record(int[] attributes, int className)
@@ -278,7 +278,7 @@ public class DecisionTree {
 		PrintWriter outFile = new PrintWriter(new FileWriter(classifiedFile));
 		
 		int numberRecords = inFile.nextInt();
-		for (int i = 0; i < numberAttributes; i++)
+		for (int i = 0; i < numberRecords; i++)
 		{
 			int[] attributeArray = new int[numberAttributes];
 			
