@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -89,12 +90,17 @@ public class DecisionTree {
 
 	public static void main(String[] args) throws IOException {
 		String inFolder = "in/", outFolder = "out/";
+		String trainingFile = "train1", testingFile = "test1",
+				classifiedFile = "classified1";
 		DecisionTree tree = new DecisionTree();
-		tree.loadTrainingData(inFolder + "train1");
+		tree.loadTrainingData(inFolder + trainingFile);
 		tree.buildTree();
 
-		System.out.println(tree);
-		tree.classifyData(inFolder + "test1", outFolder + "classified1");
+		System.out.println("decision tree:" + tree.root);
+		tree.classifyData(inFolder + testingFile, outFolder + classifiedFile);
+
+		System.out.println("Training Error: " + tree.determineTrainingError(
+			inFolder + trainingFile));
 	}
 
 	private ArrayList<Integer> attributes;
@@ -145,11 +151,10 @@ public class DecisionTree {
 			int className = this.classify(attributeArray);
 			// removed this because we don't need to be printing out all the
 			// attributes
-			/*
-			 * for (int j = 0; j < this.numberAttributes; j++) { String label =
-			 * this.convert(attributeArray[j], j + 1); outFile.print(label + " "
-			 * ); }
-			 */
+			// for (int j = 0; j < this.numberAttributes; j++) {
+			// String label = this.convert(attributeArray[j], j + 1);
+			// outFile.print(label + " ");
+			// }
 
 			String label = this.convert(className, this.numberAttributes + 1);
 			outFile.println(label);
@@ -157,6 +162,48 @@ public class DecisionTree {
 
 		inFile.close();
 		outFile.close();
+	}
+
+	/**
+	 * Determines the training error of a given file.
+	 * 
+	 * @param trainingFile
+	 * @return
+	 * @throws FileNotFoundException
+	 */
+	public double determineTrainingError(String trainingFile)
+			throws FileNotFoundException {
+		Scanner inFile = new Scanner(new File(trainingFile));
+		int numberOfIncorrectlyClassifiedRecords = 0;
+
+		inFile.nextLine(); // ignore the first line (headers)
+
+		for (int i = 0; i < this.numberRecords; i++) {
+			int[] attributeArray = new int[this.numberAttributes];
+
+			for (int j = 0; j < this.numberAttributes; j++) {
+				String label = inFile.next();
+				attributeArray[j] = this.convert(label, j + 1);
+			}
+
+			// retrieve the actual class name
+			String label = inFile.next();
+			int expectedClassName =
+					this.convert(label, this.numberAttributes + 1);
+
+			// determine what the class name would have been
+			int actualClassName = this.classify(attributeArray);
+
+			if (expectedClassName != actualClassName) {
+				numberOfIncorrectlyClassifiedRecords++;
+			}
+		}
+
+		inFile.close();
+
+		double trainingError = numberOfIncorrectlyClassifiedRecords
+								/ (double) this.numberRecords;
+		return trainingError;
 	}
 
 	/**
