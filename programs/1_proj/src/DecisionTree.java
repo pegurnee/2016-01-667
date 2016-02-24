@@ -40,9 +40,34 @@ public class DecisionTree {
 
 		@Override
 		public String toString() {
-			return "\nNode [className="+ this.className + ", condition="
-					+ this.condition + ", left=" + this.left + ", nodeType="
-					+ this.nodeType + ", right=" + this.right + "]";
+			return this.buildChildString(this, 0, -1);
+		}
+
+		/**
+		 * Will return a beautifully formatted String of beauty
+		 *
+		 * @param node
+		 * @param depth
+		 * @param value
+		 * @return
+		 */
+		private String buildChildString(Node node, int depth, int value) {
+			String toReturn = "\n";
+			for (int i = 0; i <= depth; i++) {
+				toReturn += "   ";
+			}
+			if (value >= 0) {
+				toReturn += value + ": ";
+			}
+			if ("internal" == node.nodeType) {
+				toReturn += "attribute " + node.condition + "?";
+
+				toReturn += this.buildChildString(node.left, depth + 1, 0);
+				toReturn += this.buildChildString(node.right, depth + 1, 1);
+			} else {
+				toReturn += "class " + node.className;
+			}
+			return toReturn;
 		}
 	}
 
@@ -57,7 +82,7 @@ public class DecisionTree {
 
 		@Override
 		public String toString() {
-			return "\nRecord [attributes="+ Arrays.toString(this.attributes)
+			return "Record [attributes="+ Arrays.toString(this.attributes)
 					+ ", className=" + this.className + "]";
 		}
 	}
@@ -270,7 +295,7 @@ public class DecisionTree {
 
 	/**
 	 * Altered as the specific attributes are not being used
-	 * 
+	 *
 	 * @param value
 	 * @param column
 	 * @return
