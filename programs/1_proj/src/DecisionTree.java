@@ -491,6 +491,17 @@ public class DecisionTree {
 		return value;
 	}
 
+	private void convertFrequencyToProbabilities(double[] frequency) {
+		double sum = 0;
+		for (int i = 0; i < this.numberClasses; i++) {
+			sum += frequency[i];
+		}
+
+		for (int i = 0; i < this.numberClasses; i++) {
+			frequency[i] /= sum;
+		}
+	}
+
 	private ArrayList<Integer> copyAttributes(ArrayList<Integer> attributes) {
 		ArrayList<Integer> result = new ArrayList<Integer>();
 
@@ -521,16 +532,9 @@ public class DecisionTree {
 	}
 
 	private double entropyFromClassError(ArrayList<Record> records) {
-		double[] frequency = new double[this.numberClasses];
+		double[] frequency = this.getFrequencyOfClasses(records);
 
-		double sum = 0;
-		for (int i = 0; i < this.numberClasses; i++) {
-			sum += frequency[i];
-		}
-
-		for (int i = 0; i < this.numberClasses; i++) {
-			frequency[i] /= sum;
-		}
+		this.convertFrequencyToProbabilities(frequency);
 
 		int maxLocation = 0;
 		for (int i = 1; i < this.numberClasses; i++) {
@@ -545,16 +549,9 @@ public class DecisionTree {
 	private double entropyFromGini(ArrayList<Record> records) {
 		double[] frequency = this.getFrequencyOfClasses(records);
 
+		this.convertFrequencyToProbabilities(frequency);
+
 		double sum = 0;
-		for (int i = 0; i < this.numberClasses; i++) {
-			sum += frequency[i];
-		}
-
-		for (int i = 0; i < this.numberClasses; i++) {
-			frequency[i] /= sum;
-		}
-
-		sum = 0;
 		for (int i = 0; i < this.numberClasses; i++) {
 			sum += (frequency[i] * frequency[i]);
 		}
@@ -563,8 +560,16 @@ public class DecisionTree {
 	}
 
 	private double entropyFromShannon(ArrayList<Record> records) {
+		double[] frequency = this.getFrequencyOfClasses(records);
 
-		return 0;
+		this.convertFrequencyToProbabilities(frequency);
+
+		double sum = 0;
+		for (int i = 0; i < this.numberClasses; i++) {
+			sum += (frequency[i] * this.log2(frequency[i]));
+		}
+
+		return -sum;
 	}
 
 	private double evaluate(ArrayList<Record> records, int attribute) {
@@ -592,6 +597,10 @@ public class DecisionTree {
 			frequency[records.get(i).className - 1] += 1;
 		}
 		return frequency;
+	}
+
+	private double log2(double a) {
+		return Math.log(a) / Math.log(2);
 	}
 
 	private int majorityClass(ArrayList<Record> records) {
