@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -17,7 +18,6 @@ import java.util.Scanner;
  */
 
 public class DecisionTree {
-
 	private class Node {
 		private int className;
 		private int condition;
@@ -88,19 +88,27 @@ public class DecisionTree {
 		}
 	}
 
+	private enum ValidationMethod {
+		LEAVEONEOUT, RANDOM
+	}
+
 	public static void main(String[] args) throws IOException {
 		String inFolder = "in/", outFolder = "out/";
-		String trainingFile = "train1", testingFile = "test1",
-				classifiedFile = "classified1";
+		String trainingFile = inFolder + "train1",
+				testingFile = inFolder + "test1",
+				classifiedFile = outFolder + "classified1";
 		DecisionTree tree = new DecisionTree();
-		tree.loadTrainingData(inFolder + trainingFile);
+		tree.loadTrainingData(trainingFile);
 		tree.buildTree();
 
 		System.out.println("decision tree:" + tree.root);
-		tree.classifyData(inFolder + testingFile, outFolder + classifiedFile);
+		tree.classifyData(testingFile, classifiedFile);
 
-		System.out.println("Training Error: " + tree.determineTrainingError(
-			inFolder + trainingFile));
+		System.out.println(
+			"Training Error: " + tree.determineTrainingError(trainingFile));
+
+		System.out.println("Validation Error (random): " + tree.validate(
+			trainingFile, ValidationMethod.RANDOM));
 	}
 
 	private ArrayList<Integer> attributes;
@@ -166,7 +174,7 @@ public class DecisionTree {
 
 	/**
 	 * Determines the training error of a given file.
-	 * 
+	 *
 	 * @param trainingFile
 	 * @return
 	 * @throws FileNotFoundException
@@ -252,6 +260,25 @@ public class DecisionTree {
 				+ ", \nnumberClasses=" + this.numberClasses
 				+ ", \nnumberRecords=" + this.numberRecords + ", \nrecords="
 				+ this.records + ", \nroot=" + this.root + "]";
+	}
+
+	public double validate(String trainingFile, ValidationMethod choice)
+			throws IOException {
+		double validationError;
+
+		switch (choice) {
+			case RANDOM:
+				int defaultSampleSize = 30;
+				validationError = this.validateWithRandomSampling(trainingFile,
+					defaultSampleSize);
+				break;
+			case LEAVEONEOUT:
+
+			default:
+				validationError = -1;
+		}
+
+		return validationError;
 	}
 
 	private int bestCondition(ArrayList<Record> records,
@@ -535,5 +562,49 @@ public class DecisionTree {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Given a training file and a percent of records to hold aside to validate,
+	 * evaluate the validation error with a randomly selected set of records
+	 * from the set of training records.
+	 *
+	 * @param trainingFile
+	 * @param percentSizeOfValidationSet
+	 * @return
+	 * @throws IOException
+	 */
+	private double validateWithRandomSampling(String trainingFile,
+			double percentSizeOfValidationSet) throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		if (percentSizeOfValidationSet <= 0) {
+			// this shouldn't happen
+		} else if (percentSizeOfValidationSet >= 1) {
+			// this is if the number was not in decimal format i.e. 80 when they
+			// mean 80%
+			percentSizeOfValidationSet /= 100.0;
+		}
+
+		final int numRecords =
+				(int) (percentSizeOfValidationSet * this.records.size());
+		Collections.shuffle(this.records);
+		ArrayList<Record> validationRecords =
+				new ArrayList<>(this.records.subList(0, numRecords));
+		this.records.removeAll(validationRecords);
+
+		this.buildTree();
+		int numberInvalid = 0;
+
+		for (int i = 0; i < validationRecords.size(); i++) {
+			int actualClassName =
+					this.classify(validationRecords.get(i).attributes);
+
+			if (actualClassName != validationRecords.get(i).className) {
+				numberInvalid++;
+			}
+		}
+
+		return numberInvalid / (double) validationRecords.size();
 	}
 }
