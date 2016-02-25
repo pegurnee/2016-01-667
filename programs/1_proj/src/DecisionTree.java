@@ -109,6 +109,8 @@ public class DecisionTree {
 
 		System.out.println("Validation Error (random): " + tree.validate(
 			trainingFile, ValidationMethod.RANDOM));
+		System.out.println("Validation Error (leave-one-out): " + tree.validate(
+			trainingFile, ValidationMethod.LEAVEONEOUT));
 	}
 
 	private ArrayList<Integer> attributes;
@@ -273,7 +275,8 @@ public class DecisionTree {
 					defaultSampleSize);
 				break;
 			case LEAVEONEOUT:
-
+				validationError = this.validateWithLeaveOneOut(trainingFile);
+				break;
 			default:
 				validationError = -1;
 		}
@@ -562,6 +565,26 @@ public class DecisionTree {
 		}
 
 		return true;
+	}
+
+	private double validateWithLeaveOneOut(String trainingFile)
+			throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		int numberInvalid = 0;
+		for (int i = 0; i < this.numberRecords; i++) {
+			Record theOneBeingLeftOut = this.records.remove(0);
+
+			this.buildTree();
+
+			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
+			if (actualClassName != theOneBeingLeftOut.className) {
+				numberInvalid++;
+			}
+
+			this.records.add(theOneBeingLeftOut);
+		}
+		return (numberInvalid / (double) (this.numberRecords - 1));
 	}
 
 	/**
