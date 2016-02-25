@@ -120,24 +120,26 @@ public class DecisionTree {
 	}
 
 	public static void main(String[] args) throws IOException {
+		boolean buildTrace = false;
 		String inFolder = "in/", outFolder = "out/";
 		String trainingFile = inFolder + "train1",
 				testingFile = inFolder + "test1",
 				classifiedFile = outFolder + "classified1";
 		DecisionTree tree = new DecisionTree();
 		tree.loadTrainingData(trainingFile);
-		tree.buildTree();
+		tree.buildTree(buildTrace);
 
 		System.out.println("decision tree:" + tree.root);
 		tree.classifyData(testingFile, classifiedFile);
 
-		System.out.println(
-			"Training Error: " + tree.determineTrainingError(trainingFile));
-
-		System.out.println("Validation Error (random): " + tree.validate(
-			trainingFile, MethodOfValidation.RANDOM));
-		System.out.println("Validation Error (leave-one-out): " + tree.validate(
-			trainingFile, MethodOfValidation.LEAVEONEOUT));
+		// System.out.println(
+		// "Training Error: " + tree.determineTrainingError(trainingFile));
+		//
+		// System.out.println("Validation Error (random): " + tree.validate(
+		// trainingFile, MethodOfValidation.RANDOM));
+		// System.out.println("Validation Error (leave-one-out): " +
+		// tree.validate(
+		// trainingFile, MethodOfValidation.LEAVEONEOUT));
 	}
 
 	private ArrayList<Integer> attributes;
@@ -145,10 +147,11 @@ public class DecisionTree {
 	private int numberAttributes;
 	private int numberClasses;
 	private int numberRecords;
-
 	private ArrayList<Record> records;
 
 	private Node root;
+
+	private boolean traceBuild;
 
 	/**
 	 * answers to question 1 part a
@@ -160,11 +163,15 @@ public class DecisionTree {
 		this.numberRecords = 0;
 		this.numberAttributes = 0;
 		this.numberClasses = 0;
+
 		this.entropyStyle = MethodOfEntropy.GINI;
+		this.traceBuild = false;
+
 	}
 
-	public void buildTree() {
-		this.root = this.build(this.records, this.attributes);
+	public void buildTree(boolean traceBuild) {
+		this.traceBuild = traceBuild;
+		this.buildTree();
 	}
 
 	/**
@@ -351,6 +358,10 @@ public class DecisionTree {
 			ArrayList<Integer> attributes) {
 		Node node = null;
 
+		if (this.traceBuild) {
+			System.out.println("\n" + this.getState());
+		}
+
 		if (this.sameClass(records)) {
 			int className = records.get(0).className;
 
@@ -384,12 +395,37 @@ public class DecisionTree {
 
 				node = new Node("internal", condition, null, null);
 
+				if (this.traceBuild) {
+					// best condition when an internal node is created
+					System.out.println(
+						"Best condition on attribute: "+ node.condition
+										+ ", chosen from " + attributes);
+
+					// records and attributes that are passed on to subtrees
+					// when an internal node is created
+					System.out.println(
+						"Records with value "+ this.convert(0, node.condition)
+										+ ": " + leftRecords);
+					System.out.println(
+						"Records with value "+ this.convert(1, node.condition)
+										+ ": " + rightRecords);
+				}
 				node.left = this.build(leftRecords, leftAttributes);
 				node.right = this.build(rightRecords, rightAttributes);
 			}
 		}
 
+		if (this.traceBuild && ("leaf" == node.nodeType)) {
+			// class name when a leaf is created
+			System.out.println("Leaf node with classname: " + this.convert(
+				node.className, this.numberAttributes + 1));
+
+		}
 		return node;
+	}
+
+	private void buildTree() {
+		this.root = this.build(this.records, this.attributes);
 	}
 
 	private int classify(int[] attributes) {
@@ -643,6 +679,16 @@ public class DecisionTree {
 			frequency[records.get(i).className - 1] += 1;
 		}
 		return frequency;
+	}
+
+	private String getState() {
+		// current records
+		String toReturn = "Remaining Records:" + this.records.toString();
+
+		// current attributes
+		toReturn += "\nRemaining Attributes: " + this.attributes;
+
+		return toReturn;
 	}
 
 	private double log2(double a) {
