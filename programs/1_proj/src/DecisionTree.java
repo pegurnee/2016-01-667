@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -81,23 +80,6 @@ public class DecisionTree {
 			return toReturn;
 		}
 
-		private double getRelativeConfidence() {
-			double[] frequency =
-					DecisionTree.this.getFrequencyOfClasses(this.heldRecords);
-			int sum = 0;
-
-			for (int i = 0; i < frequency.length; i++) {
-				sum += frequency[i];
-			}
-
-			return frequency[this.className - 1] / sum;
-		}
-
-		private double getTotalConfidence() {
-			return this.heldRecords.size()
-					/ (double) DecisionTree.this.numberRecords;
-		}
-
 		private void setRecords(ArrayList<Record> heldRecords) {
 			this.heldRecords = heldRecords;
 		}
@@ -132,14 +114,13 @@ public class DecisionTree {
 		System.out.println("decision tree:" + tree.root);
 		tree.classifyData(testingFile, classifiedFile);
 
-		// System.out.println(
-		// "Training Error: " + tree.determineTrainingError(trainingFile));
-		//
-		// System.out.println("Validation Error (random): " + tree.validate(
-		// trainingFile, MethodOfValidation.RANDOM));
-		// System.out.println("Validation Error (leave-one-out): " +
-		// tree.validate(
-		// trainingFile, MethodOfValidation.LEAVEONEOUT));
+		System.out.println(
+			"Training Error: " + tree.determineTrainingError(trainingFile));
+
+		System.out.println("Validation Error (random): " + tree.validate(
+			trainingFile, MethodOfValidation.RANDOM));
+		System.out.println("Validation Error (leave-one-out): " + tree.validate(
+			trainingFile, MethodOfValidation.LEAVEONEOUT));
 	}
 
 	private ArrayList<Integer> attributes;
@@ -204,15 +185,12 @@ public class DecisionTree {
 			}
 
 			Node destination = this.classifyGetNode(attributeArray);
-			// removed this because we don't need to be printing out all the
-			// attributes
-			// for (int j = 0; j < this.numberAttributes; j++) {
-			// String label = this.convert(attributeArray[j], j + 1);
-			// outFile.print(label + " ");
-			// }
+
 			ArrayList<Record> destinationRecordSet = destination.heldRecords;
 			double[] destinationFrequency =
 					this.getFrequencyOfClasses(destinationRecordSet);
+
+			// Convert to the class name
 			String label = this.convert(destination.className,
 				this.numberAttributes + 1);
 			outFile.println(String.format(classifyFileRecordFormat, label,
@@ -232,10 +210,14 @@ public class DecisionTree {
 	 *
 	 * @param trainingFile
 	 * @return
-	 * @throws FileNotFoundException
+	 * @throws IOException
 	 */
 	public double determineTrainingError(String trainingFile)
-			throws FileNotFoundException {
+			throws IOException {
+		if (this.root == null) {
+			this.loadTrainingData(trainingFile);
+		}
+
 		Scanner inFile = new Scanner(new File(trainingFile));
 		int numberOfIncorrectlyClassifiedRecords = 0;
 
@@ -398,7 +380,7 @@ public class DecisionTree {
 				if (this.traceBuild) {
 					// best condition when an internal node is created
 					System.out.println(
-						"Best condition on attribute: "+ node.condition
+						"Best condition on attribute #"+ node.condition
 										+ ", chosen from " + attributes);
 
 					// records and attributes that are passed on to subtrees
