@@ -29,6 +29,7 @@ public class DecisionTree {
 	private class Node {
 		private int className;
 		private int condition;
+		private ArrayList<Record> heldRecords;
 		private Node left;
 		private final String nodeType;
 		private Node right;
@@ -37,6 +38,7 @@ public class DecisionTree {
 			this.nodeType = nodeType;
 			this.left = left;
 			this.right = right;
+			this.heldRecords = null;
 
 			if (nodeType.equals("internal")) {
 				this.className = -1;
@@ -77,6 +79,27 @@ public class DecisionTree {
 				toReturn += "class " + node.className;
 			}
 			return toReturn;
+		}
+
+		private double getRelativeConfidence() {
+			double[] frequency =
+					DecisionTree.this.getFrequencyOfClasses(this.heldRecords);
+			int sum = 0;
+
+			for (int i = 0; i < frequency.length; i++) {
+				sum += frequency[i];
+			}
+
+			return frequency[this.className - 1] / sum;
+		}
+
+		private double getTotalConfidence() {
+			return this.heldRecords.size()
+					/ (double) DecisionTree.this.numberRecords;
+		}
+
+		private void setRecords(ArrayList<Record> heldRecords) {
+			this.heldRecords = heldRecords;
 		}
 	}
 
@@ -156,6 +179,14 @@ public class DecisionTree {
 		Scanner inFile = new Scanner(new File(testFile));
 		PrintWriter outFile = new PrintWriter(new FileWriter(classifiedFile));
 
+		String classifyFileRecordFormat = "%-7s %-10s %-10s",
+				classifyFileNumberFormat = "%2d / %-2d";
+
+		outFile.println(
+			String.format(classifyFileRecordFormat, "", "node", "class"));
+		outFile.println(String.format(classifyFileRecordFormat, "class",
+			"chance", "chance"));
+
 		int numberRecords = inFile.nextInt();
 		for (int i = 0; i < numberRecords; i++) {
 			int[] attributeArray = new int[this.numberAttributes];
@@ -165,16 +196,24 @@ public class DecisionTree {
 				attributeArray[j] = this.convert(label, j + 1);
 			}
 
-			int className = this.classify(attributeArray);
+			Node destination = this.classifyGetNode(attributeArray);
 			// removed this because we don't need to be printing out all the
 			// attributes
 			// for (int j = 0; j < this.numberAttributes; j++) {
 			// String label = this.convert(attributeArray[j], j + 1);
 			// outFile.print(label + " ");
 			// }
-
-			String label = this.convert(className, this.numberAttributes + 1);
-			outFile.println(label);
+			ArrayList<Record> destinationRecordSet = destination.heldRecords;
+			double[] destinationFrequency =
+					this.getFrequencyOfClasses(destinationRecordSet);
+			String label = this.convert(destination.className,
+				this.numberAttributes + 1);
+			outFile.println(String.format(classifyFileRecordFormat, label,
+				String.format(classifyFileNumberFormat,
+					destinationRecordSet.size(), this.numberRecords),
+				String.format(classifyFileNumberFormat,
+					(int) destinationFrequency[destination.className - 1],
+					destinationRecordSet.size())));
 		}
 
 		inFile.close();
@@ -316,10 +355,12 @@ public class DecisionTree {
 			int className = records.get(0).className;
 
 			node = new Node("leaf", className, null, null);
+			node.setRecords(records);
 		} else if (attributes.isEmpty()) {
 			int className = this.majorityClass(records);
 
 			node = new Node("leaf", className, null, null);
+			node.setRecords(records);
 		} else {
 			int condition = this.bestCondition(records, attributes);
 
@@ -331,6 +372,7 @@ public class DecisionTree {
 				int className = this.majorityClass(records);
 
 				node = new Node("leaf", className, null, null);
+				node.setRecords(records);
 			} else {
 				ArrayList<Integer> leftAttributes =
 						this.copyAttributes(attributes);
@@ -351,6 +393,10 @@ public class DecisionTree {
 	}
 
 	private int classify(int[] attributes) {
+		return this.classifyGetNode(attributes).className;
+	}
+
+	private Node classifyGetNode(int[] attributes) {
 		Node current = this.root;
 
 		while (current.nodeType.equals("internal")) {
@@ -361,7 +407,7 @@ public class DecisionTree {
 			}
 		}
 
-		return current.className;
+		return current;
 	}
 
 	private ArrayList<Record> collect(ArrayList<Record> records, int condition,
