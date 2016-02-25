@@ -18,6 +18,14 @@ import java.util.Scanner;
  */
 
 public class DecisionTree {
+	private enum MethodOfEntropy {
+		CLASSERROR, GINI, SHANNONS
+	}
+
+	private enum MethodOfValidation {
+		LEAVEONEOUT, RANDOM
+	}
+
 	private class Node {
 		private int className;
 		private int condition;
@@ -88,10 +96,6 @@ public class DecisionTree {
 		}
 	}
 
-	private enum ValidationMethod {
-		LEAVEONEOUT, RANDOM
-	}
-
 	public static void main(String[] args) throws IOException {
 		String inFolder = "in/", outFolder = "out/";
 		String trainingFile = inFolder + "train1",
@@ -108,15 +112,17 @@ public class DecisionTree {
 			"Training Error: " + tree.determineTrainingError(trainingFile));
 
 		System.out.println("Validation Error (random): " + tree.validate(
-			trainingFile, ValidationMethod.RANDOM));
+			trainingFile, MethodOfValidation.RANDOM));
 		System.out.println("Validation Error (leave-one-out): " + tree.validate(
-			trainingFile, ValidationMethod.LEAVEONEOUT));
+			trainingFile, MethodOfValidation.LEAVEONEOUT));
 	}
 
 	private ArrayList<Integer> attributes;
+	private final MethodOfEntropy entropyStyle;
 	private int numberAttributes;
 	private int numberClasses;
 	private int numberRecords;
+
 	private ArrayList<Record> records;
 
 	private Node root;
@@ -131,6 +137,7 @@ public class DecisionTree {
 		this.numberRecords = 0;
 		this.numberAttributes = 0;
 		this.numberClasses = 0;
+		this.entropyStyle = MethodOfEntropy.GINI;
 	}
 
 	public void buildTree() {
@@ -264,7 +271,7 @@ public class DecisionTree {
 				+ this.records + ", \nroot=" + this.root + "]";
 	}
 
-	public double validate(String trainingFile, ValidationMethod choice)
+	public double validate(String trainingFile, MethodOfValidation choice)
 			throws IOException {
 		double validationError;
 
@@ -495,15 +502,26 @@ public class DecisionTree {
 	}
 
 	private double entropy(ArrayList<Record> records) {
+		double entropy;
+		switch (this.entropyStyle) {
+			case CLASSERROR:
+				entropy = this.entropyFromClassError(records);
+				break;
+			case GINI:
+				entropy = this.entropyFromGini(records);
+				break;
+			case SHANNONS:
+				entropy = this.entropyFromShannon(records);
+				break;
+			default:
+				entropy = -1;
+				break;
+		}
+		return entropy;
+	}
+
+	private double entropyFromClassError(ArrayList<Record> records) {
 		double[] frequency = new double[this.numberClasses];
-
-		for (int i = 0; i < this.numberClasses; i++) {
-			frequency[i] = 0;
-		}
-
-		for (int i = 0; i < records.size(); i++) {
-			frequency[records.get(i).className - 1] += 1;
-		}
 
 		double sum = 0;
 		for (int i = 0; i < this.numberClasses; i++) {
@@ -511,7 +529,29 @@ public class DecisionTree {
 		}
 
 		for (int i = 0; i < this.numberClasses; i++) {
-			frequency[i] = frequency[i] / sum;
+			frequency[i] /= sum;
+		}
+
+		int maxLocation = 0;
+		for (int i = 1; i < this.numberClasses; i++) {
+			if (frequency[i] > frequency[maxLocation]) {
+				maxLocation = i;
+			}
+		}
+
+		return 1 - frequency[maxLocation];
+	}
+
+	private double entropyFromGini(ArrayList<Record> records) {
+		double[] frequency = this.getFrequencyOfClasses(records);
+
+		double sum = 0;
+		for (int i = 0; i < this.numberClasses; i++) {
+			sum += frequency[i];
+		}
+
+		for (int i = 0; i < this.numberClasses; i++) {
+			frequency[i] /= sum;
 		}
 
 		sum = 0;
@@ -520,6 +560,11 @@ public class DecisionTree {
 		}
 
 		return 1 - sum;
+	}
+
+	private double entropyFromShannon(ArrayList<Record> records) {
+
+		return 0;
 	}
 
 	private double evaluate(ArrayList<Record> records, int attribute) {
@@ -534,6 +579,19 @@ public class DecisionTree {
 								/ records.size());
 
 		return average;
+	}
+
+	private double[] getFrequencyOfClasses(ArrayList<Record> records) {
+		double[] frequency = new double[this.numberClasses];
+
+		for (int i = 0; i < this.numberClasses; i++) {
+			frequency[i] = 0;
+		}
+
+		for (int i = 0; i < records.size(); i++) {
+			frequency[records.get(i).className - 1] += 1;
+		}
+		return frequency;
 	}
 
 	private int majorityClass(ArrayList<Record> records) {
