@@ -1,5 +1,5 @@
 
-public class LoanRiskDecisionTreeDataConverter
+public class ExLoanRiskDecisionTreeDataConverter
 	implements DecisionTreeDataConverterInterface {
 
 	@Override
