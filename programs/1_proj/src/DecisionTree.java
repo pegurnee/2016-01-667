@@ -124,10 +124,12 @@ public class DecisionTree {
 	}
 
 	private ArrayList<Integer> attributes;
+	private final DecisionTreeDataConverterInterface converter;
 	private final MethodOfEntropy entropyStyle;
 	private int numberAttributes;
 	private int numberClasses;
 	private int numberRecords;
+
 	private ArrayList<Record> records;
 
 	private Node root;
@@ -138,6 +140,10 @@ public class DecisionTree {
 	 * answers to question 1 part a
 	 */
 	public DecisionTree() {
+		this(new IntegerDecisionTreeDataConverter());
+	}
+
+	public DecisionTree(DecisionTreeDataConverterInterface converter) {
 		this.root = null;
 		this.records = null;
 		this.attributes = null;
@@ -148,6 +154,7 @@ public class DecisionTree {
 		this.entropyStyle = MethodOfEntropy.GINI;
 		this.traceBuild = false;
 
+		this.converter = converter;
 	}
 
 	public void buildTree(boolean traceBuild) {
@@ -449,10 +456,7 @@ public class DecisionTree {
 	 * @return
 	 */
 	private String convert(int value, int column) {
-		String label;
-
-		label = Integer.toString(value);
-
+		return this.converter.convertFromNumericalValue(value, column);
 		// removed as this convert is not used in the standard mode
 		// if (column == 1) {
 		// if (value == 0) {
@@ -493,8 +497,6 @@ public class DecisionTree {
 		// } else {
 		// label = "undetermined";
 		// }
-
-		return label;
 	}
 
 	/**
@@ -506,53 +508,49 @@ public class DecisionTree {
 	 * @return
 	 */
 	private int convert(String label, int column) {
-		int value;
+		return this.converter.convertToNumericalValue(label, column);
 
-		try {
-			value = Integer.parseInt(label);
-		} catch (NumberFormatException e) {
-			if (column == 1) {
-				if (label.equals("highschool")) {
-					value = 0;
-				} else {
-					value = 1;
-				}
-			} else if (column == 2) {
-				if (label.equals("smoker")) {
-					value = 0;
-				} else {
-					value = 1;
-				}
-			} else if (column == 3) {
-				if (label.equals("married")) {
-					value = 0;
-				} else {
-					value = 1;
-				}
-			} else if (column == 4) {
-				if (label.equals("male")) {
-					value = 0;
-				} else {
-					value = 1;
-				}
-			} else if (column == 5) {
-				if (label.equals("works")) {
-					value = 0;
-				} else {
-					value = 1;
-				}
-			} else if (label.equals("highrisk")) {
-				value = 1;
-			} else if (label.equals("mediumrisk")) {
-				value = 2;
-			} else if (label.equals("lowrisk")) {
-				value = 3;
-			} else {
-				value = 4;
-			}
-		}
+		// if (column == 1) {
+		// if (label.equals("highschool")) {
+		// value = 0;
+		// } else {
+		// value = 1;
+		// }
+		// } else if (column == 2) {
+		// if (label.equals("smoker")) {
+		// value = 0;
+		// } else {
+		// value = 1;
+		// }
+		// } else if (column == 3) {
+		// if (label.equals("married")) {
+		// value = 0;
+		// } else {
+		// value = 1;
+		// }
+		// } else if (column == 4) {
+		// if (label.equals("male")) {
+		// value = 0;
+		// } else {
+		// value = 1;
+		// }
+		// } else if (column == 5) {
+		// if (label.equals("works")) {
+		// value = 0;
+		// } else {
+		// value = 1;
+		// }
+		// } else if (label.equals("highrisk")) {
+		// value = 1;
+		// } else if (label.equals("mediumrisk")) {
+		// value = 2;
+		// } else if (label.equals("lowrisk")) {
+		// value = 3;
+		// } else {
+		// value = 4;
+		// }
+		// }
 
-		return value;
 	}
 
 	private void convertFrequencyToProbabilities(double[] frequency) {
