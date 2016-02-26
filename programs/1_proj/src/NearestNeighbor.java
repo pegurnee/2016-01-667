@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -23,12 +24,20 @@ public class NearestNeighbor {
 			this.attributes = attributes;
 			this.className = className;
 		}
+
+		@Override
+		public String toString() {
+			return "Record [attributes="+ Arrays.toString(this.attributes)
+					+ ", className=" + this.className + "]";
+		}
+
 	}
 
 	public static void main(String[] args) throws IOException {
 		String inFolder = "in/", outFolder = "out/";
 		String trainingFile = inFolder + "train3",
 				testingFile = inFolder + "test3",
+				validationFile = inFolder + "valid3",
 				classifiedFile = outFolder + "classified3";
 
 		NearestNeighbor moore = new NearestNeighbor();
@@ -37,7 +46,7 @@ public class NearestNeighbor {
 
 		moore.classifyData(testingFile, classifiedFile);
 
-		moore.validate(trainingFile);
+		moore.validate(validationFile);
 	}
 
 	private String[] attributeTypes;
@@ -58,8 +67,7 @@ public class NearestNeighbor {
 	 * Response to question 1 part a
 	 */
 	public NearestNeighbor() {
-		this(new ExLoanRiskNearestNeighborDataConverter());
-
+		this(new StudentQualityNearestNeighborDataConverter());
 	}
 
 	public NearestNeighbor(NearestNeighborDataConverterInterface converter) {
@@ -129,6 +137,10 @@ public class NearestNeighbor {
 		for (int i = 0; i < this.numberAttributes; i++) {
 			this.attributeTypes[i] = inFile.next();
 		}
+
+		// need to bring in all of the metadata about the different attributes
+		// oh wait, no i don't that's if the header files looked different and I
+		// wanted to construct the converters in realtime
 
 		this.records = new ArrayList<Record>();
 
