@@ -243,6 +243,32 @@ public class NearestNeighbor {
 		inFile.close();
 	}
 
+	/**
+	 * Given the training file, runs the LeaveOneOut validation method on the
+	 * data
+	 * 
+	 * @param trainingFile
+	 * @return
+	 * @throws IOException
+	 */
+	public double validateWithLeaveOneOut(String trainingFile)
+			throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		int numberInvalid = 0;
+		for (int i = 0; i < this.numberRecords; i++) {
+			Record theOneBeingLeftOut = this.records.remove(0);
+
+			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
+			if (actualClassName != theOneBeingLeftOut.className) {
+				numberInvalid++;
+			}
+
+			this.records.add(theOneBeingLeftOut);
+		}
+		return (numberInvalid / (double) (this.numberRecords - 1));
+	}
+
 	private int classify(double[] attributes) {
 		double[] distance = new double[this.numberRecords];
 		int[] id = new int[this.numberRecords];
