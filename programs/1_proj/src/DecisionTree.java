@@ -114,13 +114,7 @@ public class DecisionTree {
 		System.out.println("decision tree:" + tree.root);
 		tree.classifyData(testingFile, classifiedFile);
 
-		System.out.println(
-			"Training Error: " + tree.determineTrainingError(trainingFile));
-
-		System.out.println("Validation Error (random): " + tree.validate(
-			trainingFile, MethodOfValidation.RANDOM));
-		System.out.println("Validation Error (leave-one-out): " + tree.validate(
-			trainingFile, MethodOfValidation.LEAVEONEOUT));
+		tree.runFullAnalytics(trainingFile);
 	}
 
 	private ArrayList<Integer> attributes;
@@ -295,6 +289,15 @@ public class DecisionTree {
 		}
 
 		inFile.close();
+	}
+
+	public void runFullAnalytics(String trainingFile) throws IOException {
+		System.out.println(
+			"Training Error: " + this.determineTrainingError(trainingFile));
+		System.out.println("Validation Error (random): " + this.validate(
+			trainingFile, MethodOfValidation.RANDOM));
+		System.out.println("Validation Error (leave-one-out): " + this.validate(
+			trainingFile, MethodOfValidation.LEAVEONEOUT));
 	}
 
 	@Override
