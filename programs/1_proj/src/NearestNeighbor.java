@@ -43,6 +43,7 @@ public class NearestNeighbor {
 		NearestNeighbor moore = new NearestNeighbor();
 
 		moore.loadTrainingData(trainingFile);
+		System.out.println(moore.determineTrainingError(trainingFile));
 
 		moore.classifyData(testingFile, classifiedFile);
 
@@ -114,6 +115,55 @@ public class NearestNeighbor {
 
 		inFile.close();
 		outFile.close();
+	}
+
+	/**
+	 * Determines the level of errors in classifying the training records. Funny
+	 * story, but with a weighted majority rule, there will probably never be
+	 * any training errors.
+	 *
+	 * @param trainingFile
+	 * @return
+	 * @throws IOException
+	 */
+	public double determineTrainingError(String trainingFile)
+			throws IOException {
+		if (this.records.isEmpty()) {
+			this.loadTrainingData(trainingFile);
+		}
+		Scanner inFile = new Scanner(new File(trainingFile));
+		int numberOfIncorrectlyClassifiedRecords = 0, numberOfHeaderLines = 3;
+
+		for (int i = 0; i < numberOfHeaderLines; i++) {
+			inFile.nextLine(); // ignore the first few lines (headers)
+		}
+
+		for (int i = 0; i < this.numberRecords; i++) {
+			double[] attributeArray = new double[this.numberAttributes];
+
+			for (int j = 0; j < this.numberAttributes; j++) {
+				String label = inFile.next();
+				attributeArray[j] = this.convert(label, j + 1);
+			}
+
+			// retrieve the actual class name
+			String label = inFile.next();
+			double expectedClassName =
+					this.convert(label, this.numberAttributes + 1);
+
+			// determine what the class name would have been
+			int actualClassName = this.classify(attributeArray);
+
+			if (expectedClassName != actualClassName) {
+				numberOfIncorrectlyClassifiedRecords++;
+			}
+		}
+
+		inFile.close();
+
+		double trainingError = numberOfIncorrectlyClassifiedRecords
+								/ (double) this.numberRecords;
+		return trainingError;
 	}
 
 	/**
