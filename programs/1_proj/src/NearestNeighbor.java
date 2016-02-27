@@ -87,7 +87,7 @@ public class NearestNeighbor {
 		this.distanceMeasure = null;
 		this.majorityRule = null;
 
-		this.traceBuild = false;
+		this.traceBuild = true;
 
 		this.converter = converter;
 	}
@@ -285,18 +285,29 @@ public class NearestNeighbor {
 			System.out.println("Comparative distances: ");
 		}
 		for (int i = 0; i < this.records.size(); i++) {
-			final double currDistance =
+			distance[i] =
 					this.distance(attributes, this.records.get(i).attributes);
-			distance[i] = currDistance;
 			id[i] = i;
 			if (this.traceBuild) {
-				System.out.println(String.format("  %5.2s | %s", currDistance,
-					this.records.get(i).attributes));
+				System.out.println(String.format("  %-14.14s | %s", distance[i],
+					Arrays.toString(this.records.get(i).attributes)));
 			}
 		}
 
 		this.nearestNeighbor(distance, id);
+		if (this.traceBuild) {
+			System.out.println("The neighbors that are nearest: ");
+			for (int i = 0; i < this.numberNeighbors; i++) {
+				System.out.println(String.format("  %-14.14s | %s", distance[i],
+					Arrays.toString(this.records.get(id[i]).attributes)));
+			}
+		}
 		int className = this.majority(id, attributes);
+
+		if (this.traceBuild) {
+			System.out.println(
+				"The class assigned is: " + this.convert(className));
+		}
 
 		return className;
 	}
