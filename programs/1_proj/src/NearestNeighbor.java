@@ -48,6 +48,8 @@ public class NearestNeighbor {
 		moore.classifyData(testingFile, classifiedFile);
 
 		moore.validate(validationFile);
+		System.out.println("Leave one out validation error: "
+							+ moore.validateWithLeaveOneOut(trainingFile));
 	}
 
 	private String[] attributeTypes;
@@ -246,7 +248,7 @@ public class NearestNeighbor {
 	/**
 	 * Given the training file, runs the LeaveOneOut validation method on the
 	 * data
-	 * 
+	 *
 	 * @param trainingFile
 	 * @return
 	 * @throws IOException
@@ -273,7 +275,7 @@ public class NearestNeighbor {
 		double[] distance = new double[this.numberRecords];
 		int[] id = new int[this.numberRecords];
 
-		for (int i = 0; i < this.numberRecords; i++) {
+		for (int i = 0; i < this.records.size(); i++) {
 			distance[i] =
 					this.distance(attributes, this.records.get(i).attributes);
 			id[i] = i;
