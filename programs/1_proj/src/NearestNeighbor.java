@@ -66,6 +66,8 @@ public class NearestNeighbor {
 
 	private ArrayList<Record> records;
 
+	private final boolean traceBuild;
+
 	/**
 	 * Response to question 1 part a
 	 */
@@ -84,6 +86,8 @@ public class NearestNeighbor {
 		this.numberNeighbors = 0;
 		this.distanceMeasure = null;
 		this.majorityRule = null;
+
+		this.traceBuild = false;
 
 		this.converter = converter;
 	}
@@ -275,10 +279,20 @@ public class NearestNeighbor {
 		double[] distance = new double[this.numberRecords];
 		int[] id = new int[this.numberRecords];
 
+		if (this.traceBuild) {
+			System.out.println(
+				"Classifying record: " + Arrays.toString(attributes));
+			System.out.println("Comparative distances: ");
+		}
 		for (int i = 0; i < this.records.size(); i++) {
-			distance[i] =
+			final double currDistance =
 					this.distance(attributes, this.records.get(i).attributes);
+			distance[i] = currDistance;
 			id[i] = i;
+			if (this.traceBuild) {
+				System.out.println(String.format("  %5.2s | %s", currDistance,
+					this.records.get(i).attributes));
+			}
 		}
 
 		this.nearestNeighbor(distance, id);
