@@ -43,13 +43,14 @@ public class NearestNeighbor {
 		NearestNeighbor moore = new NearestNeighbor();
 
 		moore.loadTrainingData(trainingFile);
-		System.out.println(moore.determineTrainingError(trainingFile));
 
 		moore.classifyData(testingFile, classifiedFile);
+		System.out.println("The training error: "
+							+ moore.determineTrainingError(trainingFile) + "%");
 
-		moore.validate(validationFile);
 		System.out.println("Leave one out validation error: "
-							+ moore.validateWithLeaveOneOut(trainingFile));
+							+ moore.validateWithLeaveOneOut(trainingFile)
+							+ "%");
 	}
 
 	private String[] attributeTypes;
@@ -66,7 +67,7 @@ public class NearestNeighbor {
 
 	private ArrayList<Record> records;
 
-	private final boolean traceBuild;
+	private boolean traceBuild;
 
 	/**
 	 * Response to question 1 part a
@@ -87,7 +88,7 @@ public class NearestNeighbor {
 		this.distanceMeasure = null;
 		this.majorityRule = null;
 
-		this.traceBuild = true;
+		this.traceBuild = false;
 
 		this.converter = converter;
 	}
@@ -103,6 +104,9 @@ public class NearestNeighbor {
 			throws IOException {
 		Scanner inFile = new Scanner(new File(testFile));
 		PrintWriter outFile = new PrintWriter(new FileWriter(classifiedFile));
+
+		// lets watch the build
+		this.traceBuild = true;
 
 		int numberRecords = inFile.nextInt();
 		for (int i = 0; i < numberRecords; i++) {
@@ -121,6 +125,9 @@ public class NearestNeighbor {
 
 		inFile.close();
 		outFile.close();
+
+		// lets stop tracing
+		this.traceBuild = false;
 	}
 
 	/**
@@ -167,7 +174,7 @@ public class NearestNeighbor {
 
 		inFile.close();
 
-		double trainingError = numberOfIncorrectlyClassifiedRecords
+		double trainingError = (numberOfIncorrectlyClassifiedRecords * 100)
 								/ (double) this.numberRecords;
 		return trainingError;
 	}
@@ -259,6 +266,7 @@ public class NearestNeighbor {
 	 */
 	public double validateWithLeaveOneOut(String trainingFile)
 			throws IOException {
+
 		this.loadTrainingData(trainingFile);
 
 		int numberInvalid = 0;
@@ -272,7 +280,8 @@ public class NearestNeighbor {
 
 			this.records.add(theOneBeingLeftOut);
 		}
-		return (numberInvalid / (double) (this.numberRecords - 1));
+
+		return ((numberInvalid * 100.0) / (this.numberRecords - 1));
 	}
 
 	private int classify(double[] attributes) {
@@ -306,7 +315,7 @@ public class NearestNeighbor {
 
 		if (this.traceBuild) {
 			System.out.println(
-				"The class assigned is: " + this.convert(className));
+				"The class assigned is: " + this.convert(className) + "\n");
 		}
 
 		return className;
