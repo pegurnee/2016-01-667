@@ -2,16 +2,10 @@
 public class BankLoanNearestNeighborDataConverter
 	implements NearestNeighborDataConverterInterface {
 
-	/*
-	 * credit score: 500-900 income: 30k-90k age: 30-80 sex: male, female
-	 * marital status: single, divorced, married class: low risk, medium risk,
-	 * high risk, undetermined
-	 *
-	 *
-	 */
+	private final int[][] ranges = { { 500, 900 }, { 30, 90 }, { 30, 80 } };
+
 	@Override
 	public String convertFromNumericalValue(int value) {
-		// TODO Auto-generated method stub
 		String label;
 		switch (value) {
 			case 1:
@@ -33,8 +27,44 @@ public class BankLoanNearestNeighborDataConverter
 
 	@Override
 	public double convertToNumericalValue(String label, int column) {
-		// TODO Auto-generated method stub
-		return 0;
+		double value;
+		switch (column) {
+			case 1:
+			case 2:
+			case 3:
+				value = this.normalize(Double.parseDouble(label),
+					this.ranges[column - 1][0], this.ranges[column - 1][0]);
+				break;
+			case 4:
+			case 5:
+			case 6:
+			default:
+				switch (label) {
+					case "male":
+					case "single":
+					case "low":
+						value = 1;
+						break;
+					case "female":
+					case "married":
+					case "medium":
+						value = 2;
+						break;
+					case "divorced":
+					case "high":
+						value = 3;
+						break;
+					case "undetermined":
+					default:
+						value = 4;
+				}
+
+		}
+		return value;
+	}
+
+	private double normalize(double x, double min, double max) {
+		return (x - min) / (max - min);
 	}
 
 }
