@@ -5,16 +5,17 @@ public class BankLoanClassification {
 		NearestNeighbor moore =
 				new NearestNeighbor(new BankLoanNearestNeighborDataConverter());
 
-		boolean buildTrace = false;
 		String inFolder = "in/", outFolder = "out/";
 		String trainingFile = inFolder + "train4",
 				testingFile = inFolder + "test4",
-				validationFile = inFolder + "valid4",
 				classifiedFile = outFolder + "classified4";
 
 		moore.loadTrainingData(trainingFile);
 
 		moore.classifyData(testingFile, classifiedFile);
+
+		moore.determineTrainingError(trainingFile);
+		System.out.println(moore.validateWithLeaveOneOut(trainingFile));
 
 	}
 }

@@ -33,7 +33,7 @@ public class BankLoanNearestNeighborDataConverter
 			case 2:
 			case 3:
 				value = this.normalize(Double.parseDouble(label),
-					this.ranges[column - 1][0], this.ranges[column - 1][0]);
+					this.ranges[column - 1][0], this.ranges[column - 1][1]);
 				break;
 			case 4:
 			case 5:
