@@ -17,5 +17,7 @@ public class BankLoanClassification {
 		moore.determineTrainingError(trainingFile);
 		System.out.println(moore.validateWithLeaveOneOut(trainingFile));
 
+		moore.optimizeNeighbors(trainingFile);
+
 	}
 }

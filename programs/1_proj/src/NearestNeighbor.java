@@ -226,6 +226,35 @@ public class NearestNeighbor {
 		inFile.close();
 	}
 
+	/**
+	 * This is what it has come to. This monstrosity.
+	 *
+	 * @param trainingFile
+	 * @throws IOException
+	 */
+	public void optimizeNeighbors(String trainingFile) throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		final int size = this.records.size();
+		double[] rates = new double[size];
+		for (int i = 0; i < size; i++) {
+			this.numberNeighbors = i;
+
+			rates[i] = this.validateWithLeaveOneOut();
+		}
+
+		int minIndex = 0;
+		for (int i = 1; i < rates.length; i++) {
+			if (rates[i] < rates[minIndex]) {
+				minIndex = i;
+			}
+		}
+
+		System.out.println("The optimal number for weighted is: "+ minIndex
+							+ "\n\tat a validation error of "
+							+ rates[minIndex]);
+	}
+
 	public void validate(String validationFile) throws IOException {
 		Scanner inFile = new Scanner(new File(validationFile));
 
@@ -269,19 +298,7 @@ public class NearestNeighbor {
 
 		this.loadTrainingData(trainingFile);
 
-		int numberInvalid = 0;
-		for (int i = 0; i < this.numberRecords; i++) {
-			Record theOneBeingLeftOut = this.records.remove(0);
-
-			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
-			if (actualClassName != theOneBeingLeftOut.className) {
-				numberInvalid++;
-			}
-
-			this.records.add(theOneBeingLeftOut);
-		}
-
-		return ((numberInvalid * 100.0) / (this.numberRecords - 1));
+		return this.validateWithLeaveOneOut();
 	}
 
 	private int classify(double[] attributes) {
@@ -418,5 +435,21 @@ public class NearestNeighbor {
 				}
 			}
 		}
+	}
+
+	private double validateWithLeaveOneOut() {
+		int numberInvalid = 0;
+		for (int i = 0; i < this.numberRecords; i++) {
+			Record theOneBeingLeftOut = this.records.remove(0);
+
+			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
+			if (actualClassName != theOneBeingLeftOut.className) {
+				numberInvalid++;
+			}
+
+			this.records.add(theOneBeingLeftOut);
+		}
+
+		return ((numberInvalid * 100.0) / (this.numberRecords - 1));
 	}
 }
