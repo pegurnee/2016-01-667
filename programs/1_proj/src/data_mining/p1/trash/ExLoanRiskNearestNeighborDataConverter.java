@@ -1,3 +1,7 @@
+package data_mining.p1.trash;
+
+
+import data_mining.p1.converters.NearestNeighborDataConverterInterface;
 
 public class ExLoanRiskNearestNeighborDataConverter
 	implements NearestNeighborDataConverterInterface {

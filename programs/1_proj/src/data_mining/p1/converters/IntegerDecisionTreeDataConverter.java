@@ -1,3 +1,4 @@
+package data_mining.p1.converters;
 
 public class IntegerDecisionTreeDataConverter
 	implements DecisionTreeDataConverterInterface {

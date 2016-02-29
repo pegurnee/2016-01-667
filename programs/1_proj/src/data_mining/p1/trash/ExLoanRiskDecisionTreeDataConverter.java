@@ -1,3 +1,7 @@
+package data_mining.p1.trash;
+
+
+import data_mining.p1.converters.DecisionTreeDataConverterInterface;
 
 public class ExLoanRiskDecisionTreeDataConverter
 	implements DecisionTreeDataConverterInterface {

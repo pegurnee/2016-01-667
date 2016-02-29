@@ -1,3 +1,4 @@
+package data_mining.p1.trash;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

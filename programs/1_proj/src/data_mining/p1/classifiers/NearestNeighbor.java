@@ -1,3 +1,4 @@
+package data_mining.p1.classifiers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -5,6 +6,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import data_mining.p1.converters.NearestNeighborDataConverterInterface;
+import data_mining.p1.converters.StudentQualityNearestNeighborDataConverter;
 
 /**
  * Decision tree class, original code presented by Dr Suchindran Maniccam.

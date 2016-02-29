@@ -1,4 +1,8 @@
+package data_mining.p1.drivers;
 import java.io.IOException;
+
+import data_mining.p1.classifiers.DecisionTree;
+import data_mining.p1.converters.JavaResumeDecisionTreeDataConverter;
 
 public class JavaResumeClassification {
 	public static void main(String[] args) throws IOException {
