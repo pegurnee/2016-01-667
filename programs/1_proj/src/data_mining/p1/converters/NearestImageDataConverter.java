@@ -6,4 +6,8 @@ public class NearestImageDataConverter {
 		return ch == '1';
 	}
 
+	public char convertToCharacterValue(boolean value) {
+		return value ? '1' : '0';
+	}
+
 }
