@@ -64,7 +64,6 @@ public class NearestImageNeighbor {
 	private final String distanceMeasure;
 	private final String majorityRule;
 
-	private final int numberAttributes;
 	private final int numberClasses;
 	private int numberNeighbors;
 
@@ -74,9 +73,6 @@ public class NearestImageNeighbor {
 
 	private boolean traceBuild;
 
-	/**
-	 * Response to question 1 part a
-	 */
 	public NearestImageNeighbor() {
 		this(new NearestImageDataConverter());
 	}
@@ -85,7 +81,6 @@ public class NearestImageNeighbor {
 		this.records = null;
 
 		this.numberRecords = 0;
-		this.numberAttributes = 0;
 		this.numberClasses = 0;
 
 		this.numberNeighbors = 0;
