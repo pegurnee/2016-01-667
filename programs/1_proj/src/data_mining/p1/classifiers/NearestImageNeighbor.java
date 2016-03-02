@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 import data_mining.p1.converters.NearestImageDataConverter;
@@ -49,9 +50,9 @@ public class NearestImageNeighbor {
 				"i8", "i9", "i10", "i11", "i12", "i13", "i14", "i15", "i16",
 				"i17", "i18", "i19", "i20", "i21", "i22", "i23", "i24", "i25" };
 
-		NearestNeighbor moore = new NearestNeighbor();
+		NearestImageNeighbor moore = new NearestImageNeighbor();
 
-		moore.loadTrainingData(trainingFile);
+		moore.loadImageTrainingData(trainingFile);
 
 		moore.classifyData(testingFile, classifiedFile);
 
@@ -111,6 +112,38 @@ public class NearestImageNeighbor {
 
 		// lets stop tracing
 		this.traceBuild = false;
+	}
+
+	public void distributeRandomImages(String trainingFile) throws IOException {
+		this.loadImageTrainingData(trainingFile);
+		final int numberOfTestFiles = 25;
+
+		Collections.shuffle(this.records);
+
+		ArrayList<Record> outbound = new ArrayList<>();
+		for (int i = 0; i < numberOfTestFiles; i++) {
+			outbound.add(this.records.remove(0));
+		}
+
+		PrintWriter outFile =
+				new PrintWriter(new FileWriter(trainingFile + "new"));
+		for (Record record : this.records) {
+			outFile.println(record.className);
+			final boolean[][] writeData = record.attributes;
+
+			this.writeToFileImageData(outFile, writeData);
+		}
+
+		outFile.close();
+		int count = 1;
+		for (Record record : outbound) {
+			outFile = new PrintWriter(new FileWriter("i" + count++));
+
+			this.writeToFileImageData(outFile, record.attributes);
+
+			outFile.close();
+		}
+
 	}
 
 	public void loadImageTrainingData(String trainingFile)
@@ -209,6 +242,10 @@ public class NearestImageNeighbor {
 		}
 
 		return className;
+	}
+
+	private char convert(boolean value) {
+		return this.converter.convertToCharacterValue(value);
 	}
 
 	private boolean convert(char value) {
@@ -323,5 +360,15 @@ public class NearestImageNeighbor {
 		}
 
 		return ((numberInvalid * 100.0) / (this.numberRecords - 1));
+	}
+
+	private void writeToFileImageData(PrintWriter outFile,
+			final boolean[][] writeData) {
+		for (int r = 0; r < writeData.length; r++) {
+			for (int c = 0; c < writeData[r].length; c++) {
+				outFile.print(this.convert(writeData[r][c]));
+			}
+			outFile.println();
+		}
 	}
 }
