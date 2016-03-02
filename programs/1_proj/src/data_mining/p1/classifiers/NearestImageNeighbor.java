@@ -54,7 +54,9 @@ public class NearestImageNeighbor {
 
 		moore.loadImageTrainingData(trainingFile);
 
-		moore.classifyData(testingFile, classifiedFile);
+		moore.distributeRandomImages(trainingFile);
+
+		// moore.classifyData(testingFile, classifiedFile);
 
 		System.out.println("Leave one out validation error: "
 							+ moore.validateWithLeaveOneOut(trainingFile)
@@ -85,7 +87,7 @@ public class NearestImageNeighbor {
 		this.numberClasses = 0;
 
 		this.numberNeighbors = 0;
-		this.distanceMeasure = null;
+		this.distanceMeasure = "jacard";
 		this.majorityRule = null;
 
 		this.traceBuild = false;
