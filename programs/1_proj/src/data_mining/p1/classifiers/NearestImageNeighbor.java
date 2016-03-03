@@ -42,10 +42,10 @@ public class NearestImageNeighbor {
 	private final static int SIZE_OF_IMAGE = 20;
 
 	public static void main(String[] args) throws IOException {
-		String inFolder = "in/", outFolder = "out/";
-		String trainingFile = inFolder + "formatted.txt",
-				testingFile = inFolder + "test3",
-				classifiedFile = outFolder + "imagey";
+		String inFolder = "in/", outFolder = "out/",
+				imageFolder = inFolder + "images/";
+		String trainingFile = inFolder + "imageTrain",
+				classifiedFile = outFolder + "classifiedImages";
 		String[] testingFiles = { "i1", "i2", "i3", "i4", "i5", "i6", "i7",
 				"i8", "i9", "i10", "i11", "i12", "i13", "i14", "i15", "i16",
 				"i17", "i18", "i19", "i20", "i21", "i22", "i23", "i24", "i25" };
@@ -53,14 +53,11 @@ public class NearestImageNeighbor {
 		NearestImageNeighbor moore = new NearestImageNeighbor();
 
 		moore.loadImageTrainingData(trainingFile);
+		System.out.println(
+			"Loaded all " + moore.numberRecords + " training data");
 
-		moore.distributeRandomImages(trainingFile);
-
-		// moore.classifyData(testingFile, classifiedFile);
-
-		System.out.println("Leave one out validation error: "
-							+ moore.validateWithLeaveOneOut(trainingFile)
-							+ "%");
+		moore.classifyData(imageFolder, testingFiles, classifiedFile);
+		System.out.println("Classified all data");
 	}
 
 	private final NearestImageDataConverter converter;
@@ -70,11 +67,11 @@ public class NearestImageNeighbor {
 	private final int numberClasses;
 	private int numberNeighbors;
 
-	private final int numberRecords;
+	private int numberRecords;
 
 	private ArrayList<Record> records;
 
-	private boolean traceBuild;
+	private final boolean traceBuild;
 
 	public NearestImageNeighbor() {
 		this(new NearestImageDataConverter());
@@ -84,36 +81,40 @@ public class NearestImageNeighbor {
 		this.records = null;
 
 		this.numberRecords = 0;
-		this.numberClasses = 0;
+		this.numberClasses = 10;
 
-		this.numberNeighbors = 0;
+		this.numberNeighbors = 100;
 		this.distanceMeasure = "jacard";
-		this.majorityRule = null;
+		this.majorityRule = "weighted";
 
 		this.traceBuild = false;
 
 		this.converter = converter;
 	}
 
-	public void classifyData(String testFile, String classifiedFile)
-			throws IOException {
-		Scanner inFile = new Scanner(new File(testFile));
+	public void classifyData(String testFolder, String[] testFiles,
+			String classifiedFile) throws IOException {
+
 		PrintWriter outFile = new PrintWriter(new FileWriter(classifiedFile));
 
-		// lets watch the build
-		this.traceBuild = true;
+		for (String testFile : testFiles) {
+			final String pathname = testFolder + testFile;
+
+			int className = this.classifyImageFile(pathname);
+			outFile.println(testFile + " is probably the number " + className);
+		}
+
+		outFile.close();
+	}
+
+	public int classifyImageFile(final String pathname)
+			throws FileNotFoundException {
+		Scanner inFile = new Scanner(new File(pathname));
 
 		boolean[][] imageArray = this.getImageArray(inFile);
-
 		int className = this.classify(imageArray);
-
-		outFile.println(className);
-
 		inFile.close();
-		outFile.close();
-
-		// lets stop tracing
-		this.traceBuild = false;
+		return className;
 	}
 
 	public void distributeRandomImages(String trainingFile) throws IOException {
@@ -148,7 +149,7 @@ public class NearestImageNeighbor {
 
 	}
 
-	public void loadImageTrainingData(String trainingFile)
+	public int loadImageTrainingData(String trainingFile)
 			throws FileNotFoundException {
 		Scanner inFile = new Scanner(new File(trainingFile));
 
@@ -163,6 +164,9 @@ public class NearestImageNeighbor {
 		}
 
 		inFile.close();
+
+		this.numberRecords = this.records.size();
+		return this.numberClasses;
 	}
 
 	/**
@@ -311,14 +315,13 @@ public class NearestImageNeighbor {
 
 		if (this.majorityRule.equals("unweighted")) {
 			for (int i = 0; i < this.numberNeighbors; i++) {
-				frequency[this.records.get(id[i]).className - 1] += 1;
+				frequency[this.records.get(id[i]).className] += 1;
 			}
 		} else {
 			for (int i = 0; i < this.numberNeighbors; i++) {
 				double d = this.distance(this.records.get(id[i]).attributes,
 					attributes);
-				frequency[this.records.get(id[i]).className - 1] +=
-						1 / (d + 0.001);
+				frequency[this.records.get(id[i]).className] += 1 / (d + 0.001);
 			}
 		}
 
@@ -329,7 +332,7 @@ public class NearestImageNeighbor {
 			}
 		}
 
-		return maxIndex + 1;
+		return maxIndex;
 	}
 
 	private void nearestNeighbor(double[] distance, int[] id) {
