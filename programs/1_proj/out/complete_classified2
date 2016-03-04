@@ -1,0 +1,54 @@
+        node       class     
+class   chance     chance    
+no       3 / 42     3 / 3    
+hire     6 / 42     6 / 6    
+hire     1 / 42     1 / 1    
+hire     3 / 42     3 / 3    
+no       3 / 42     3 / 3    
+hire     3 / 42     3 / 3    
+no       6 / 42     6 / 6    
+no       1 / 42     1 / 1    
+hire     1 / 42     1 / 1    
+hire     6 / 42     6 / 6    
+
+decision tree: DecisionTree [
+attributes=[1, 2, 3, 4, 5, 6], 
+numberAttributes=6, 
+numberClasses=2, 
+numberRecords=42, 
+records=[Record [attributes=[1, 1, 1, 1, 1, 1], className=1], Record [attributes=[1, 1, 0, 1, 1, 0], className=1], Record [attributes=[0, 1, 0, 1, 0, 1], className=2], Record [attributes=[0, 1, 1, 1, 0, 1], className=2], Record [attributes=[0, 0, 0, 0, 1, 0], className=2], Record [attributes=[0, 1, 1, 1, 1, 1], className=1], Record [attributes=[1, 1, 0, 0, 0, 0], className=2], Record [attributes=[0, 1, 1, 0, 0, 0], className=2], Record [attributes=[1, 1, 1, 1, 0, 1], className=2], Record [attributes=[1, 0, 1, 0, 1, 1], className=1], Record [attributes=[0, 0, 0, 1, 0, 0], className=1], Record [attributes=[0, 1, 0, 0, 1, 1], className=1], Record [attributes=[1, 0, 0, 1, 1, 1], className=2], Record [attributes=[1, 0, 1, 0, 1, 0], className=1], Record [attributes=[0, 1, 0, 1, 0, 0], className=2], Record [attributes=[1, 0, 1, 1, 0, 1], className=2], Record [attributes=[1, 1, 1, 0, 1, 1], className=2], Record [attributes=[0, 1, 1, 0, 1, 0], className=1], Record [attributes=[0, 0, 1, 0, 0, 0], className=1], Record [attributes=[0, 0, 1, 0, 1, 0], className=1], Record [attributes=[1, 0, 1, 0, 0, 1], className=2], Record [attributes=[1, 1, 1, 0, 0, 0], className=2], Record [attributes=[1, 1, 0, 1, 1, 1], className=1], Record [attributes=[0, 0, 1, 1, 1, 0], className=1], Record [attributes=[0, 1, 0, 1, 1, 0], className=1], Record [attributes=[1, 1, 1, 0, 1, 0], className=2], Record [attributes=[0, 1, 1, 0, 0, 1], className=2], Record [attributes=[0, 1, 0, 1, 1, 1], className=1], Record [attributes=[1, 0, 1, 0, 0, 0], className=1], Record [attributes=[0, 1, 0, 0, 0, 0], className=2], Record [attributes=[1, 1, 0, 0, 1, 0], className=2], Record [attributes=[1, 0, 1, 1, 0, 0], className=1], Record [attributes=[1, 1, 0, 0, 0, 1], className=2], Record [attributes=[1, 0, 0, 0, 1, 1], className=2], Record [attributes=[1, 1, 1, 1, 0, 0], className=1], Record [attributes=[1, 0, 0, 0, 0, 0], className=2], Record [attributes=[0, 0, 1, 1, 1, 1], className=2], Record [attributes=[1, 1, 0, 1, 0, 1], className=1], Record [attributes=[0, 0, 0, 1, 0, 1], className=2], Record [attributes=[0, 0, 1, 0, 1, 1], className=2], Record [attributes=[0, 1, 1, 0, 1, 1], className=1], Record [attributes=[0, 0, 1, 1, 0, 1], className=2]], 
+root=
+   attribute 5?
+      0: attribute 6?
+         0: attribute 2?
+            0: attribute 3?
+               0: attribute 1?
+                  0: class 1
+                  1: class 2
+               1: class 1
+            1: attribute 4?
+               0: class 2
+               1: attribute 1?
+                  0: class 2
+                  1: class 1
+         1: attribute 3?
+            0: attribute 1?
+               0: class 2
+               1: class 1
+            1: class 2
+      1: attribute 2?
+         0: attribute 3?
+            0: class 2
+            1: attribute 6?
+               0: class 1
+               1: attribute 1?
+                  0: class 2
+                  1: class 1
+         1: attribute 1?
+            0: class 1
+            1: attribute 4?
+               0: class 2
+               1: class 1]
+Training Error: 0.023809523809523808
+Validation Error (random): 0.3333333333333333
+Validation Error (leave-one-out): 0.36585365853658536
