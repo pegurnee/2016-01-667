@@ -1,3 +1,4 @@
+package data_mining.examples;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
