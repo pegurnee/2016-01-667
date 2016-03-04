@@ -39,6 +39,7 @@ public class NearestImageClassification {
 		}
 
 		System.out.println("Goodbye");
+		kb.close();
 
 	}
 }

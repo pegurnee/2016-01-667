@@ -1,4 +1,5 @@
 package data_mining.p1.classifiers;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,7 +42,6 @@ public class NearestNeighbor {
 		String inFolder = "in/", outFolder = "out/";
 		String trainingFile = inFolder + "train3",
 				testingFile = inFolder + "test3",
-				validationFile = inFolder + "valid3",
 				classifiedFile = outFolder + "classified3";
 
 		NearestNeighbor moore = new NearestNeighbor();

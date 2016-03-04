@@ -1,4 +1,5 @@
 package data_mining.p1.drivers;
+
 import java.io.IOException;
 
 import data_mining.p1.classifiers.NearestNeighbor;
@@ -19,7 +20,9 @@ public class BankLoanClassification {
 		moore.classifyData(testingFile, classifiedFile);
 
 		moore.determineTrainingError(trainingFile);
-		System.out.println(moore.validateWithLeaveOneOut(trainingFile));
+		System.out.println(
+			"Weighted with neighborhood of 3, validation error of: "
+							+ moore.validateWithLeaveOneOut(trainingFile));
 
 		moore.optimizeNeighbors(trainingFile);
 
