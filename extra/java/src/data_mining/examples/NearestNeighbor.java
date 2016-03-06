@@ -263,7 +263,7 @@ public class NearestNeighbor {
 		{
 			if (label.equals("single"))
 				value = 1;
-			else if (label.equals("single"))
+			else if (label.equals("married"))
 				value = 2;
 			else
 				value = 3;
