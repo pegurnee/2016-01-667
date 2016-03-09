@@ -75,4 +75,59 @@ public class BayesClassifier
 		
 		inFile.close();
 	}
+	
+	public void buildModel()
+	{
+		fillClassTable();
+		
+		fillProbabilityTable();
+	}
+
+	private void fillClassTable() 
+	{
+		classTable = new double[numberClasses];
+		
+		for (int i = 0; i < numberClasses; i++)
+			classTable[i] = 0;
+		
+		for (int i = 0; i < numberRecords; i++)
+			classTable[records.get(i).className-1] += 1;
+		
+		for (int i = 0; i < numberClasses; i++) 
+			classTable[i] /= numberRecords;
+	}
+
+	private void fillProbabilityTable() 
+	{
+		table = new double[numberAttributes][][];
+		
+		for (int i = 0; i < numberAttributes; i++)
+			fill(i+1);
+	}
+
+	private void fill(int attribute) 
+	{
+		int attributeValues = this.attributeValues[attribute-1];
+		
+		table[attribute-1] = new double[numberClasses][attributeValues];
+		
+		for (int i = 0; i < numberClasses; i++)
+			for (int j = 0; j < attributeValues; j++)
+				table[attribute-1][i][j] = 0;
+		
+		for (int k = 0; k < numberRecords; k++)
+		{
+			int i = records.get(k).className - 1;
+			int j = records.get(k).attributes[attribute-1] - 1;
+			table[attribute-1][i][j] += 1;
+		}
+		
+		for (int i = 0; i < numberClasses; i++)
+			for (int j = 0; j < attributeValues; j++) {
+				double value = (table[attribute-1][i][j] + 1)/
+								(classTable[i]*numberRecords + attributeValues);
+				table[attribute-1][i][j] = value;
+			}
+	}
+	
 }
