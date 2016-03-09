@@ -1,7 +1,9 @@
 package data_mining.examples;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -160,6 +162,66 @@ public class BayesClassifier
 		}
 		
 		return product*classTable[className-1];
+	}
+	
+	public void classifyData(String testFile, String classifiedFile)
+	throws IOException
+	{
+		Scanner inFile = new Scanner(new File(testFile));
+		PrintWriter outFile = new PrintWriter(new FileWriter(classifiedFile));
+		
+		int numberRecords = inFile.nextInt();
+		
+		for (int i = 0; i < numberRecords; i++) {
+			int[] attributeArray = new int[numberAttributes];
+			
+			for (int j = 0; j < numberAttributes; j++) 
+			{
+				String label = inFile.next();
+				attributeArray[j] = convert(label, j+1);
+			}
+			
+			int className = classify(attributeArray);
+			
+			String label = convert(className);
+			outFile.println(label);
+		}
+		
+		inFile.close();
+		outFile.close();
+	}
+	
+	public void validate(String validationFile) throws IOException
+	{
+		Scanner inFile = new Scanner(new File(validationFile));
+		
+		int numberRecords = inFile.nextInt();
+		
+		int numberErrors = 0;
+		
+		for (int i = 0; i < numberRecords; i++)
+		{
+			int[] attributeArray = new int[numberAttributes];
+			
+			for (int j = 0; j < numberAttributes; j++)
+			{
+				String label = inFile.next();
+				attributeArray[j] = convert(label, j+1);
+			}
+			
+			int predictedClass = classify(attributeArray);
+			
+			String label = inFile.next();
+			int actualClass = convert(label, numberAttributes+1);
+			
+			if (predictedClass != actualClass)
+				numberErrors += 1;
+		}
+		
+		double errorRate = 100.0*numberErrors/numberRecords;
+		System.out.println(errorRate + " percent error");
+		
+		inFile.close();
 	}
 	
 }
