@@ -224,4 +224,48 @@ public class BayesClassifier
 		inFile.close();
 	}
 	
+	private int convert(String label, int column)
+	{
+		int value;
+		
+		if (column == 1)
+			if (label.equals("college")) value = 1;
+			else value = 2;
+		
+		else if (column == 2)
+			if (label.equals("smoker")) value = 1;
+			else value = 2;
+		
+		else if (column == 3)
+			if (label.equals("married")) value = 1;
+			else value = 2;
+		
+		else if (column == 4)
+			if (label.equals("male")) value = 1;
+			else value = 2;
+		
+		else if (column == 5)
+			if (label.equals("works")) value = 1;
+			else value = 2;
+		
+		else
+			if (label.equals("highrisk")) value = 1;
+			else if (label.equals("mediumrisk")) value = 2;
+			else if (label.equals("lowrisk")) value = 3;
+			else value = 4;
+		
+		return value;
+	}
+	
+	private String convert(int value)
+	{
+		String label;
+		
+		if (value == 1) label = "highrisk";
+		else if (value == 2) label = "mediumrisk";
+		else if (value == 3) label = "lowrisk";
+		else label = "undetermined";
+		
+		return label;
+	}
 }
