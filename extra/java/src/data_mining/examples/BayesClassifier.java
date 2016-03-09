@@ -130,4 +130,36 @@ public class BayesClassifier
 			}
 	}
 	
+	private int classify(int[] attributes)
+	{
+		double maxProbability = 0.0;
+		int maxClass = -1;
+		
+		for (int i = 0; i < numberClasses; i++) {
+			double probability = findProbability(i+1, attributes);
+			
+			if (probability > maxProbability)
+			{
+				maxProbability = probability;
+				maxClass = i;
+			}
+		}
+		
+		return maxClass + 1;
+	}
+
+	private double findProbability(int className, int[] attributes) 
+	{
+		double value;
+		double product = 1;
+		
+		for (int i = 0; i < numberAttributes; i++)
+		{
+			value = table[i][className-1][attributes[i]-1];
+			product = product*value;
+		}
+		
+		return product*classTable[className-1];
+	}
+	
 }
