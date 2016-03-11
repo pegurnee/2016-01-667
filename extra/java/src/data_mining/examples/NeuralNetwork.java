@@ -1,7 +1,9 @@
 package data_mining.examples;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -198,5 +200,35 @@ public class NeuralNetwork
 			thetaMiddle[i] += rate*errorMiddle[i];
 	}
 	
+	private double[] test(double[] input)
+	{
+		forwardCalculation(input);
+		
+		return output;
+	}
 	
+	public void testData(String inputFile, String outputFile) throws IOException
+	{
+		Scanner inFile = new Scanner(new File(inputFile));
+		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+		
+		int numberRecords = inFile.nextInt();
+		
+		for (int i = 0; i < numberRecords; i++)
+		{
+			double[] input = new double[numberInputs];
+			
+			for (int j = 0; j < numberInputs; j++)
+				input[j] = inFile.nextDouble();
+			
+			double[] output = test(input);
+			
+			for (int j = 0; j < numberOutputs; j++)
+				outFile.print(output[j] + " ");
+			outFile.println();
+		}
+		
+		inFile.close();
+		outFile.close();
+	}
 }
