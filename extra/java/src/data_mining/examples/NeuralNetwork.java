@@ -127,4 +127,76 @@ public class NeuralNetwork
 			for (int j = 0; j < numberOutputs; j++)
 				matrixOut[i][j] = 2*rand.nextDouble() - 1;
 	}
+	
+	public void train()
+	{
+		for (int i = 0; i < numberIterations; i++)
+			for (int j = 0; j < numberRecords; j++)
+			{
+				forwardCalculation(records.get(j).input);
+				
+				backwardCalculation(records.get(j).output);
+			}
+	}
+
+	private void forwardCalculation(double[] trainingInput)
+	{
+		for (int i = 0; i < numberInputs; i++)
+			input[i] = trainingInput[i];
+		
+		for (int i = 0; i < numberMiddle; i++) {
+			double sum = 0;
+			
+			for (int j = 0; j < numberInputs; j++)
+				sum += input[j]*matrixMiddle[j][i];
+			
+			sum += thetaMiddle[i];
+			
+			middle[i] = 1/(1 + Math.exp(-sum));
+		}
+		
+		for (int i = 0; i < numberOutputs; i++)
+		{
+			double sum = 0;
+			
+			for (int j = 0; j < numberMiddle; j++)
+				sum += middle[j]*matrixOut[j][i];
+			
+			sum += thetaOut[i];
+			
+			output[i] = 1/(1 + Math.exp(-sum));
+		}
+	}
+
+	private void backwardCalculation(double[] trainingOutput) 
+	{
+		for (int i = 0; i < numberOutputs; i++)
+			errorOut[i] = output[i]*(1-output[i])*(trainingOutput[i]-output[i]);
+		
+		for (int i = 0; i < numberMiddle; i++)
+		{
+			double sum = 0;
+			
+			for (int j = 0; j < numberOutputs; j++)
+				sum += matrixOut[i][j]*errorOut[j];
+			
+			errorMiddle[i] = middle[i]*(1-middle[i])*sum;
+		}
+		
+		for (int i = 0; i < numberMiddle; i++) 
+			for (int j = 0; j < numberOutputs; j++)
+				matrixOut[i][j] += rate*middle[i]*errorOut[j];
+
+		for (int i = 0; i < numberInputs; i++) 
+			for (int j = 0; j < numberMiddle; j++)
+				matrixMiddle[i][j] += rate*input[i]*errorMiddle[j];
+
+		for (int i = 0; i < numberOutputs; i++)
+			thetaOut[i] += rate*errorOut[i];
+		
+		for (int i = 0; i < numberMiddle; i++)
+			thetaMiddle[i] += rate*errorMiddle[i];
+	}
+	
+	
 }
