@@ -231,4 +231,44 @@ public class NeuralNetwork
 		inFile.close();
 		outFile.close();
 	}
+	
+	private void validate(String validationFile) throws IOException
+	{
+		Scanner inFile = new Scanner(new File(validationFile));
+		
+		int numberRecords = inFile.nextInt();
+		
+		double error = 0;
+		
+		for (int i = 0; i < numberRecords; i++)
+		{
+			double[] input = new double[numberInputs];
+			for (int j = 0; j < numberInputs; j++)
+				input[j] = inFile.nextDouble();
+			
+			double[] actualOutput = new double[numberOutputs];
+			for (int j = 0; j < numberOutputs; j++)
+				actualOutput[j] = inFile.nextDouble();
+			
+			double[] predictedOutput = test(input);
+			
+			error += computeError(actualOutput, predictedOutput);
+		}
+		
+		System.out.println(error/numberRecords);
+		
+		inFile.close();
+	}
+
+	private double computeError(double[] actualOutput, double[] predictedOutput) 
+	{
+		double error = 0;
+		
+		for (int i = 0; i < actualOutput.length; i++)
+			error += Math.pow(actualOutput[i] - predictedOutput[i], 2);
+		
+		return Math.sqrt(error/actualOutput.length);
+	}
+	
+	
 }
