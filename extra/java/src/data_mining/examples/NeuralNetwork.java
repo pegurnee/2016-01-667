@@ -232,7 +232,7 @@ public class NeuralNetwork
 		outFile.close();
 	}
 	
-	private void validate(String validationFile) throws IOException
+	public void validate(String validationFile) throws IOException
 	{
 		Scanner inFile = new Scanner(new File(validationFile));
 		
