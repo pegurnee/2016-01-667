@@ -7,6 +7,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * Neural network classifier, original code presented by Dr Suchindran Maniccam.
+ * Modified and expanded by Eddie Gurnee for use in Data Mining project 2.
+ *
+ * @author smaniccam
+ * @author eddie
+ *
+ */
 public class NeuralNetwork {
 
 	private class Record {
@@ -172,6 +180,34 @@ public class NeuralNetwork {
 		}
 	}
 
+	public void validate(String validationFile) throws IOException {
+		Scanner inFile = new Scanner(new File(validationFile));
+
+		int numberRecords = inFile.nextInt();
+
+		double error = 0;
+
+		for (int i = 0; i < numberRecords; i++) {
+			double[] input = new double[this.numberInputs];
+			for (int j = 0; j < this.numberInputs; j++) {
+				input[j] = inFile.nextDouble();
+			}
+
+			double[] actualOutput = new double[this.numberOutputs];
+			for (int j = 0; j < this.numberOutputs; j++) {
+				actualOutput[j] = inFile.nextDouble();
+			}
+
+			double[] predictedOutput = this.test(input);
+
+			error += this.computeError(actualOutput, predictedOutput);
+		}
+
+		System.out.println(error / numberRecords);
+
+		inFile.close();
+	}
+
 	private void backwardCalculation(double[] trainingOutput) {
 		for (int i = 0; i < this.numberOutputs; i++) {
 			this.errorOut[i] = this.output[i]* (1 - this.output[i])
@@ -256,34 +292,6 @@ public class NeuralNetwork {
 		this.forwardCalculation(input);
 
 		return this.output;
-	}
-
-	private void validate(String validationFile) throws IOException {
-		Scanner inFile = new Scanner(new File(validationFile));
-
-		int numberRecords = inFile.nextInt();
-
-		double error = 0;
-
-		for (int i = 0; i < numberRecords; i++) {
-			double[] input = new double[this.numberInputs];
-			for (int j = 0; j < this.numberInputs; j++) {
-				input[j] = inFile.nextDouble();
-			}
-
-			double[] actualOutput = new double[this.numberOutputs];
-			for (int j = 0; j < this.numberOutputs; j++) {
-				actualOutput[j] = inFile.nextDouble();
-			}
-
-			double[] predictedOutput = this.test(input);
-
-			error += this.computeError(actualOutput, predictedOutput);
-		}
-
-		System.out.println(error / numberRecords);
-
-		inFile.close();
 	}
 
 }

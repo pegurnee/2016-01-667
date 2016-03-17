@@ -6,6 +6,14 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Naive bayes classifier, original code presented by Dr Suchindran Maniccam.
+ * Modified and expanded by Eddie Gurnee for use in Data Mining project 2.
+ *
+ * @author smaniccam
+ * @author eddie
+ *
+ */
 public class BayesClassifier {
 	private class Record {
 		private final int[] attributes;
