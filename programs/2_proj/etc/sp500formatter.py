@@ -34,7 +34,13 @@ def main():
 
   # for _r in zip(_recs, percent_vals):
   #   print('{} : {}'.format(_r[0][0], _r[1]))
-  training_recs = [x for x in percent_recs]
+  training_recs = [x for x in percent_recs if x[0][3] == '4']
+  validation_recs = [x for x in percent_recs if x[0][3] == '5' and int(x[0][5:7]) < 4]
+  testing_recs = [x for x in percent_recs if x[0][3] == '5' and int(x[0][5:7]) == 4]
+
+  print('='*40)
+  for _r in testing_recs:
+    print('{} : {}'.format(_r[0], _r[1]))
 
   # with open('../in/sp500/train', 'w') as train, open('../in/sp500/validate', 'w') as valid, open('../in/sp500/test', 'w') as testf:
   #   for _r in percent_recs:
