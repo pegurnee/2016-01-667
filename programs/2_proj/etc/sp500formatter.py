@@ -21,9 +21,19 @@ def main():
 
     percent_vals.append((_recs[i][0], percent_change))
 
+  precent_recs = []
+  for i in range(3, len(percent_vals)):
+    date = percent_vals[i][0]
 
-  for _r in zip(_recs, percent_vals):
-    print('{} : {}'.format(_r[0][0], _r[1]))
+    fourple = percent_vals[i - 3 : i + 1]
+    record = tuple([ i[1] for i in fourple ])
+    precent_recs.append((date, record))
+
+  for _r in precent_recs:
+    print('{} : {}'.format(_r[0], _r[1]))
+
+  # for _r in zip(_recs, percent_vals):
+  #   print('{} : {}'.format(_r[0][0], _r[1]))
 
   #with open('../in/sp500/train') as train, open('../in/sp500/validate') as valid, open('../in/sp500/test') as testf:
 
