@@ -39,13 +39,25 @@ def main():
   testing_recs = [x for x in percent_recs if x[0][3] == '5' and int(x[0][5:7]) == 4]
 
   print('='*40)
-  for _r in testing_recs:
+  for _r in training_recs:
     print('{} : {}'.format(_r[0], _r[1]))
 
-  # with open('../in/sp500/train', 'w') as train, open('../in/sp500/validate', 'w') as valid, open('../in/sp500/test', 'w') as testf:
-  #   for _r in percent_recs:
-  #     if _r[0][3] == '4':
-  #       train.write('{}'.format(_r[1]))
+  with open('../in/sp500/train', 'w') as train, open('../in/sp500/validate', 'w') as valid, open('../in/sp500/test', 'w') as testf:
+    train.write('{} {} {}\n'.format(len(training_recs), len(training_recs[0][1]) - 1, 1))
+    for _r in training_recs:
+      train.write(' '.join(map(str, _r[1])))
+      train.write('\n')
+
+    valid.write('{}\n'.format(len(validation_recs)))
+    for _r in validation_recs:
+      valid.write(' '.join(map(str, _r[1])))
+      valid.write('\n')
+
+    testf.write('{}\n'.format(len(testing_recs)))
+    for _r in testing_recs:
+      testf.write(' '.join(map(str, _r[1])))
+      testf.write('\n')
+
 
 
 
