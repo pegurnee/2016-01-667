@@ -36,6 +36,9 @@ public class BayesClassifier {
 	double[] classTable;
 	double[][][] table;
 
+	/**
+	 * answer to section 1 question 1 part a
+	 */
 	public BayesClassifier() {
 		this.records = null;
 		this.attributeValues = null;
@@ -48,12 +51,22 @@ public class BayesClassifier {
 		this.table = null;
 	}
 
+	/**
+	 * answer to section 1 question 1 part c
+	 */
 	public void buildModel() {
 		this.fillClassTable();
 
 		this.fillProbabilityTable();
 	}
 
+	/**
+	 * answer to section 1 question 1 part d
+	 * 
+	 * @param testFile
+	 * @param classifiedFile
+	 * @throws IOException
+	 */
 	public void classifyData(String testFile, String classifiedFile)
 			throws IOException {
 		Scanner inFile = new Scanner(new File(testFile));
@@ -79,6 +92,12 @@ public class BayesClassifier {
 		outFile.close();
 	}
 
+	/**
+	 * answer to section 1 question 1 part b
+	 * 
+	 * @param trainingFile
+	 * @throws IOException
+	 */
 	public void loadTrainingData(String trainingFile) throws IOException {
 		Scanner inFile = new Scanner(new File(trainingFile));
 
