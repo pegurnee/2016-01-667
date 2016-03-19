@@ -1,9 +1,11 @@
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -25,15 +27,36 @@ public class BayesClassifier {
 		}
 	}
 
-	private int[] attributeValues;
+	public static void main(String[] args) throws IOException {
+		String inFolder = "in/part1/", outFolder = "out/part1/";
+		String trainingFile = inFolder + "train1",
+				testingFile = inFolder + "test1",
+				classifiedFile = outFolder + "classified1";
+		BayesClassifier classifier = new BayesClassifier();
+		classifier.loadTrainingData(trainingFile);
+		for (Record r : classifier.records) {
+			System.out.println(
+				Arrays.toString(r.attributes) + ": " + r.className);
+		}
+		classifier.buildModel();
 
+		classifier.displayProbabilityTables();
+
+		// System.out.println("decision tree:" + tree.root);
+		// tree.classifyData(testingFile, classifiedFile);
+		//
+		// tree.runFullAnalytics(trainingFile);
+	}
+
+	private int[] attributeValues;
 	private int numberAttributes;
 	private int numberClasses;
+
 	private int numberRecords;
 
 	private ArrayList<Record> records;
-
 	double[] classTable;
+
 	double[][][] table;
 
 	/**
@@ -62,7 +85,7 @@ public class BayesClassifier {
 
 	/**
 	 * answer to section 1 question 1 part d
-	 * 
+	 *
 	 * @param testFile
 	 * @param classifiedFile
 	 * @throws IOException
@@ -75,12 +98,7 @@ public class BayesClassifier {
 		int numberRecords = inFile.nextInt();
 
 		for (int i = 0; i < numberRecords; i++) {
-			int[] attributeArray = new int[this.numberAttributes];
-
-			for (int j = 0; j < this.numberAttributes; j++) {
-				String label = inFile.next();
-				attributeArray[j] = this.convert(label, j + 1);
-			}
+			int[] attributeArray = this.loadIndividualRecordData(inFile);
 
 			int className = this.classify(attributeArray);
 
@@ -93,8 +111,53 @@ public class BayesClassifier {
 	}
 
 	/**
+	 * answer to section 1 question 1 part a
+	 *
+	 * @param trainingFile
+	 * @return
+	 * @throws IOException
+	 */
+	public double computeTrainingError(String trainingFile) throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		return this.computeValidationError(trainingFile);
+	}
+
+	/**
+	 * answer for section 1 question 2 part d
+	 */
+	public void displayProbabilityTables() {
+		StringBuilder response = new StringBuilder();
+		if ((this.table == null) || (this.classTable == null)) {
+			response.append("Model not yet built");
+		} else {
+			for (int att = 0; att < this.table.length; att++) {
+				response.append("\tAttribute column: " + (att + 1) + "\n");
+				for (int cla = 0; cla < this.table[att].length; cla++) {
+					for (int val =
+							0; val < this.table[att][cla].length; val++) {
+						response.append(String.format("%-20s",
+							String.format("P(%s|%s)", val, this.convert(cla))));
+						response.append(String.format("%10.6f ",
+							this.table[att][cla][val]));
+					}
+					response.append("\n");
+				}
+				response.append("\n");
+			}
+			response.append("\tClass probabilities:\n");
+			for (int i = 0; i < this.classTable.length; i++) {
+				response.append(String.format("%-20s%10.6f\n",
+					String.format("P(%s)", this.convert(i)),
+					this.classTable[i]));
+			}
+		}
+		System.out.println(response.toString());
+	}
+
+	/**
 	 * answer to section 1 question 1 part b
-	 * 
+	 *
 	 * @param trainingFile
 	 * @throws IOException
 	 */
@@ -113,53 +176,26 @@ public class BayesClassifier {
 		this.records = new ArrayList<Record>();
 
 		for (int i = 0; i < this.numberRecords; i++) {
-			int[] attributeArray = new int[this.numberAttributes];
-
-			for (int j = 0; j < this.numberAttributes; j++) {
-				String label = inFile.next();
-				attributeArray[j] = this.convert(label, j + 1);
-			}
+			int[] attributeArray = this.loadIndividualRecordData(inFile);
 
 			String label = inFile.next();
-			int className = this.convert(label, this.numberAttributes);
+			int className = this.convert(label, this.numberAttributes + 1);
 
 			Record record = new Record(attributeArray, className);
 
 			this.records.add(record);
 		}
 
+		// System.out.println(
+		// "Records loaded with "+ this.computeValidationError(trainingFile)
+		// + " training error");
+
 		inFile.close();
 	}
 
 	public void validate(String validationFile) throws IOException {
-		Scanner inFile = new Scanner(new File(validationFile));
-
-		int numberRecords = inFile.nextInt();
-
-		int numberErrors = 0;
-
-		for (int i = 0; i < numberRecords; i++) {
-			int[] attributeArray = new int[this.numberAttributes];
-
-			for (int j = 0; j < this.numberAttributes; j++) {
-				String label = inFile.next();
-				attributeArray[j] = this.convert(label, j + 1);
-			}
-
-			int predictedClass = this.classify(attributeArray);
-
-			String label = inFile.next();
-			int actualClass = this.convert(label, this.numberAttributes + 1);
-
-			if (predictedClass != actualClass) {
-				numberErrors += 1;
-			}
-		}
-
-		double errorRate = (100.0 * numberErrors) / numberRecords;
+		double errorRate = this.computeValidationError(validationFile);
 		System.out.println(errorRate + " percent error");
-
-		inFile.close();
 	}
 
 	private int classify(int[] attributes) {
@@ -176,6 +212,44 @@ public class BayesClassifier {
 		}
 
 		return maxClass + 1;
+	}
+
+	private double computeValidationError(String validationFile)
+			throws FileNotFoundException {
+		Scanner inFile = new Scanner(new File(validationFile));
+
+		int numberRecords = inFile.nextInt();
+
+		inFile.nextLine();
+		inFile.nextLine();
+
+		int numberErrors = 0;
+
+		for (int i = 0; i < numberRecords; i++) {
+			int[] attributeArray = this.loadIndividualRecordData(inFile);
+
+			int predictedClass = this.classify(attributeArray);
+
+			String label = inFile.next();
+			int actualClass = this.convert(label, this.numberAttributes + 1);
+
+			if (predictedClass != actualClass) {
+				numberErrors += 1;
+			}
+		}
+
+		double errorRate = (100.0 * numberErrors) / numberRecords;
+
+		inFile.close();
+		return errorRate;
+	}
+
+	private double confidenceLevel(int className, int[] attributes) {
+		// TODO: report confidence of classification decision which is measured
+		// by the conditional probability of the class given a record as percent
+		// of the total conditional probabilities of all classes given that
+		// record
+		return 0.0;
 	}
 
 	private String convert(int value) {
@@ -197,46 +271,22 @@ public class BayesClassifier {
 	private int convert(String label, int column) {
 		int value;
 
-		if (column == 1) {
-			if (label.equals("college")) {
-				value = 1;
-			} else {
-				value = 2;
-			}
-		} else if (column == 2) {
-			if (label.equals("smoker")) {
-				value = 1;
-			} else {
-				value = 2;
-			}
-		} else if (column == 3) {
-			if (label.equals("married")) {
-				value = 1;
-			} else {
-				value = 2;
-			}
-		} else if (column == 4) {
-			if (label.equals("male")) {
-				value = 1;
-			} else {
-				value = 2;
-			}
-		} else if (column == 5) {
-			if (label.equals("works")) {
-				value = 1;
-			} else {
-				value = 2;
-			}
-		} else if (label.equals("highrisk")) {
-			value = 1;
-		} else if (label.equals("mediumrisk")) {
-			value = 2;
-		} else if (label.equals("lowrisk")) {
-			value = 3;
-		} else {
-			value = 4;
-		}
+		value = Integer.parseInt(label);
 
+		if ((column == 1) || (column == 4)) {
+			value += 1;
+		}
+		/*
+		 * if (column == 1) { if (label.equals("college")) { value = 1; } else {
+		 * value = 2; } } else if (column == 2) { if (label.equals("smoker")) {
+		 * value = 1; } else { value = 2; } } else if (column == 3) { if
+		 * (label.equals("married")) { value = 1; } else { value = 2; } } else
+		 * if (column == 4) { if (label.equals("male")) { value = 1; } else {
+		 * value = 2; } } else if (column == 5) { if (label.equals("works")) {
+		 * value = 1; } else { value = 2; } } else if (label.equals("highrisk"))
+		 * { value = 1; } else if (label.equals("mediumrisk")) { value = 2; }
+		 * else if (label.equals("lowrisk")) { value = 3; } else { value = 4; }
+		 */
 		return value;
 	}
 
@@ -260,6 +310,7 @@ public class BayesClassifier {
 
 		for (int i = 0; i < this.numberClasses; i++) {
 			for (int j = 0; j < attributeValues; j++) {
+				// this is computing the laplace adjusted value
 				double value = (this.table[attribute - 1][i][j] + 1)
 								/ ((this.classTable[i] * this.numberRecords)
 									+ attributeValues);
@@ -302,5 +353,42 @@ public class BayesClassifier {
 		}
 
 		return product * this.classTable[className - 1];
+	}
+
+	private int[] loadIndividualRecordData(Scanner inFile) {
+		int[] attributeArray = new int[this.numberAttributes];
+
+		for (int j = 0; j < this.numberAttributes; j++) {
+			String label = inFile.next();
+			attributeArray[j] = this.convert(label, j + 1);
+		}
+		return attributeArray;
+	}
+
+	/**
+	 * answer to section 1 question 2 part b
+	 *
+	 * @param trainingFile
+	 * @return
+	 * @throws IOException
+	 */
+	private double validateWithLeaveOneOut(String trainingFile)
+			throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		int numberInvalid = 0;
+		for (int i = 0; i < this.numberRecords; i++) {
+			Record theOneBeingLeftOut = this.records.remove(0);
+
+			this.buildModel();
+
+			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
+			if (actualClassName != theOneBeingLeftOut.className) {
+				numberInvalid++;
+			}
+
+			this.records.add(theOneBeingLeftOut);
+		}
+		return (numberInvalid / (double) (this.numberRecords - 1));
 	}
 }
