@@ -68,7 +68,7 @@ public class BayesClassifier
 			}
 			
 			String label = inFile.next();
-			int className = convert(label, numberAttributes);
+			int className = convert(label, numberAttributes + 1);
 			
 			Record record = new Record(attributeArray, className);
 			
