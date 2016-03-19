@@ -6,7 +6,15 @@ public class ConfigurationObject
 
 	private static final long serialVersionUID = -1354273965361346550L;
 
+	public static ConfigurationObject getInstance() {
+		if (instance == null) {
+			instance = new ConfigurationObject();
+		}
+		return instance;
+	}
+
 	private final String IN_FOLDER = "in/";
+
 	private final String OUT_FOLDER = "out/";
 
 	private final String STOCK_LOCATION = "sp500/";
@@ -19,13 +27,6 @@ public class ConfigurationObject
 
 	public String getFileOutput(int section, int question, FileType type) {
 		return this.getFileLocation(section, question, type);
-	}
-
-	public ConfigurationObject getInstance() {
-		if (instance == null) {
-			instance = new ConfigurationObject();
-		}
-		return instance;
 	}
 
 	public String getLocationInput(int section, int question) {
