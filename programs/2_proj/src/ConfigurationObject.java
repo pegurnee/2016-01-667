@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.Serializable;
 
 public class ConfigurationObject
@@ -14,19 +15,38 @@ public class ConfigurationObject
 	}
 
 	private final String IN_FOLDER = "in/";
-
 	private final String OUT_FOLDER = "out/";
-
 	private final String STOCK_LOCATION = "sp500/";
 
 	private ConfigurationObject() {}
 
-	public String getFileInput(int section, int question, FileType type) {
-		return this.getFileLocation(section, question, type);
+	public String getFileClassified(int section, int question) {
+		String fileLocation = this.OUT_FOLDER + this.getFileLocation(section,
+			question, FileType.CLASSIFIED);
+
+		final File file = new File(fileLocation);
+		final File parentDirectory = file.getParentFile();
+
+		if (null != parentDirectory) {
+			parentDirectory.mkdirs();
+		}
+
+		return fileLocation;
 	}
 
-	public String getFileOutput(int section, int question, FileType type) {
-		return this.getFileLocation(section, question, type);
+	public String getFileTesting(int section, int question) {
+		return this.IN_FOLDER
+				+ this.getFileLocation(section, question, FileType.TESTING);
+	}
+
+	public String getFileTraining(int section, int question) {
+		return this.IN_FOLDER
+				+ this.getFileLocation(section, question, FileType.TRAINING);
+	}
+
+	public String getFileValidation(int section, int question) {
+		return this.IN_FOLDER
+				+ this.getFileLocation(section, question, FileType.VALIDATION);
 	}
 
 	public String getLocationInput(int section, int question) {
@@ -40,7 +60,7 @@ public class ConfigurationObject
 	}
 
 	private String getFileLocation(int section, int question, FileType type) {
-		String location = this.getLocationInput(section, question);
+		String location = this.getSubfolder(section, question);
 		location += type.toString();
 		if (!this.needsStockMarketValues(section, question)) {
 			if (section < 3) {
