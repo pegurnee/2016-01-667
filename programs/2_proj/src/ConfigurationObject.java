@@ -20,6 +20,21 @@ public class ConfigurationObject
 
 	private ConfigurationObject() {}
 
+	public DataConverterInterface getConverter(int section, int question) {
+		DataConverterInterface converter = null;
+		switch (section) {
+			case 1:
+				if (question == 2) {
+					converter = new IntegerDataConverter();
+				} else if (question == 3) {
+					converter = new JavaResumeDataConverter();
+				}
+			case 2:
+			case 3:
+		}
+		return converter;
+	}
+
 	public String getFileClassified(int section, int question) {
 		String fileLocation = this.OUT_FOLDER + this.getFileLocation(section,
 			question, FileType.CLASSIFIED);
