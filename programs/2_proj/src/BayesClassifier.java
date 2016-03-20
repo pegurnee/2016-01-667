@@ -109,7 +109,7 @@ public class BayesClassifier {
 			int className = this.classify(attributeArray);
 			double confidence = this.confidenceLevel(className, attributeArray);
 
-			String label = this.convert(className);
+			String label = this.convert(className, this.numberAttributes);
 			outFile.println(String.format("%-20s %f", label, confidence));
 		}
 
@@ -151,8 +151,11 @@ public class BayesClassifier {
 				for (int cla = 0; cla < this.table[att].length; cla++) {
 					for (int val =
 							0; val < this.table[att][cla].length; val++) {
-						response.append(String.format("%-20s", String.format(
-							"P(%s|%s):", val, this.convert(cla + 1))));
+						response.append(
+							String.format("%-20s",
+								String.format("P(%s|%s):",
+									this.convert(val, att),
+									this.convert(cla, this.numberAttributes))));
 						response.append(String.format("%10.6f ",
 							this.table[att][cla][val]));
 					}
@@ -163,7 +166,8 @@ public class BayesClassifier {
 			response.append("\tClass probabilities:\n");
 			for (int i = 0; i < this.classTable.length; i++) {
 				response.append(String.format("%-10s%-10f\n",
-					String.format("P(%s):", this.convert(i + 1)),
+					String.format("P(%s):",
+						this.convert(i, this.numberAttributes)),
 					this.classTable[i]));
 			}
 		}
@@ -194,7 +198,7 @@ public class BayesClassifier {
 			int[] attributeArray = this.loadIndividualRecordData(inFile);
 
 			String label = inFile.next();
-			int className = this.convert(label, this.numberAttributes + 1);
+			int className = this.convert(label, this.numberAttributes);
 
 			Record record = new Record(attributeArray, className);
 
@@ -241,7 +245,7 @@ public class BayesClassifier {
 		int maxClass = -1;
 
 		for (int i = 0; i < this.numberClasses; i++) {
-			double probability = this.findProbability(i + 1, attributes);
+			double probability = this.findProbability(i, attributes);
 
 			if (probability > maxProbability) {
 				maxProbability = probability;
@@ -249,7 +253,7 @@ public class BayesClassifier {
 			}
 		}
 
-		return maxClass + 1;
+		return maxClass;
 	}
 
 	private double computeValidationError(String validationFile)
@@ -270,7 +274,7 @@ public class BayesClassifier {
 			int predictedClass = this.classify(attributeArray);
 
 			String label = inFile.next();
-			int actualClass = this.convert(label, this.numberAttributes + 1);
+			int actualClass = this.convert(label, this.numberAttributes);
 
 			if (predictedClass != actualClass) {
 				numberErrors += 1;
@@ -293,13 +297,13 @@ public class BayesClassifier {
 		double pAnyClass = 0.0;
 
 		for (int i = 0; i < this.numberClasses; i++) {
-			pAnyClass += this.findProbability(i + 1, attributes);
+			pAnyClass += this.findProbability(i, attributes);
 		}
 		return pClassChoosen / pAnyClass;
 	}
 
-	private String convert(int value) {
-		return this.converter.convertFromNumericalValue(value, -1);
+	private String convert(int value, int column) {
+		return this.converter.convertFromNumericalValue(value, column);
 	}
 
 	private int convert(String label, int column) {
@@ -307,30 +311,29 @@ public class BayesClassifier {
 	}
 
 	private void fill(int attribute) {
-		int attributeValues = this.attributeValues[attribute - 1];
+		int attributeValues = this.attributeValues[attribute];
 
-		this.table[attribute - 1] =
-				new double[this.numberClasses][attributeValues];
+		this.table[attribute] = new double[this.numberClasses][attributeValues];
 
 		for (int i = 0; i < this.numberClasses; i++) {
 			for (int j = 0; j < attributeValues; j++) {
-				this.table[attribute - 1][i][j] = 0;
+				this.table[attribute][i][j] = 0;
 			}
 		}
 
 		for (int k = 0; k < this.records.size(); k++) {
-			int i = this.records.get(k).className - 1;
-			int j = this.records.get(k).attributes[attribute - 1] - 1;
-			this.table[attribute - 1][i][j] += 1;
+			int i = this.records.get(k).className;
+			int j = this.records.get(k).attributes[attribute];
+			this.table[attribute][i][j] += 1;
 		}
 
 		for (int i = 0; i < this.numberClasses; i++) {
 			for (int j = 0; j < attributeValues; j++) {
 				// this is computing the laplace adjusted value
-				double value = (this.table[attribute - 1][i][j] + 1)
+				double value = (this.table[attribute][i][j] + 1)
 								/ ((this.classTable[i] * this.numberRecords)
 									+ attributeValues);
-				this.table[attribute - 1][i][j] = value;
+				this.table[attribute][i][j] = value;
 			}
 		}
 	}
@@ -343,7 +346,7 @@ public class BayesClassifier {
 		}
 
 		for (int i = 0; i < this.records.size(); i++) {
-			this.classTable[this.records.get(i).className - 1] += 1;
+			this.classTable[this.records.get(i).className] += 1;
 		}
 
 		for (int i = 0; i < this.numberClasses; i++) {
@@ -355,7 +358,7 @@ public class BayesClassifier {
 		this.table = new double[this.numberAttributes][][];
 
 		for (int i = 0; i < this.numberAttributes; i++) {
-			this.fill(i + 1);
+			this.fill(i);
 		}
 	}
 
@@ -364,11 +367,11 @@ public class BayesClassifier {
 		double product = 1;
 
 		for (int i = 0; i < this.numberAttributes; i++) {
-			value = this.table[i][className - 1][attributes[i] - 1];
+			value = this.table[i][className][attributes[i]];
 			product = product * value;
 		}
 
-		return product * this.classTable[className - 1];
+		return product * this.classTable[className];
 	}
 
 	private int[] loadIndividualRecordData(Scanner inFile) {
@@ -376,7 +379,7 @@ public class BayesClassifier {
 
 		for (int j = 0; j < this.numberAttributes; j++) {
 			String label = inFile.next();
-			attributeArray[j] = this.convert(label, j + 1);
+			attributeArray[j] = this.convert(label, j);
 		}
 		return attributeArray;
 	}
