@@ -42,10 +42,8 @@ public class BayesClassifier {
 
 		classifier.displayProbabilityTables();
 
-		// System.out.println("decision tree:" + tree.root);
-		// tree.classifyData(testingFile, classifiedFile);
-		//
-		// tree.runFullAnalytics(trainingFile);
+		classifier.classifyData(testingFile, classifiedFile);
+
 	}
 
 	private int[] attributeValues;
@@ -249,7 +247,14 @@ public class BayesClassifier {
 		// by the conditional probability of the class given a record as percent
 		// of the total conditional probabilities of all classes given that
 		// record
-		return 0.0;
+		// p(chosen class) / p(any class)
+		double pClassChoosen = this.findProbability(className - 1, attributes);
+		double pAnyClass = 0.0;
+
+		for (int i = 0; i < this.numberClasses; i++) {
+			pAnyClass += this.findProbability(0, attributes);
+		}
+		return pClassChoosen / pAnyClass;
 	}
 
 	private String convert(int value) {
@@ -276,17 +281,47 @@ public class BayesClassifier {
 		if ((column == 1) || (column == 4)) {
 			value += 1;
 		}
-		/*
-		 * if (column == 1) { if (label.equals("college")) { value = 1; } else {
-		 * value = 2; } } else if (column == 2) { if (label.equals("smoker")) {
-		 * value = 1; } else { value = 2; } } else if (column == 3) { if
-		 * (label.equals("married")) { value = 1; } else { value = 2; } } else
-		 * if (column == 4) { if (label.equals("male")) { value = 1; } else {
-		 * value = 2; } } else if (column == 5) { if (label.equals("works")) {
-		 * value = 1; } else { value = 2; } } else if (label.equals("highrisk"))
-		 * { value = 1; } else if (label.equals("mediumrisk")) { value = 2; }
-		 * else if (label.equals("lowrisk")) { value = 3; } else { value = 4; }
-		 */
+
+		// if (column == 1) {
+		// if (label.equals("college")) {
+		// value = 1;
+		// } else {
+		// value = 2;
+		// }
+		// } else if (column == 2) {
+		// if (label.equals("smoker")) {
+		// value = 1;
+		// } else {
+		// value = 2;
+		// }
+		// } else if (column == 3) {
+		// if (label.equals("married")) {
+		// value = 1;
+		// } else {
+		// value = 2;
+		// }
+		// } else if (column == 4) {
+		// if (label.equals("male")) {
+		// value = 1;
+		// } else {
+		// value = 2;
+		// }
+		// } else if (column == 5) {
+		// if (label.equals("works")) {
+		// value = 1;
+		// } else {
+		// value = 2;
+		// }
+		// } else if (label.equals("highrisk")) {
+		// value = 1;
+		// } else if (label.equals("mediumrisk")) {
+		// value = 2;
+		// } else if (label.equals("lowrisk")) {
+		// value = 3;
+		// } else {
+		// value = 4;
+		// }
+
 		return value;
 	}
 
