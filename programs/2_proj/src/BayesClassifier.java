@@ -116,10 +116,18 @@ public class BayesClassifier {
 	 * @return
 	 * @throws IOException
 	 */
-	public double computeTrainingError(String trainingFile) throws IOException {
-		this.loadTrainingData(trainingFile);
+	public double computeTrainingError() {
+		int numberErrors = 0;
 
-		return this.computeValidationError(trainingFile);
+		for (Record r : this.records) {
+			int predictedClass = this.classify(r.attributes);
+
+			if (r.className != predictedClass) {
+				numberErrors += 1;
+			}
+		}
+		return (100.0 * numberErrors) / this.records.size();
+		// return this.computeValidationError(trainingFile);
 	}
 
 	/**
@@ -219,8 +227,9 @@ public class BayesClassifier {
 
 		int numberRecords = inFile.nextInt();
 
-		inFile.nextLine();
-		inFile.nextLine();
+		System.out.println(inFile.nextLine());
+		inFile.next();
+		System.out.println(inFile.nextLine());
 
 		int numberErrors = 0;
 
