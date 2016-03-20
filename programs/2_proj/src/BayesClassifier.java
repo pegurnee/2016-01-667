@@ -136,7 +136,7 @@ public class BayesClassifier {
 					for (int val =
 							0; val < this.table[att][cla].length; val++) {
 						response.append(String.format("%-20s", String.format(
-							"P(%s|%s):", val, this.convert(cla))));
+							"P(%s|%s):", val, this.convert(cla + 1))));
 						response.append(String.format("%10.6f ",
 							this.table[att][cla][val]));
 					}
@@ -147,7 +147,7 @@ public class BayesClassifier {
 			response.append("\tClass probabilities:\n");
 			for (int i = 0; i < this.classTable.length; i++) {
 				response.append(String.format("%-10s%-10f\n",
-					String.format("P(%s):", this.convert(i)),
+					String.format("P(%s):", this.convert(i + 1)),
 					this.classTable[i]));
 			}
 		}
@@ -261,7 +261,7 @@ public class BayesClassifier {
 	private String convert(int value) {
 		String label;
 
-		label = Integer.toString(value + 1);
+		label = Integer.toString(value);
 
 		// if (value == 1) {
 		// label = "highrisk";
