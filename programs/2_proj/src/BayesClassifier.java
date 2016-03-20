@@ -47,7 +47,9 @@ public class BayesClassifier {
 	}
 
 	private int[] attributeValues;
+	private final DataConverterInterface converter;
 	private int numberAttributes;
+
 	private int numberClasses;
 
 	private int numberRecords;
@@ -61,6 +63,10 @@ public class BayesClassifier {
 	 * answer to section 1 question 1 part a
 	 */
 	public BayesClassifier() {
+		this(new IntegerDataConverter());
+	}
+
+	public BayesClassifier(DataConverterInterface converter) {
 		this.records = null;
 		this.attributeValues = null;
 
@@ -70,6 +76,8 @@ public class BayesClassifier {
 
 		this.classTable = null;
 		this.table = null;
+
+		this.converter = converter;
 	}
 
 	/**
@@ -126,8 +134,8 @@ public class BayesClassifier {
 				numberErrors += 1;
 			}
 		}
+
 		return (100.0 * numberErrors) / this.records.size();
-		// return this.computeValidationError(trainingFile);
 	}
 
 	/**
@@ -192,10 +200,6 @@ public class BayesClassifier {
 
 			this.records.add(record);
 		}
-
-		// System.out.println(
-		// "Records loaded with "+ this.computeValidationError(trainingFile)
-		// + " training error");
 
 		inFile.close();
 	}
@@ -280,7 +284,7 @@ public class BayesClassifier {
 	}
 
 	private double confidenceLevel(int className, int[] attributes) {
-		// TODO: report confidence of classification decision which is measured
+		// report confidence of classification decision which is measured
 		// by the conditional probability of the class given a record as percent
 		// of the total conditional probabilities of all classes given that
 		// record
@@ -295,73 +299,11 @@ public class BayesClassifier {
 	}
 
 	private String convert(int value) {
-		String label;
-
-		label = Integer.toString(value);
-
-		// if (value == 1) {
-		// label = "highrisk";
-		// } else if (value == 2) {
-		// label = "mediumrisk";
-		// } else if (value == 3) {
-		// label = "lowrisk";
-		// } else {
-		// label = "undetermined";
-		// }
-
-		return label;
+		return this.converter.convertFromNumericalValue(value, -1);
 	}
 
 	private int convert(String label, int column) {
-		int value;
-
-		value = Integer.parseInt(label);
-
-		if ((column == 1) || (column == 4)) {
-			value += 1;
-		}
-
-		// if (column == 1) {
-		// if (label.equals("college")) {
-		// value = 1;
-		// } else {
-		// value = 2;
-		// }
-		// } else if (column == 2) {
-		// if (label.equals("smoker")) {
-		// value = 1;
-		// } else {
-		// value = 2;
-		// }
-		// } else if (column == 3) {
-		// if (label.equals("married")) {
-		// value = 1;
-		// } else {
-		// value = 2;
-		// }
-		// } else if (column == 4) {
-		// if (label.equals("male")) {
-		// value = 1;
-		// } else {
-		// value = 2;
-		// }
-		// } else if (column == 5) {
-		// if (label.equals("works")) {
-		// value = 1;
-		// } else {
-		// value = 2;
-		// }
-		// } else if (label.equals("highrisk")) {
-		// value = 1;
-		// } else if (label.equals("mediumrisk")) {
-		// value = 2;
-		// } else if (label.equals("lowrisk")) {
-		// value = 3;
-		// } else {
-		// value = 4;
-		// }
-
-		return value;
+		return this.converter.convertToNumericalValue(label, column);
 	}
 
 	private void fill(int attribute) {
