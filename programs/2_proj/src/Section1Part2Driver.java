@@ -19,8 +19,11 @@ public class Section1Part2Driver {
 		classifier.buildModel();
 
 		classifier.classifyData(testingFile, classifiedFile);
+
+		System.out.println(classifier.computeTrainingError());
+		System.out.println(classifier.validateWithLeaveOneOut(trainingFile));
+
 		classifier.displayProbabilityTables();
 
-		classifier.computeTrainingError(trainingFile);
 	}
 }

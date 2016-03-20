@@ -205,6 +205,33 @@ public class BayesClassifier {
 		System.out.println(errorRate + " percent error");
 	}
 
+	/**
+	 * answer to section 1 question 2 part b
+	 *
+	 * @param trainingFile
+	 * @return
+	 * @throws IOException
+	 */
+	public double validateWithLeaveOneOut(String trainingFile)
+			throws IOException {
+		this.loadTrainingData(trainingFile);
+
+		int numberInvalid = 0;
+		for (int i = 0; i < this.numberRecords; i++) {
+			Record theOneBeingLeftOut = this.records.remove(0);
+
+			this.buildModel();
+
+			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
+			if (actualClassName != theOneBeingLeftOut.className) {
+				numberInvalid++;
+			}
+
+			this.records.add(theOneBeingLeftOut);
+		}
+		return (numberInvalid / (double) (this.numberRecords - 1));
+	}
+
 	private int classify(int[] attributes) {
 		double maxProbability = 0.0;
 		int maxClass = -1;
@@ -349,7 +376,7 @@ public class BayesClassifier {
 			}
 		}
 
-		for (int k = 0; k < this.numberRecords; k++) {
+		for (int k = 0; k < this.records.size(); k++) {
 			int i = this.records.get(k).className - 1;
 			int j = this.records.get(k).attributes[attribute - 1] - 1;
 			this.table[attribute - 1][i][j] += 1;
@@ -373,7 +400,7 @@ public class BayesClassifier {
 			this.classTable[i] = 0;
 		}
 
-		for (int i = 0; i < this.numberRecords; i++) {
+		for (int i = 0; i < this.records.size(); i++) {
 			this.classTable[this.records.get(i).className - 1] += 1;
 		}
 
@@ -410,32 +437,5 @@ public class BayesClassifier {
 			attributeArray[j] = this.convert(label, j + 1);
 		}
 		return attributeArray;
-	}
-
-	/**
-	 * answer to section 1 question 2 part b
-	 *
-	 * @param trainingFile
-	 * @return
-	 * @throws IOException
-	 */
-	private double validateWithLeaveOneOut(String trainingFile)
-			throws IOException {
-		this.loadTrainingData(trainingFile);
-
-		int numberInvalid = 0;
-		for (int i = 0; i < this.numberRecords; i++) {
-			Record theOneBeingLeftOut = this.records.remove(0);
-
-			this.buildModel();
-
-			int actualClassName = this.classify(theOneBeingLeftOut.attributes);
-			if (actualClassName != theOneBeingLeftOut.className) {
-				numberInvalid++;
-			}
-
-			this.records.add(theOneBeingLeftOut);
-		}
-		return (numberInvalid / (double) (this.numberRecords - 1));
 	}
 }
