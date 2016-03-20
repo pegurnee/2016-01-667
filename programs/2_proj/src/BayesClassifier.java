@@ -99,9 +99,10 @@ public class BayesClassifier {
 			int[] attributeArray = this.loadIndividualRecordData(inFile);
 
 			int className = this.classify(attributeArray);
+			double confidence = this.confidenceLevel(className, attributeArray);
 
 			String label = this.convert(className);
-			outFile.println(label);
+			outFile.println(String.format("%-20s %f", label, confidence));
 		}
 
 		inFile.close();
@@ -134,8 +135,8 @@ public class BayesClassifier {
 				for (int cla = 0; cla < this.table[att].length; cla++) {
 					for (int val =
 							0; val < this.table[att][cla].length; val++) {
-						response.append(String.format("%-20s",
-							String.format("P(%s|%s)", val, this.convert(cla))));
+						response.append(String.format("%-20s", String.format(
+							"P(%s|%s):", val, this.convert(cla))));
 						response.append(String.format("%10.6f ",
 							this.table[att][cla][val]));
 					}
@@ -145,8 +146,8 @@ public class BayesClassifier {
 			}
 			response.append("\tClass probabilities:\n");
 			for (int i = 0; i < this.classTable.length; i++) {
-				response.append(String.format("%-20s%10.6f\n",
-					String.format("P(%s)", this.convert(i)),
+				response.append(String.format("%-10s%-10f\n",
+					String.format("P(%s):", this.convert(i)),
 					this.classTable[i]));
 			}
 		}
@@ -248,11 +249,11 @@ public class BayesClassifier {
 		// of the total conditional probabilities of all classes given that
 		// record
 		// p(chosen class) / p(any class)
-		double pClassChoosen = this.findProbability(className - 1, attributes);
+		double pClassChoosen = this.findProbability(className, attributes);
 		double pAnyClass = 0.0;
 
 		for (int i = 0; i < this.numberClasses; i++) {
-			pAnyClass += this.findProbability(0, attributes);
+			pAnyClass += this.findProbability(i + 1, attributes);
 		}
 		return pClassChoosen / pAnyClass;
 	}
@@ -260,15 +261,17 @@ public class BayesClassifier {
 	private String convert(int value) {
 		String label;
 
-		if (value == 1) {
-			label = "highrisk";
-		} else if (value == 2) {
-			label = "mediumrisk";
-		} else if (value == 3) {
-			label = "lowrisk";
-		} else {
-			label = "undetermined";
-		}
+		label = Integer.toString(value + 1);
+
+		// if (value == 1) {
+		// label = "highrisk";
+		// } else if (value == 2) {
+		// label = "mediumrisk";
+		// } else if (value == 3) {
+		// label = "lowrisk";
+		// } else {
+		// label = "undetermined";
+		// }
 
 		return label;
 	}
