@@ -40,11 +40,21 @@ public class NeuralNetwork {
 
 		for (Record r : classifier.records) {
 			System.out.println(
-				Arrays.toString(r.input) + ": " + Arrays.toString(r.output));
+				Arrays.toString(r.input) + " : " + Arrays.toString(r.output));
 		}
+
+		// 53467
+		// 453876
+		// 234789
+		// 1
+		classifier.setParameters(5, 100_000, 53467, .85);
+
 		classifier.train();
 
 		classifier.testData(testingFile, classifiedFile);
+
+		System.out.println(
+			"training error: " + classifier.computeTrainingError());
 
 	}
 
@@ -76,6 +86,9 @@ public class NeuralNetwork {
 	private double[] thetaMiddle;
 	private double[] thetaOut;
 
+	/**
+	 * answer to section 2 question 1 part a
+	 */
 	public NeuralNetwork() {
 		this(new DoubleDataConverter());
 	}
@@ -103,6 +116,32 @@ public class NeuralNetwork {
 		this.converter = (NeuralNetworkDataConverterInterface) converter;
 	}
 
+	public double computeTrainingError() {
+		int numberError = 0;
+
+		for (Record r : this.records) {
+			double[] actualOutput = this.test(r.input);
+
+			if (!this.isOutputCloseEnough(r.output, actualOutput)) {
+				// System.out.println("error: "+ Arrays.toString(r.input)
+				// + " ex: " + Arrays.toString(r.output)
+				// + " ac: " + Arrays.toString(actualOutput));
+				// System.out.println(
+				// "label: " + this.convertOutput(r.output[0], 0) + " ac: "
+				// + this.convertOutput(actualOutput[0], 0));
+				numberError++;
+			}
+		}
+
+		return (100.0 * numberError) / this.numberRecords;
+	}
+
+	/**
+	 * answer to section 2 question 1 part b
+	 *
+	 * @param trainingData
+	 * @throws IOException
+	 */
 	public void loadTrainingData(String trainingData) throws IOException {
 		Scanner inFile = new Scanner(new File(trainingData));
 
@@ -131,6 +170,14 @@ public class NeuralNetwork {
 		inFile.close();
 	}
 
+	/**
+	 * answer to section 2 question 1 part c
+	 *
+	 * @param numberMiddle
+	 * @param numberIterations
+	 * @param seed
+	 * @param rate
+	 */
 	public void setParameters(int numberMiddle, int numberIterations, int seed,
 			double rate) {
 		this.numberMiddle = numberMiddle;
@@ -172,6 +219,13 @@ public class NeuralNetwork {
 		}
 	}
 
+	/**
+	 * answer to section 2 question 1 part e
+	 *
+	 * @param inputFile
+	 * @param outputFile
+	 * @throws IOException
+	 */
 	public void testData(String inputFile, String outputFile)
 			throws IOException {
 		Scanner inFile = new Scanner(new File(inputFile));
@@ -198,6 +252,9 @@ public class NeuralNetwork {
 		outFile.close();
 	}
 
+	/**
+	 * answer to section 2 question 1 part d
+	 */
 	public void train() {
 		for (int i = 0; i < this.numberIterations; i++) {
 			for (int j = 0; j < this.numberRecords; j++) {
@@ -290,6 +347,11 @@ public class NeuralNetwork {
 		return this.converter.convertToNumericalValue(label, column);
 	}
 
+	private String convertOutput(double value, int column) {
+		return this.converter.convertFromNumericalValue(value,
+			column + this.numberInputs);
+	}
+
 	private void forwardCalculation(double[] trainingInput) {
 		for (int i = 0; i < this.numberInputs; i++) {
 			this.input[i] = trainingInput[i];
@@ -318,6 +380,18 @@ public class NeuralNetwork {
 
 			this.output[i] = 1 / (1 + Math.exp(-sum));
 		}
+	}
+
+	private boolean isOutputCloseEnough(double[] output1, double[] output2) {
+		for (int i = 0; i < output2.length; i++) {
+			final String label1 = this.convertOutput(output1[i], i);
+			final String label2 = this.convertOutput(output2[i], i);
+
+			if (!label1.equals(label2)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private double[] test(double[] input) {
