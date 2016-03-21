@@ -30,6 +30,9 @@ public class ConfigurationObject
 					converter = new JavaResumeDataConverter();
 				}
 			case 2:
+				if (question == 2) {
+					converter = new StudentNeuralNetDataConverter();
+				}
 			case 3:
 		}
 		return converter;

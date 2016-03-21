@@ -48,13 +48,13 @@ public class BayesClassifier {
 
 	private int[] attributeValues;
 	private final BayesClassifierDataConverterInterface converter;
+
 	private int numberAttributes;
-
 	private int numberClasses;
-
 	private int numberRecords;
 
 	private ArrayList<Record> records;
+
 	double[] classTable;
 
 	double[][][] table;
