@@ -68,7 +68,7 @@ public class StudentNeuralNetDataConverter
 
 		int nearestIndex = 0;
 		for (int i = 1; i < relatives.length; i++) {
-			if (relatives[nearestIndex] < relatives[i]) {
+			if (relatives[nearestIndex] > relatives[i]) {
 				nearestIndex = i;
 			}
 		}
