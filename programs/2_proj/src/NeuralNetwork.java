@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -27,18 +28,41 @@ public class NeuralNetwork {
 		}
 	}
 
+	public static void main(String[] args) throws IOException {
+		String inFolder = "in/part2/", outFolder = "out/part2/";
+		String trainingFile = inFolder + "train1",
+				testingFile = inFolder + "test1",
+				classifiedFile = outFolder + "classified1";
+		NeuralNetwork classifier =
+				new NeuralNetwork(new StudentNeuralNetDataConverter());
+
+		classifier.loadTrainingData(trainingFile);
+
+		for (Record r : classifier.records) {
+			System.out.println(
+				Arrays.toString(r.input) + ": " + Arrays.toString(r.output));
+		}
+		classifier.train();
+		;
+
+		classifier.testData(testingFile, classifiedFile);
+
+	}
+
+	private final NeuralNetworkDataConverterInterface converter;
 	private double[] errorMiddle;
+
 	private double[] errorOut;
 
 	private double[] input;
-
 	private double[][] matrixMiddle;
 	private double[][] matrixOut;
-	private double[] middle;
 
+	private double[] middle;
 	private int numberInputs;
 	private int numberIterations;
 	private int numberMiddle;
+
 	private int numberOutputs;
 
 	private int numberRecords;
@@ -50,11 +74,15 @@ public class NeuralNetwork {
 	private ArrayList<Record> records;
 
 	private int seed;
-
 	private double[] thetaMiddle;
+
 	private double[] thetaOut;
 
 	public NeuralNetwork() {
+		this(new DoubleDataConverter());
+	}
+
+	public NeuralNetwork(NeuralNetworkDataConverterInterface converter) {
 		this.numberRecords = 0;
 		this.numberInputs = 0;
 		this.numberOutputs = 0;
@@ -73,6 +101,8 @@ public class NeuralNetwork {
 		this.thetaOut = null;
 		this.matrixMiddle = null;
 		this.matrixOut = null;
+
+		this.converter = converter;
 	}
 
 	public void loadTrainingData(String trainingData) throws IOException {
@@ -87,12 +117,12 @@ public class NeuralNetwork {
 		for (int i = 0; i < this.numberRecords; i++) {
 			double[] input = new double[this.numberInputs];
 			for (int j = 0; j < input.length; j++) {
-				input[j] = inFile.nextDouble();
+				input[j] = this.convert(inFile.next(), j);
 			}
 
 			double[] output = new double[this.numberOutputs];
 			for (int j = 0; j < this.numberOutputs; j++) {
-				output[j] = inFile.nextDouble();
+				output[j] = this.convert(inFile.next(), j + this.numberInputs);
 			}
 
 			Record record = new Record(input, output);
@@ -155,7 +185,7 @@ public class NeuralNetwork {
 			double[] input = new double[this.numberInputs];
 
 			for (int j = 0; j < this.numberInputs; j++) {
-				input[j] = inFile.nextDouble();
+				input[j] = this.convert(inFile.next(), j);
 			}
 
 			double[] output = this.test(input);
@@ -190,12 +220,12 @@ public class NeuralNetwork {
 		for (int i = 0; i < numberRecords; i++) {
 			double[] input = new double[this.numberInputs];
 			for (int j = 0; j < this.numberInputs; j++) {
-				input[j] = inFile.nextDouble();
+				input[j] = this.convert(inFile.next(), j);
 			}
 
 			double[] actualOutput = new double[this.numberOutputs];
 			for (int j = 0; j < this.numberOutputs; j++) {
-				actualOutput[j] = inFile.nextDouble();
+				actualOutput[j] = this.convert(inFile.next(), j);
 			}
 
 			double[] predictedOutput = this.test(input);
@@ -256,6 +286,10 @@ public class NeuralNetwork {
 		}
 
 		return Math.sqrt(error / actualOutput.length);
+	}
+
+	private double convert(String label, int column) {
+		return this.converter.convertToNumericalValue(label, column);
 	}
 
 	private void forwardCalculation(double[] trainingInput) {
