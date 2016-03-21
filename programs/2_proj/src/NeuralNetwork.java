@@ -43,28 +43,26 @@ public class NeuralNetwork {
 				Arrays.toString(r.input) + ": " + Arrays.toString(r.output));
 		}
 		classifier.train();
-		;
 
 		classifier.testData(testingFile, classifiedFile);
 
 	}
 
 	private final NeuralNetworkDataConverterInterface converter;
-	private double[] errorMiddle;
 
+	private double[] errorMiddle;
 	private double[] errorOut;
 
 	private double[] input;
 	private double[][] matrixMiddle;
 	private double[][] matrixOut;
-
 	private double[] middle;
+
 	private int numberInputs;
 	private int numberIterations;
 	private int numberMiddle;
 
 	private int numberOutputs;
-
 	private int numberRecords;
 
 	private double[] output;
@@ -74,15 +72,15 @@ public class NeuralNetwork {
 	private ArrayList<Record> records;
 
 	private int seed;
-	private double[] thetaMiddle;
 
+	private double[] thetaMiddle;
 	private double[] thetaOut;
 
 	public NeuralNetwork() {
 		this(new DoubleDataConverter());
 	}
 
-	public NeuralNetwork(NeuralNetworkDataConverterInterface converter) {
+	public NeuralNetwork(DataConverterInterface converter) {
 		this.numberRecords = 0;
 		this.numberInputs = 0;
 		this.numberOutputs = 0;
@@ -102,7 +100,7 @@ public class NeuralNetwork {
 		this.matrixMiddle = null;
 		this.matrixOut = null;
 
-		this.converter = converter;
+		this.converter = (NeuralNetworkDataConverterInterface) converter;
 	}
 
 	public void loadTrainingData(String trainingData) throws IOException {
