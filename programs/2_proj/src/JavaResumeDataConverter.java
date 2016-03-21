@@ -1,6 +1,6 @@
 
 public class JavaResumeDataConverter
-	implements DataConverterInterface {
+	implements BayesClassifierDataConverterInterface {
 
 	@Override
 	public String convertFromNumericalValue(int value, int column) {

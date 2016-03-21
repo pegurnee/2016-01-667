@@ -47,7 +47,7 @@ public class BayesClassifier {
 	}
 
 	private int[] attributeValues;
-	private final DataConverterInterface converter;
+	private final BayesClassifierDataConverterInterface converter;
 	private int numberAttributes;
 
 	private int numberClasses;
@@ -66,7 +66,7 @@ public class BayesClassifier {
 		this(new IntegerDataConverter());
 	}
 
-	public BayesClassifier(DataConverterInterface converter) {
+	public BayesClassifier(BayesClassifierDataConverterInterface converter) {
 		this.records = null;
 		this.attributeValues = null;
 

@@ -20,8 +20,8 @@ public class ConfigurationObject
 
 	private ConfigurationObject() {}
 
-	public DataConverterInterface getConverter(int section, int question) {
-		DataConverterInterface converter = null;
+	public BayesClassifierDataConverterInterface getConverter(int section, int question) {
+		BayesClassifierDataConverterInterface converter = null;
 		switch (section) {
 			case 1:
 				if (question == 2) {
