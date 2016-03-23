@@ -70,7 +70,11 @@ public class FuzzyRanges {
 				}
 
 				// output.append(String.format("[ %f , %f ]%n", min, max));
-				output.append(String.format("%f %f ", min, max));
+
+				double[] fuzzyMinMax = applyFuzz(min, max);
+
+				output.append(
+					String.format("%f %f ", fuzzyMinMax[0], fuzzyMinMax[1]));
 				System.out.println(String.format(
 					"For set %d, range #%d:%nmin: %12.6f max: %12.6f", (i + 1),
 					g, min, max));
@@ -81,5 +85,28 @@ public class FuzzyRanges {
 				new FileOutputStream(new File(inFolder + outFilename)));
 		outFile.println(output.toString());
 		outFile.close();
+	}
+
+	private static double[] applyFuzz(double min, double max) {
+		double[] fuzzyMinMax = new double[2];
+		fuzzyMinMax[0] = min;
+		fuzzyMinMax[1] = max;
+
+		int rotations;
+		for (int i = 0; i < fuzzyMinMax.length; i++) {
+			rotations = 0;
+			while (Math.abs(fuzzyMinMax[i]) > 10) {
+				fuzzyMinMax[i] /= 10;
+				rotations++;
+			}
+			if (i == 0) {
+				fuzzyMinMax[i] = Math.floor(fuzzyMinMax[i]);
+			} else if (i == 1) {
+				fuzzyMinMax[i] = Math.ceil(fuzzyMinMax[i]);
+			}
+
+			fuzzyMinMax[i] *= Math.pow(10, rotations);
+		}
+		return fuzzyMinMax;
 	}
 }
