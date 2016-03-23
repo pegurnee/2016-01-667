@@ -136,7 +136,7 @@ public class Kmeans
 		
 		return clusterChanges;
 	}
-	
+
 	private void updateCentroids()
 	{
 		ArrayList<Record> clusterSum = new ArrayList<Record>();
@@ -172,4 +172,34 @@ public class Kmeans
 			centroids.set(i, average);
 		}
 	}
+	
+	private double distance(Record u, Record v) {
+		double sum = 0;
+		
+		for (int i = 0; i < u.attributes.length; i++)
+			sum += (u.attributes[i] - v.attributes[i]) *
+					(u.attributes[i] - v.attributes[i]);
+		
+		return sum;
+	}
+	
+	private Record sum(Record u, Record v) {
+		double[] result = new double[u.attributes.length];
+		
+		for (int i = 0; i < u.attributes.length; i++)
+			result[i] = u.attributes[i] + v.attributes[i];
+		
+		return new Record(result);
+	}
+	
+	private Record scale(Record u, double k) {
+		double[] result = new double[u.attributes.length];
+		
+		for (int i = 0; i < result.length; i++)
+			result[i] = k*u.attributes[i];
+		
+		return new Record(result);
+	}
+	
+	
 }
