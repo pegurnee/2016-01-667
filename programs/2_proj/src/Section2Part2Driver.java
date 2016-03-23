@@ -16,7 +16,6 @@ public class Section2Part2Driver {
 				config.getFileTesting(SECTION_NUM, QUESTION_NUM);
 		final String classifiedFile =
 				config.getFileClassified(SECTION_NUM, QUESTION_NUM);
-
 		final String validationFile =
 				config.getFileValidation(SECTION_NUM, QUESTION_NUM);
 

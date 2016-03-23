@@ -1,10 +1,5 @@
 50 3 1
 
-score: 0-100
-gpa: 0-4
-grade: A, B, C
-class: good, average, bad
-
 86 1.29 C average
 58 3.42 C bad
 96 3.39 B average
