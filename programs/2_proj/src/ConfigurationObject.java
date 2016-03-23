@@ -1,24 +1,59 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.util.Scanner;
 
 public class ConfigurationObject
 	implements Serializable {
 	private static ConfigurationObject instance = null;
+	private static int numberOfPartThreeDataSets = 5;
+	private static String rangesFile = "in/part3/ranges";
 
 	private static final long serialVersionUID = -1354273965361346550L;
 
 	public static ConfigurationObject getInstance() {
 		if (instance == null) {
-			instance = new ConfigurationObject();
+			instance = new ConfigurationObject(loadRanges(rangesFile));
 		}
 		return instance;
 	}
 
+	private static int[][][] loadRanges(String rangesFile) {
+		// TODO Auto-generated method stub
+		int[][][] ranges = new int[numberOfPartThreeDataSets][][];
+		Scanner inFile = null;
+		try {
+			inFile = new Scanner(new File(rangesFile));
+
+			for (int dataSetIndex =
+					0; dataSetIndex < numberOfPartThreeDataSets; dataSetIndex++) {
+				int numRanges = inFile.nextInt();
+
+				ranges[dataSetIndex] = new int[numRanges][2];
+				for (int rangeIndex = 0; rangeIndex < numRanges; rangeIndex++) {
+					ranges[dataSetIndex][rangeIndex][0] = inFile.nextInt();
+					ranges[dataSetIndex][rangeIndex][1] = inFile.nextInt();
+				}
+			}
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+
+		} finally {
+			inFile.close();
+		}
+
+		return ranges;
+	}
+
 	private final String IN_FOLDER = "in/";
 	private final String OUT_FOLDER = "out/";
+	private final int[][][] ranges;
 	private final String STOCK_LOCATION = "sp500/";
 
-	private ConfigurationObject() {}
+	private ConfigurationObject(int[][][] ranges) {
+		this.ranges = ranges;
+	}
 
 	public DataConverterInterface getConverter(int section, int question) {
 		DataConverterInterface converter = null;
@@ -36,6 +71,12 @@ public class ConfigurationObject
 					converter = new LoanNeuralNetDataConverter();
 				}
 			case 3:
+				if (question > 10) {
+					converter = new ContinuousValuesDataConverter(
+							this.ranges[question - 11]);
+				}
+			default:
+				converter = new DoubleDataConverter();
 		}
 		return converter;
 	}
@@ -82,11 +123,13 @@ public class ConfigurationObject
 	private String getFileLocation(int section, int question, FileType type) {
 		String location = this.getSubfolder(section, question);
 		location += type.toString();
-		if (!this.needsStockMarketValues(section, question)) {
-			if (section < 3) {
-				location += (question - 1);
-			}
+
+		if ((section == 3) && (question != 2)) {
+			location += (question - 10);
+		} else {
+			location += (question - 1);
 		}
+
 		return location;
 	}
 

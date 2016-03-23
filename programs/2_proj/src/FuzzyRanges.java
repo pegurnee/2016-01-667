@@ -54,6 +54,7 @@ public class FuzzyRanges {
 				inFile.close();
 			}
 
+			output.append(String.format("%d ", numberRanges));
 			for (int g = 0; g < numberRanges; g++) {
 				double min, max;
 
