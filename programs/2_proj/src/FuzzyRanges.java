@@ -73,8 +73,8 @@ public class FuzzyRanges {
 
 				double[] fuzzyMinMax = applyFuzz(min, max);
 
-				output.append(
-					String.format("%f %f ", fuzzyMinMax[0], fuzzyMinMax[1]));
+				output.append(String.format("%.0f %.0f ", fuzzyMinMax[0],
+					fuzzyMinMax[1]));
 				System.out.println(String.format(
 					"For set %d, range #%d:%nmin: %12.6f max: %12.6f", (i + 1),
 					g, min, max));
