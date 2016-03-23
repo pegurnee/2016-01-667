@@ -177,57 +177,60 @@ public class NeuralNetwork {
 		// this.thetaOut
 
 		// make headers for input matrix
-		response.append(this.getCellString(""));
+		response.append(ProjectTwoTools.getCellString(""));
 		for (int i = 0; i < this.numberMiddle; i++) {
-			response.append(this.getCellString("middle " + i + ":"));
+			response.append(ProjectTwoTools.getCellString("middle " + i + ":"));
 		}
 		response.append("\n");
 
 		// print out input/middle weight matrix
 		for (int i = 0; i < this.matrixMiddle.length; i++) {
-			response.append(this.getCellString("input " + i + ": "));
+			response.append(ProjectTwoTools.getCellString("input " + i + ": "));
 			for (int j = 0; j < this.matrixMiddle[i].length; j++) {
-				response.append(this.getCellString(this.matrixMiddle[i][j]));
+				response.append(
+					ProjectTwoTools.getCellString(this.matrixMiddle[i][j]));
 			}
 			response.append("\n");
 		}
 		response.append("\n");
 
 		// make headers for output matrix
-		response.append(this.getCellString(""));
+		response.append(ProjectTwoTools.getCellString(""));
 		for (int i = 0; i < this.numberOutputs; i++) {
-			response.append(this.getCellString("output " + i + ":"));
+			response.append(ProjectTwoTools.getCellString("output " + i + ":"));
 		}
 		response.append("\n");
 
 		// print out middle/output weight matrix
 		for (int i = 0; i < this.matrixOut.length; i++) {
-			response.append(this.getCellString("middle " + i + ": "));
+			response.append(
+				ProjectTwoTools.getCellString("middle " + i + ": "));
 			for (int j = 0; j < this.matrixOut[i].length; j++) {
-				response.append(this.getCellString(this.matrixOut[i][j]));
+				response.append(
+					ProjectTwoTools.getCellString(this.matrixOut[i][j]));
 			}
 			response.append("\n");
 		}
 		response.append("\n");
 
 		// theta for middle
-		response.append(this.getCellString(""));
-		response.append(this.getCellString("middle"));
+		response.append(ProjectTwoTools.getCellString(""));
+		response.append(ProjectTwoTools.getCellString("middle"));
 		response.append("\n");
 		for (int i = 0; i < this.thetaMiddle.length; i++) {
-			response.append(this.getCellString("theta " + i + ":"));
-			response.append(this.getCellString(this.thetaMiddle[i]));
+			response.append(ProjectTwoTools.getCellString("theta " + i + ":"));
+			response.append(ProjectTwoTools.getCellString(this.thetaMiddle[i]));
 			response.append("\n");
 		}
 		response.append("\n");
 
 		// theta for out
-		response.append(this.getCellString(""));
-		response.append(this.getCellString("out"));
+		response.append(ProjectTwoTools.getCellString(""));
+		response.append(ProjectTwoTools.getCellString("out"));
 		response.append("\n");
 		for (int i = 0; i < this.thetaOut.length; i++) {
-			response.append(this.getCellString("theta " + i + ":"));
-			response.append(this.getCellString(this.thetaOut[i]));
+			response.append(ProjectTwoTools.getCellString("theta " + i + ":"));
+			response.append(ProjectTwoTools.getCellString(this.thetaOut[i]));
 			response.append("\n");
 		}
 		response.append("\n");
@@ -451,16 +454,6 @@ public class NeuralNetwork {
 
 			this.output[i] = 1 / (1 + Math.exp(-sum));
 		}
-	}
-
-	private String getCellString(double cellData) {
-		final String cellFormat = "%-12.6f";
-		return String.format(cellFormat, cellData);
-	}
-
-	private String getCellString(String cellData) {
-		final String cellFormat = "%-12s";
-		return String.format(cellFormat, cellData.toString());
 	}
 
 	private boolean isOutputCloseEnough(double[] output1, double[] output2) {

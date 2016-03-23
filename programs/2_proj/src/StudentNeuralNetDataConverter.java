@@ -13,13 +13,13 @@ public class StudentNeuralNetDataConverter
 		switch (column) {
 			case 0:
 			case 1:
-				label = Double.toString(this.denormalize(value,
+				label = Double.toString(ProjectTwoTools.denormalize(value,
 					this.ranges[column][0], this.ranges[column][1]));
 				break;
 			case 2:
 			case 3:
 			default:
-				label = this.values[column - 2][this.closest(value,
+				label = this.values[column - 2][ProjectTwoTools.closest(value,
 					this.haystack)];
 		}
 
@@ -33,7 +33,7 @@ public class StudentNeuralNetDataConverter
 		switch (column) {
 			case 0:
 			case 1:
-				value = this.normalize(Double.parseDouble(label),
+				value = ProjectTwoTools.normalize(Double.parseDouble(label),
 					this.ranges[column][0], this.ranges[column][1]);
 				break;
 			case 2:
@@ -58,30 +58,4 @@ public class StudentNeuralNetDataConverter
 
 		return value;
 	}
-
-	private int closest(double needle, double[] haystack) {
-		double[] relatives = new double[haystack.length];
-
-		for (int i = 0; i < relatives.length; i++) {
-			relatives[i] = Math.abs(haystack[i] - needle);
-		}
-
-		int nearestIndex = 0;
-		for (int i = 1; i < relatives.length; i++) {
-			if (relatives[nearestIndex] > relatives[i]) {
-				nearestIndex = i;
-			}
-		}
-
-		return nearestIndex;
-	}
-
-	private double denormalize(double x, double min, double max) {
-		return (x * (max - min)) + min;
-	}
-
-	private double normalize(double x, double min, double max) {
-		return (x - min) / (max - min);
-	}
-
 }
