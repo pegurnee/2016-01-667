@@ -84,4 +84,24 @@ public class Kmeans
 			stopCondition = clusterChanges == 0;
 		}
 	}
+
+	private void initializeClusters()
+	{
+		clusters = new int[numberRecords];
+		
+		for (int i = 0; i < numberRecords; i++)
+			clusters[i] = -1;
+	}
+
+	private void initializeCentroids()
+	{
+		centroids = new ArrayList<Record>();
+		
+		for (int i = 0; i < numberClusters; i++)
+		{
+			int index = rand.nextInt(numberRecords);
+			
+			centroids.add(records.get(index));
+		}
+	}
 }
