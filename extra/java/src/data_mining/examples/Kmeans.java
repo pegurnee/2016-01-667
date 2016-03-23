@@ -60,4 +60,28 @@ public class Kmeans
 		
 		inFile.close();
 	}
+	
+	public void setParameters(int numberClusters, int seed)
+	{
+		this.numberClusters = numberClusters;
+		
+		this.rand = new Random(seed);
+	}
+	
+	public void cluster()
+	{
+		initializeClusters();
+		initializeCentroids();
+		
+		boolean stopCondition = false;
+		
+		while (!stopCondition)
+		{
+			int clusterChanges = assignClusters();
+			
+			updateCentroids();
+			
+			stopCondition = clusterChanges == 0;
+		}
+	}
 }
