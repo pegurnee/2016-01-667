@@ -1,22 +1,26 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 public class FuzzyRanges {
 	public static void main(String[] args) throws FileNotFoundException {
-		String inFolder = "in/part3/", outFile = "ranges";
+		String inFolder = "in/part3/", outFilename = "ranges";
 		int numFiles = 5;
 		String[] fileTypes = { "train", "test", "validate" };
 		StringBuilder output = new StringBuilder();
 
+		PrintWriter outFile;
 		Scanner inFile;
 
 		for (int i = 0; i < numFiles; i++) {
 			int numberRanges = 0, numInputs = 0, numOutputs = 0;
 			ArrayList<LinkedList<Double>> values = null;
 
+			output.append("File set " + (i + 1) + "\n");
 			for (int j = 0; j < fileTypes.length; j++) {
 				int numberRecords;
 				inFile = new Scanner(
@@ -46,6 +50,8 @@ public class FuzzyRanges {
 						// System.out.println(incomingValue);
 					}
 				}
+
+				inFile.close();
 			}
 
 			for (int g = 0; g < numberRanges; g++) {
@@ -63,11 +69,16 @@ public class FuzzyRanges {
 					}
 				}
 
+				output.append(String.format("[ %f , %f ]%n", min, max));
 				System.out.println(String.format(
-					"For set %d, range #%d:%nmin: %12.6f max: %12.6f", i, g,
-					min, max));
+					"For set %d, range #%d:%nmin: %12.6f max: %12.6f", (i + 1),
+					g, min, max));
 			}
 
+			outFile = new PrintWriter(
+					new FileOutputStream(new File(inFolder + outFilename)));
+			outFile.println(output.toString());
+			outFile.close();
 		}
 	}
 }
