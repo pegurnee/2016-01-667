@@ -20,7 +20,7 @@ public class FuzzyRanges {
 			int numberRanges = 0, numInputs = 0, numOutputs = 0;
 			ArrayList<LinkedList<Double>> values = null;
 
-			output.append("File set " + (i + 1) + "\n");
+			// output.append("File set " + (i + 1) + "\n");
 			for (int j = 0; j < fileTypes.length; j++) {
 				int numberRecords;
 				inFile = new Scanner(
@@ -69,16 +69,17 @@ public class FuzzyRanges {
 					}
 				}
 
-				output.append(String.format("[ %f , %f ]%n", min, max));
+				// output.append(String.format("[ %f , %f ]%n", min, max));
+				output.append(String.format("%f %f ", min, max));
 				System.out.println(String.format(
 					"For set %d, range #%d:%nmin: %12.6f max: %12.6f", (i + 1),
 					g, min, max));
 			}
-
-			outFile = new PrintWriter(
-					new FileOutputStream(new File(inFolder + outFilename)));
-			outFile.println(output.toString());
-			outFile.close();
+			output.append("\n");
 		}
+		outFile = new PrintWriter(
+				new FileOutputStream(new File(inFolder + outFilename)));
+		outFile.println(output.toString());
+		outFile.close();
 	}
 }
