@@ -16,6 +16,10 @@ public class Section2Part2Driver {
 				config.getFileTesting(SECTION_NUM, QUESTION_NUM);
 		final String classifiedFile =
 				config.getFileClassified(SECTION_NUM, QUESTION_NUM);
+
+		final String validationFile =
+				config.getFileValidation(SECTION_NUM, QUESTION_NUM);
+
 		classifier.loadTrainingData(trainingFile);
 
 		classifier.setParameters(5, 10_000, 53467, .85);
@@ -23,14 +27,11 @@ public class Section2Part2Driver {
 		classifier.train();
 
 		classifier.testData(testingFile, classifiedFile);
-		// classifier.buildModel();
-		//
-		// classifier.classifyData(testingFile, classifiedFile);
-		//
-		// System.out.println(classifier.computeTrainingError());
-		// System.out.println(classifier.validateWithLeaveOneOut(trainingFile));
-		//
-		// classifier.displayProbabilityTables();
+		classifier.displayWeightsAndThetas();
 
+		System.out.printf("training error:   %7.4f%%%n",
+			classifier.computeTrainingError());
+		System.out.printf("validation error: %7.4f%%%n",
+			(classifier.computeValidationError(validationFile) * 100));
 	}
 }
