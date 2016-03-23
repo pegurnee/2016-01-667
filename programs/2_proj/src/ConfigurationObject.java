@@ -71,10 +71,13 @@ public class ConfigurationObject
 					converter = new LoanNeuralNetDataConverter();
 				}
 			case 3:
-				if (question > 10) {
+				if (question == 2) {
+
+				} else if (question > 10) {
 					converter = new ContinuousValuesDataConverter(
 							this.ranges[question - 11]);
 				}
+				break;
 			default:
 				converter = new DoubleDataConverter();
 		}
