@@ -31,7 +31,7 @@ public class Section3Part1Driver {
 			// classifier.displayWeightsAndThetas();
 
 			System.out.printf("training error:   %7.4f%%%n",
-				classifier.computeTrainingError());
+				classifier.computeValidationError(trainingFile) * 100);
 			System.out.printf("validation error: %7.4f%%%n",
 				(classifier.computeValidationError(validationFile) * 100));
 		}
