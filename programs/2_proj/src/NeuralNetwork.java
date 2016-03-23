@@ -145,42 +145,63 @@ public class NeuralNetwork {
 		// this.thetaMiddle
 		// this.thetaOut
 
+		// make headers for input matrix
 		response.append(this.getCellString(""));
-		for (int i = 0; i < this.errorMiddle.length; i++) {
-			response.append(this.getCellString("middle " + i));
+		for (int i = 0; i < this.numberMiddle; i++) {
+			response.append(this.getCellString("middle " + i + ":"));
 		}
 		response.append("\n");
 
+		// print out input/middle weight matrix
 		for (int i = 0; i < this.matrixMiddle.length; i++) {
-			final String inputLabel = "input " + i + ": ";
-			response.append(this.getCellString(inputLabel));
-			System.out.print(inputLabel);
+			response.append(this.getCellString("input " + i + ": "));
 			for (int j = 0; j < this.matrixMiddle[i].length; j++) {
-				final String matrixValue = this.matrixMiddle[i][j] + " ";
 				response.append(this.getCellString(this.matrixMiddle[i][j]));
-				System.out.print(matrixValue);
 			}
-			final String newLine = "\n";
-			response.append(newLine);
-			System.out.print(newLine);
+			response.append("\n");
 		}
-		System.out.println(response.toString());
+		response.append("\n");
 
-		for (int i = 0; i < this.numberMiddle; i++) {
-
-			for (int j = 0; j < this.numberInputs; j++) {
-				System.out.print(this.matrixMiddle[j][i] + " ");
-			}
-			System.out.println();
-
-		}
-
+		// make headers for output matrix
+		response.append(this.getCellString(""));
 		for (int i = 0; i < this.numberOutputs; i++) {
-			for (int j = 0; j < this.numberMiddle; j++) {
-				System.out.print(this.matrixOut[j][i] + " ");
-			}
-			System.out.println();
+			response.append(this.getCellString("output " + i + ":"));
 		}
+		response.append("\n");
+
+		// print out middle/output weight matrix
+		for (int i = 0; i < this.matrixOut.length; i++) {
+			response.append(this.getCellString("middle " + i + ": "));
+			for (int j = 0; j < this.matrixOut[i].length; j++) {
+				response.append(this.getCellString(this.matrixOut[i][j]));
+			}
+			response.append("\n");
+		}
+		response.append("\n");
+
+		// theta for middle
+		response.append(this.getCellString(""));
+		response.append(this.getCellString("middle"));
+		response.append("\n");
+		for (int i = 0; i < this.thetaMiddle.length; i++) {
+			response.append(this.getCellString("theta " + i + ":"));
+			response.append(this.getCellString(this.thetaMiddle[i]));
+			response.append("\n");
+		}
+		response.append("\n");
+
+		// theta for out
+		response.append(this.getCellString(""));
+		response.append(this.getCellString("out"));
+		response.append("\n");
+		for (int i = 0; i < this.thetaOut.length; i++) {
+			response.append(this.getCellString("theta " + i + ":"));
+			response.append(this.getCellString(this.thetaOut[i]));
+			response.append("\n");
+		}
+		response.append("\n");
+
+		System.out.println(response.toString());
 	}
 
 	/**
