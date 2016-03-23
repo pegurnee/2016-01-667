@@ -11,13 +11,23 @@ public class ContinuousValuesDataConverter
 	@Override
 	public String convertFromNumericalValue(double value, int column) {
 		// TODO Auto-generated method stub
-		return null;
+		String label;
+
+		label = Double.toString(ProjectTwoTools.denormalize(value,
+			this.ranges[column][0], this.ranges[column][1]));
+
+		return label;
 	}
 
 	@Override
 	public double convertToNumericalValue(String label, int column) {
 		// TODO Auto-generated method stub
-		return 0;
+		double value;
+
+		value = ProjectTwoTools.normalize(Double.parseDouble(label),
+			this.ranges[column][0], this.ranges[column][1]);
+
+		return value;
 	}
 
 }
