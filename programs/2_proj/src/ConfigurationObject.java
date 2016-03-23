@@ -32,6 +32,8 @@ public class ConfigurationObject
 			case 2:
 				if (question == 2) {
 					converter = new StudentNeuralNetDataConverter();
+				} else if (question == 3) {
+					converter = new LoanNeuralNetDataConverter();
 				}
 			case 3:
 		}
