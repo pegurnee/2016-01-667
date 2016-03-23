@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -32,16 +31,17 @@ public class NeuralNetwork {
 		String inFolder = "in/part2/", outFolder = "out/part2/";
 		String trainingFile = inFolder + "train1",
 				testingFile = inFolder + "test1",
+				validationFile = inFolder + "validate1",
 				classifiedFile = outFolder + "classified1";
 		NeuralNetwork classifier =
 				new NeuralNetwork(new StudentNeuralNetDataConverter());
 
 		classifier.loadTrainingData(trainingFile);
 
-		for (Record r : classifier.records) {
-			System.out.println(
-				Arrays.toString(r.input) + " : " + Arrays.toString(r.output));
-		}
+		// for (Record r : classifier.records) {
+		// System.out.println(
+		// Arrays.toString(r.input) + " : " + Arrays.toString(r.output));
+		// }
 
 		// 53467
 		// 453876
@@ -53,11 +53,12 @@ public class NeuralNetwork {
 
 		classifier.testData(testingFile, classifiedFile);
 
-		System.out.println(
-			"training error: " + classifier.computeTrainingError());
-
 		classifier.displayWeightsAndThetas();
 
+		System.out.printf("training error:   %7.4f%%%n",
+			classifier.computeTrainingError());
+		System.out.printf("validation error: %7.4f%%%n",
+			(classifier.computeValidationError(validationFile) * 100));
 	}
 
 	private final NeuralNetworkDataConverterInterface converter;
@@ -136,6 +137,36 @@ public class NeuralNetwork {
 		}
 
 		return (100.0 * numberError) / this.numberRecords;
+	}
+
+	public double computeValidationError(String validationFile)
+			throws IOException {
+		Scanner inFile = new Scanner(new File(validationFile));
+
+		int numberRecords = inFile.nextInt();
+
+		double error = 0;
+
+		for (int i = 0; i < numberRecords; i++) {
+			double[] input = new double[this.numberInputs];
+			for (int j = 0; j < this.numberInputs; j++) {
+				input[j] = this.convert(inFile.next(), j);
+			}
+
+			double[] actualOutput = new double[this.numberOutputs];
+			for (int j = 0; j < this.numberOutputs; j++) {
+				actualOutput[j] =
+						this.convert(inFile.next(), j + this.numberInputs);
+			}
+
+			double[] predictedOutput = this.test(input);
+
+			error += this.computeError(actualOutput, predictedOutput);
+		}
+
+		inFile.close();
+
+		return error / numberRecords;
 	}
 
 	public void displayWeightsAndThetas() {
@@ -331,34 +362,6 @@ public class NeuralNetwork {
 				this.backwardCalculation(this.records.get(j).output);
 			}
 		}
-	}
-
-	public void validate(String validationFile) throws IOException {
-		Scanner inFile = new Scanner(new File(validationFile));
-
-		int numberRecords = inFile.nextInt();
-
-		double error = 0;
-
-		for (int i = 0; i < numberRecords; i++) {
-			double[] input = new double[this.numberInputs];
-			for (int j = 0; j < this.numberInputs; j++) {
-				input[j] = this.convert(inFile.next(), j);
-			}
-
-			double[] actualOutput = new double[this.numberOutputs];
-			for (int j = 0; j < this.numberOutputs; j++) {
-				actualOutput[j] = this.convert(inFile.next(), j);
-			}
-
-			double[] predictedOutput = this.test(input);
-
-			error += this.computeError(actualOutput, predictedOutput);
-		}
-
-		System.out.println(error / numberRecords);
-
-		inFile.close();
 	}
 
 	private void backwardCalculation(double[] trainingOutput) {
