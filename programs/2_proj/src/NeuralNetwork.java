@@ -47,7 +47,7 @@ public class NeuralNetwork {
 		// 453876
 		// 234789
 		// 1
-		classifier.setParameters(5, 100_000, 53467, .85);
+		classifier.setParameters(5, 10_000, 53467, .85);
 
 		classifier.train();
 
@@ -55,6 +55,8 @@ public class NeuralNetwork {
 
 		System.out.println(
 			"training error: " + classifier.computeTrainingError());
+
+		classifier.displayWeightsAndThetas();
 
 	}
 
@@ -134,6 +136,51 @@ public class NeuralNetwork {
 		}
 
 		return (100.0 * numberError) / this.numberRecords;
+	}
+
+	public void displayWeightsAndThetas() {
+		StringBuilder response = new StringBuilder();
+		// this.matrixMiddle
+		// this.matrixOut
+		// this.thetaMiddle
+		// this.thetaOut
+
+		response.append(this.getCellString(""));
+		for (int i = 0; i < this.errorMiddle.length; i++) {
+			response.append(this.getCellString("middle " + i));
+		}
+		response.append("\n");
+
+		for (int i = 0; i < this.matrixMiddle.length; i++) {
+			final String inputLabel = "input " + i + ": ";
+			response.append(this.getCellString(inputLabel));
+			System.out.print(inputLabel);
+			for (int j = 0; j < this.matrixMiddle[i].length; j++) {
+				final String matrixValue = this.matrixMiddle[i][j] + " ";
+				response.append(this.getCellString(this.matrixMiddle[i][j]));
+				System.out.print(matrixValue);
+			}
+			final String newLine = "\n";
+			response.append(newLine);
+			System.out.print(newLine);
+		}
+		System.out.println(response.toString());
+
+		for (int i = 0; i < this.numberMiddle; i++) {
+
+			for (int j = 0; j < this.numberInputs; j++) {
+				System.out.print(this.matrixMiddle[j][i] + " ");
+			}
+			System.out.println();
+
+		}
+
+		for (int i = 0; i < this.numberOutputs; i++) {
+			for (int j = 0; j < this.numberMiddle; j++) {
+				System.out.print(this.matrixOut[j][i] + " ");
+			}
+			System.out.println();
+		}
 	}
 
 	/**
@@ -380,6 +427,16 @@ public class NeuralNetwork {
 
 			this.output[i] = 1 / (1 + Math.exp(-sum));
 		}
+	}
+
+	private String getCellString(double cellData) {
+		final String cellFormat = "%-12.6f";
+		return String.format(cellFormat, cellData);
+	}
+
+	private String getCellString(String cellData) {
+		final String cellFormat = "%-12s";
+		return String.format(cellFormat, cellData.toString());
 	}
 
 	private boolean isOutputCloseEnough(double[] output1, double[] output2) {
