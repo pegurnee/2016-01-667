@@ -104,4 +104,72 @@ public class Kmeans
 			centroids.add(records.get(index));
 		}
 	}
+	
+	private int assignClusters()
+	{
+		int clusterChanges = 0;
+		
+		for (int i = 0; i < numberRecords; i++)
+		{
+			Record record = records.get(i);
+			
+			double minDistance = distance(record, centroids.get(0));
+			int minIndex = 0;
+			
+			for (int j = 0; j < numberClusters; j++)
+			{
+				double distance = distance(record, centroids.get(j));
+				
+				if (distance < minDistance)
+				{
+					minDistance = distance;
+					minIndex = j;
+				}
+			}
+			
+			if (clusters[i] != minIndex)
+			{
+				clusters[i] = minIndex;
+				clusterChanges++;
+			}
+		}
+		
+		return clusterChanges;
+	}
+	
+	private void updateCentroids()
+	{
+		ArrayList<Record> clusterSum = new ArrayList<Record>();
+		
+		for (int i = 0; i < numberClusters; i++)
+		{
+			double[] attributes = new double[numberAttributes];
+			for (int j = 0; j < numberAttributes; j++)
+				attributes[j] = 0;
+			
+			clusterSum.add(new Record(attributes));
+		}
+		
+		int[] clusterSize = new int[numberClusters];
+		
+		for (int i = 0; i < numberClusters; i++)
+			clusterSize[i] = 0;
+		
+		for (int i = 0; i < numberRecords; i++)
+		{
+			int cluster = clusters[i];
+			
+			Record sum = sum(clusterSum.get(cluster), records.get(i));
+			clusterSum.set(cluster, sum);
+			
+			clusterSize[cluster] += 1;
+		}
+		
+		for (int i = 0; i < numberClusters; i++)
+		{
+			Record average = scale(clusterSum.get(i), 1.0/clusterSize[i]);
+			
+			centroids.set(i, average);
+		}
+	}
 }
