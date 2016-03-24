@@ -1,5 +1,11 @@
 package data_mining.p2.converters;
 
+/**
+ * This data converter is used in the example dataset for section 1 problem 2.
+ * 
+ * @author eddie
+ *
+ */
 public class IntegerDataConverter
 	implements BayesClassifierDataConverterInterface {
 
@@ -9,17 +15,6 @@ public class IntegerDataConverter
 		if ((column == 1) || (column == 2) || (column == 4)) {
 			value += 1;
 		}
-
-		// switch (column) {
-		// case 1:
-		// case 2:
-		// case 4:
-		// value += 1;
-		// case 0:
-		// case 3:
-		// default:
-		// break;
-		// }
 
 		return Integer.toString(value);
 	}
@@ -31,17 +26,6 @@ public class IntegerDataConverter
 		if ((column == 1) || (column == 2) || (column == 4)) {
 			value -= 1;
 		}
-
-		// switch (column) {
-		// case 1:
-		// case 2:
-		// case 4:
-		// value -= 1;
-		// case 0:
-		// case 3:
-		// default:
-		// break;
-		// }
 
 		return value;
 	}

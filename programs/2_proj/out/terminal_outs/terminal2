@@ -1,0 +1,26 @@
+training error: 22.916666666666668
+validation error: 0.3404255319148936
+  Attribute column: 1
+P(0|no):    0.285714 P(1|no):    0.321429 P(2|no):    0.392857 
+P(0|hire):  0.080000 P(1|hire):  0.560000 P(2|hire):  0.360000 
+
+  Attribute column: 2
+P(no|no):    0.592593 P(java|no):  0.407407 
+P(no|hire):  0.375000 P(java|hire):  0.625000 
+
+  Attribute column: 3
+P(0|no):    0.392857 P(1|no):    0.392857 P(2|no):    0.214286 
+P(0|hire):  0.200000 P(1|hire):  0.240000 P(2|hire):  0.560000 
+
+  Attribute column: 4
+P(cs|no):    0.407407 P(other|no):  0.592593 
+P(cs|hire):  0.500000 P(other|hire):  0.500000 
+
+  Attribute column: 5
+P(A|no):    0.172414 P(B|no):    0.206897 P(C|no):    0.310345 P(D|no):    0.310345 
+P(A|hire):  0.307692 P(B|hire):  0.307692 P(C|hire):  0.192308 P(D|hire):  0.192308 
+
+  Class probabilities:
+P(no):    0.520833  
+P(hire):  0.458333  
+

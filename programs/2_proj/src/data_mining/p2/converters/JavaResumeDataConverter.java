@@ -1,5 +1,12 @@
 package data_mining.p2.converters;
 
+/**
+ * This data converter is used with the hiring question implemented with a bayes
+ * classifer in section 1 question 3.
+ * 
+ * @author eddie
+ *
+ */
 public class JavaResumeDataConverter
 	implements BayesClassifierDataConverterInterface {
 

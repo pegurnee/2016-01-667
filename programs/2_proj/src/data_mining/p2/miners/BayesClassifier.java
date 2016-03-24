@@ -22,6 +22,12 @@ import data_mining.p2.converters.IntegerDataConverter;
  *
  */
 public class BayesClassifier {
+	/**
+	 * private record class to store attributes and output classname
+	 *
+	 * @author eddie
+	 *
+	 */
 	private class Record {
 		private final int[] attributes;
 		private final int className;
@@ -71,6 +77,12 @@ public class BayesClassifier {
 		this(new IntegerDataConverter());
 	}
 
+	/**
+	 * Constructor takes a converter object that will be responsible for the
+	 * individual data conversions per data set
+	 *
+	 * @param converter
+	 */
 	public BayesClassifier(DataConverterInterface converter) {
 		this.records = null;
 		this.attributeValues = null;
@@ -95,7 +107,9 @@ public class BayesClassifier {
 	}
 
 	/**
-	 * answer to section 1 question 1 part d
+	 * answer to section 1 question 1 part d Takes a file of records to classify
+	 * and an destination file that will be recieving the information of
+	 * corresponding class labels confidence of classification
 	 *
 	 * @param testFile
 	 * @param classifiedFile
@@ -109,9 +123,13 @@ public class BayesClassifier {
 		int numberRecords = inFile.nextInt();
 
 		for (int i = 0; i < numberRecords; i++) {
+			// load a record
 			int[] attributeArray = this.loadIndividualRecordData(inFile);
 
+			// classify said record
 			int className = this.classify(attributeArray);
+
+			// compute confidence of said classification
 			double confidence = this.confidenceLevel(className, attributeArray);
 
 			String label = this.convert(className, this.numberAttributes);
@@ -123,11 +141,8 @@ public class BayesClassifier {
 	}
 
 	/**
-	 * answer to section 1 question 1 part a
-	 *
-	 * @param trainingFile
-	 * @return
-	 * @throws IOException
+	 * answer to section 1 question 1 part a After a training file and model has
+	 * been built, compute the training error rate
 	 */
 	public double computeTrainingError() {
 		int numberErrors = 0;
@@ -144,20 +159,27 @@ public class BayesClassifier {
 	}
 
 	/**
-	 * answer for section 1 question 2 part d
+	 * Displays the laplace adjusted conditional probabilities table, along with
+	 * the class probabilities
 	 */
 	public void displayProbabilityTables() {
 		StringBuilder response = new StringBuilder();
+
+		// checks if the model exists yet
 		if ((this.table == null) || (this.classTable == null)) {
 			response.append("Model not yet built");
 		} else {
+			// loop over each attribute
 			for (int att = 0; att < this.table.length; att++) {
 				response.append("\tAttribute column: " + (att + 1) + "\n");
+
+				// look at the individual class probability based on the a
+				// specific attribute selected
 				for (int cla = 0; cla < this.table[att].length; cla++) {
 					for (int val =
 							0; val < this.table[att][cla].length; val++) {
 						response.append(
-							String.format("%-20s",
+							String.format("%-10s",
 								String.format("P(%s|%s):",
 									this.convert(val, att),
 									this.convert(cla, this.numberAttributes))));
@@ -169,6 +191,8 @@ public class BayesClassifier {
 				response.append("\n");
 			}
 			response.append("\tClass probabilities:\n");
+
+			// here the class probablities are actually appended
 			for (int i = 0; i < this.classTable.length; i++) {
 				response.append(String.format("%-10s%-10f\n",
 					String.format("P(%s):",
@@ -180,7 +204,8 @@ public class BayesClassifier {
 	}
 
 	/**
-	 * answer to section 1 question 1 part b
+	 * answer to section 1 question 1 part b Loads a training file of records to
+	 * build a model
 	 *
 	 * @param trainingFile
 	 * @throws IOException

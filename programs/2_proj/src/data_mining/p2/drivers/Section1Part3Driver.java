@@ -1,4 +1,5 @@
 package data_mining.p2.drivers;
+
 import java.io.IOException;
 
 import data_mining.p2.miners.BayesClassifier;
@@ -26,8 +27,10 @@ public class Section1Part3Driver {
 
 		classifier.classifyData(testingFile, classifiedFile);
 
-		System.out.println(classifier.computeTrainingError());
-		System.out.println(classifier.validateWithLeaveOneOut(trainingFile));
+		System.out.println(
+			"training error: " + classifier.computeTrainingError());
+		System.out.println("validation error: "
+							+ classifier.validateWithLeaveOneOut(trainingFile));
 
 		classifier.displayProbabilityTables();
 	}
