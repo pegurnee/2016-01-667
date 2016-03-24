@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -28,13 +29,15 @@ public class NeuralNetwork {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String inFolder = "in/part2/", outFolder = "out/part2/";
-		String trainingFile = inFolder + "train1",
-				testingFile = inFolder + "test1",
-				validationFile = inFolder + "validate1",
-				classifiedFile = outFolder + "classified1";
-		NeuralNetwork classifier =
-				new NeuralNetwork(new StudentNeuralNetDataConverter());
+		String inFolder = "in/part3/", outFolder = "out/part3/";
+		String trainingFile = inFolder + "train5",
+				testingFile = inFolder + "test5",
+				validationFile = inFolder + "validate5",
+				classifiedFile = outFolder + "classified5";
+		// NeuralNetwork classifier =
+		// new NeuralNetwork(new StudentNeuralNetDataConverter());
+		NeuralNetwork classifier = new NeuralNetwork(
+				ConfigurationObject.getInstance().getConverter(3, 15));
 
 		classifier.loadTrainingData(trainingFile);
 
@@ -47,7 +50,7 @@ public class NeuralNetwork {
 		// 453876
 		// 234789
 		// 1
-		classifier.setParameters(5, 10_000, 53467, .85);
+		classifier.setParameters(4, 50_000, 53467, .65);
 
 		classifier.train();
 
@@ -55,8 +58,10 @@ public class NeuralNetwork {
 
 		classifier.displayWeightsAndThetas();
 
+		// System.out.printf("training error: %7.4f%%%n",
+		// classifier.computeTrainingError());
 		System.out.printf("training error:   %7.4f%%%n",
-			classifier.computeTrainingError());
+			classifier.computeValidationError(trainingFile) * 100);
 		System.out.printf("validation error: %7.4f%%%n",
 			(classifier.computeValidationError(validationFile) * 100));
 	}
@@ -120,23 +125,9 @@ public class NeuralNetwork {
 	}
 
 	public double computeTrainingError() {
-		int numberError = 0;
+		double errorValue = this.computeClassificationError();
 
-		for (Record r : this.records) {
-			double[] actualOutput = this.test(r.input);
-
-			if (!this.isOutputCloseEnough(r.output, actualOutput)) {
-				// System.out.println("error: "+ Arrays.toString(r.input)
-				// + " ex: " + Arrays.toString(r.output)
-				// + " ac: " + Arrays.toString(actualOutput));
-				// System.out.println(
-				// "label: " + this.convertOutput(r.output[0], 0) + " ac: "
-				// + this.convertOutput(actualOutput[0], 0));
-				numberError++;
-			}
-		}
-
-		return (100.0 * numberError) / this.numberRecords;
+		return (100.0 * errorValue) / this.numberRecords;
 	}
 
 	public double computeValidationError(String validationFile)
@@ -144,6 +135,8 @@ public class NeuralNetwork {
 		Scanner inFile = new Scanner(new File(validationFile));
 
 		int numberRecords = inFile.nextInt();
+
+		inFile.nextLine();
 
 		double error = 0;
 
@@ -160,6 +153,9 @@ public class NeuralNetwork {
 			}
 
 			double[] predictedOutput = this.test(input);
+			// System.out.println("actual: " + Arrays.toString(actualOutput));
+			// System.out.println("predic: " +
+			// Arrays.toString(predictedOutput));
 
 			error += this.computeError(actualOutput, predictedOutput);
 		}
@@ -404,6 +400,25 @@ public class NeuralNetwork {
 		for (int i = 0; i < this.numberMiddle; i++) {
 			this.thetaMiddle[i] += this.rate * this.errorMiddle[i];
 		}
+	}
+
+	private int computeClassificationError() {
+		int numberError = 0;
+
+		for (Record r : this.records) {
+			double[] actualOutput = this.test(r.input);
+
+			if (!this.isOutputCloseEnough(r.output, actualOutput)) {
+				System.out.println("error: "+ Arrays.toString(r.input)
+									+ " ex: " + Arrays.toString(r.output)
+									+ " ac: " + Arrays.toString(actualOutput));
+				System.out.println(
+					"label: "		+ this.convertOutput(r.output[0], 0) + " ac: "
+									+ this.convertOutput(actualOutput[0], 0));
+				numberError++;
+			}
+		}
+		return numberError;
 	}
 
 	private double computeError(double[] actualOutput,
