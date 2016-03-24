@@ -1,5 +1,6 @@
+package data_mining.p2.util;
 
-class ProjectTwoTools {
+public class ProjectTwoTools {
 	public static int closest(double needle, double[] haystack) {
 		double[] relatives = new double[haystack.length];
 
