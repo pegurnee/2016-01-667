@@ -64,12 +64,14 @@ public class ConfigurationObject
 				} else if (question == 3) {
 					converter = new JavaResumeDataConverter();
 				}
+				break;
 			case 2:
 				if (question == 2) {
 					converter = new StudentNeuralNetDataConverter();
 				} else if (question == 3) {
 					converter = new LoanNeuralNetDataConverter();
 				}
+				break;
 			case 3:
 				if (question == 2) {
 
