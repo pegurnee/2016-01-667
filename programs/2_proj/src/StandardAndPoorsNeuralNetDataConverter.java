@@ -6,13 +6,15 @@ public class StandardAndPoorsNeuralNetDataConverter
 	@Override
 	public String convertFromNumericalValue(double value, int column) {
 		// TODO Auto-generated method stub
-		return null;// ProjectTwoTools.;
+		return Double.toString(ProjectTwoTools.denormalize(value,
+			this.sapRange[0], this.sapRange[1]));
 	}
 
 	@Override
 	public double convertToNumericalValue(String label, int column) {
 		// TODO Auto-generated method stub
-		return 0;
+		return ProjectTwoTools.normalize(Double.parseDouble(label),
+			this.sapRange[0], this.sapRange[1]);
 	}
 
 }
