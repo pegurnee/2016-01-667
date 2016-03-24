@@ -1,11 +1,18 @@
 package data_mining.p2.drivers;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 import data_mining.p2.miners.NeuralNetwork;
 import data_mining.p2.util.ConfigurationObject;
 
-public class Section3Part2Driver {
+/**
+ * User application for testing S&P info
+ * 
+ * @author eddie
+ *
+ */
+public class Section3Part2UserApp {
 	private static final int QUESTION_NUM = 2;
 	private static final int SECTION_NUM = 3;
 
@@ -16,25 +23,22 @@ public class Section3Part2Driver {
 
 		final String trainingFile =
 				config.getFileTraining(SECTION_NUM, QUESTION_NUM);
-		final String testingFile =
-				config.getFileTesting(SECTION_NUM, QUESTION_NUM);
-		final String classifiedFile =
-				config.getFileClassified(SECTION_NUM, QUESTION_NUM);
-		final String validationFile =
-				config.getFileValidation(SECTION_NUM, QUESTION_NUM);
 
+		// initialize and train net
 		classifier.loadTrainingData(trainingFile);
-
 		classifier.setParameters(4, 75_000, 53467, .65);
-
 		classifier.train();
 
-		classifier.testData(testingFile, classifiedFile);
-		// classifier.displayWeightsAndThetas();
+		// user interface follows here:
+		Scanner kb = new Scanner(System.in);
+		String testFile, destFile;
 
-		System.out.printf("training error:   %7.4f%%%n",
-			classifier.computeValidationError(trainingFile) * 100);
-		System.out.printf("validation error: %7.4f%%%n",
-			(classifier.computeValidationError(validationFile) * 100));
+		System.out.println("Enter test file: ");
+		testFile = kb.nextLine();
+
+		System.out.println("Enter file destination: ");
+		destFile = kb.nextLine();
+
 	}
+
 }

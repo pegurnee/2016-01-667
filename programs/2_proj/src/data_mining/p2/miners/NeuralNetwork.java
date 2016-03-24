@@ -342,7 +342,7 @@ public class NeuralNetwork {
 			double[] output = this.test(input);
 
 			for (int j = 0; j < this.numberOutputs; j++) {
-				outFile.print(output[j] + " ");
+				outFile.print(this.convertOutput(output[j], j) + " ");
 			}
 			outFile.println();
 		}

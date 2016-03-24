@@ -1,5 +1,8 @@
 import csv
+"""
+This script takes the raw S&P file and converts it into records to be used in the section 3, problem 2.
 
+"""
 def main():
   with open('../in/SP500.csv') as f:
     _recs = [tuple(_l) for _l in csv.reader(f) if _l[0][3] in '45' and len(_l[1]) > 1]
