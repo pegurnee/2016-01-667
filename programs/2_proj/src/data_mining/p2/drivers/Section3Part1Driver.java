@@ -1,15 +1,24 @@
 package data_mining.p2.drivers;
+
 import java.io.IOException;
 
 import data_mining.p2.miners.NeuralNetwork;
 import data_mining.p2.util.ConfigurationObject;
 
+/**
+ * Driver for section 3 problem 1, converts, displays, classifies all the data
+ *
+ * @author eddie
+ *
+ */
 public class Section3Part1Driver {
 	private static final int SECTION_NUM = 3;
 
 	public static void main(String[] args) throws IOException {
 		ConfigurationObject config = ConfigurationObject.getInstance();
 		int questionNumber = 5;
+		// this question offset is a hack so that i can get 5 different files
+		// from a method that should only return one
 		final int questionOffset = 11;
 
 		for (int i = 0; i < questionNumber; i++) {
@@ -27,7 +36,7 @@ public class Section3Part1Driver {
 
 			classifier.loadTrainingData(trainingFile);
 
-			classifier.setParameters(4, 50_000, 53467, .65);
+			classifier.setParameters(6, 75_000, 53467, .65);
 
 			classifier.train();
 

@@ -1,4 +1,5 @@
 package data_mining.p2.util;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,6 +8,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * This is a little utility file (that should've been in a python script) that
+ * take the training files and computes some ranges that should theoretically be
+ * able to handle some test and validation data.
+ * 
+ * @author eddie
+ *
+ */
 public class FuzzyRanges {
 	public static void main(String[] args) throws FileNotFoundException {
 		String inFolder = "in/part3/", outFilename = "ranges";
