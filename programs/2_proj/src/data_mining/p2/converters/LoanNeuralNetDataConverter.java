@@ -2,6 +2,13 @@ package data_mining.p2.converters;
 
 import data_mining.p2.util.ProjectTwoTools;
 
+/**
+ * This is a data converter to be used with the neural network classifier,
+ * specifically converting loan information into reliability data
+ *
+ * @author eddie
+ *
+ */
 public class LoanNeuralNetDataConverter
 	implements NeuralNetworkDataConverterInterface {
 

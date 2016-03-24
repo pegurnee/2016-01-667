@@ -5,12 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 import data_mining.p2.converters.DataConverterInterface;
-import data_mining.p2.converters.DoubleDataConverter;
+import data_mining.p2.converters.LoanNeuralNetDataConverter;
 import data_mining.p2.converters.NeuralNetworkDataConverterInterface;
 import data_mining.p2.util.ConfigurationObject;
 import data_mining.p2.util.ProjectTwoTools;
@@ -47,11 +46,6 @@ public class NeuralNetwork {
 				ConfigurationObject.getInstance().getConverter(3, 15));
 
 		classifier.loadTrainingData(trainingFile);
-
-		// for (Record r : classifier.records) {
-		// System.out.println(
-		// Arrays.toString(r.input) + " : " + Arrays.toString(r.output));
-		// }
 
 		// 53467
 		// 453876
@@ -105,7 +99,7 @@ public class NeuralNetwork {
 	 * answer to section 2 question 1 part a
 	 */
 	public NeuralNetwork() {
-		this(new DoubleDataConverter());
+		this(new LoanNeuralNetDataConverter());
 	}
 
 	public NeuralNetwork(DataConverterInterface converter) {
@@ -416,12 +410,12 @@ public class NeuralNetwork {
 			double[] actualOutput = this.test(r.input);
 
 			if (!this.isOutputCloseEnough(r.output, actualOutput)) {
-				System.out.println("error: "+ Arrays.toString(r.input)
-									+ " ex: " + Arrays.toString(r.output)
-									+ " ac: " + Arrays.toString(actualOutput));
-				System.out.println(
-					"label: "		+ this.convertOutput(r.output[0], 0) + " ac: "
-									+ this.convertOutput(actualOutput[0], 0));
+				// System.out.println("error: "+ Arrays.toString(r.input)
+				// + " ex: " + Arrays.toString(r.output)
+				// + " ac: " + Arrays.toString(actualOutput));
+				// System.out.println(
+				// "label: " + this.convertOutput(r.output[0], 0) + " ac: "
+				// + this.convertOutput(actualOutput[0], 0));
 				numberError++;
 			}
 		}
