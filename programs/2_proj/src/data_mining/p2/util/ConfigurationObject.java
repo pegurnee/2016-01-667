@@ -1,4 +1,5 @@
 package data_mining.p2.util;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
@@ -6,13 +7,21 @@ import java.util.Scanner;
 
 import data_mining.p2.converters.ContinuousValuesDataConverter;
 import data_mining.p2.converters.DataConverterInterface;
-import data_mining.p2.converters.DoubleDataConverter;
 import data_mining.p2.converters.IntegerDataConverter;
 import data_mining.p2.converters.JavaResumeDataConverter;
 import data_mining.p2.converters.LoanNeuralNetDataConverter;
 import data_mining.p2.converters.StandardAndPoorsNeuralNetDataConverter;
 import data_mining.p2.converters.StudentNeuralNetDataConverter;
 
+/**
+ * This singleton object holds much of the management data and functions of the
+ * project; depending on what question is being worked with, this configobject
+ * is responsible for retrieving the correct data converters,
+ * input/output/testing/validation files, and other management processes
+ *
+ * @author eddie
+ *
+ */
 public class ConfigurationObject
 	implements Serializable {
 	private static ConfigurationObject instance = null;
@@ -91,7 +100,6 @@ public class ConfigurationObject
 				}
 				break;
 			default:
-				converter = new DoubleDataConverter();
 		}
 		return converter;
 	}

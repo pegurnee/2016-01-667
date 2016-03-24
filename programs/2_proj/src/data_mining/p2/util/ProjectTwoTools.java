@@ -1,5 +1,12 @@
 package data_mining.p2.util;
 
+/**
+ * This class contains a number of static methods that are used in various
+ * places around the project.
+ * 
+ * @author eddie
+ *
+ */
 public class ProjectTwoTools {
 	public static int closest(double needle, double[] haystack) {
 		double[] relatives = new double[haystack.length];
