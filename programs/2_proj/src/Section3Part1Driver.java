@@ -23,16 +23,16 @@ public class Section3Part1Driver {
 
 			classifier.loadTrainingData(trainingFile);
 
-			classifier.setParameters(5, 10_000, 53467, .85);
+			classifier.setParameters(4, 50_000, 53467, .65);
 
 			classifier.train();
 
 			classifier.testData(testingFile, classifiedFile);
 			// classifier.displayWeightsAndThetas();
 
-			System.out.printf("training error:   %7.4f%%%n",
+			System.out.printf("training%d error:   %7.4f%%%n", (i + 1),
 				classifier.computeValidationError(trainingFile) * 100);
-			System.out.printf("validation error: %7.4f%%%n",
+			System.out.printf("validation%d error: %7.4f%%%n", (i + 1),
 				(classifier.computeValidationError(validationFile) * 100));
 		}
 
