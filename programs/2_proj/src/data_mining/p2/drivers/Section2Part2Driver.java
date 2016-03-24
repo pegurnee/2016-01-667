@@ -8,7 +8,7 @@ import data_mining.p2.util.ConfigurationObject;
 /**
  * Drive for section 2 question 2, best properties are 10 hidden nodes, 100_000
  * iterations, and .85 learning rate
- * 
+ *
  * @author eddie
  *
  */
