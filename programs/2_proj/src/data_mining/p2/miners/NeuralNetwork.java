@@ -1,3 +1,4 @@
+package data_mining.p2.miners;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -7,6 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+
+import data_mining.p2.converters.DataConverterInterface;
+import data_mining.p2.converters.DoubleDataConverter;
+import data_mining.p2.converters.NeuralNetworkDataConverterInterface;
+import data_mining.p2.util.ConfigurationObject;
+import data_mining.p2.util.ProjectTwoTools;
 
 /**
  * Neural network classifier, original code presented by Dr Suchindran Maniccam.

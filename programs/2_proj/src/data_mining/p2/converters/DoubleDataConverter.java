@@ -1,3 +1,4 @@
+package data_mining.p2.converters;
 
 public class DoubleDataConverter
 	implements NeuralNetworkDataConverterInterface {

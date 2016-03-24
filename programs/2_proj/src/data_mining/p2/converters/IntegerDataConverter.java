@@ -1,3 +1,4 @@
+package data_mining.p2.converters;
 
 public class IntegerDataConverter
 	implements BayesClassifierDataConverterInterface {

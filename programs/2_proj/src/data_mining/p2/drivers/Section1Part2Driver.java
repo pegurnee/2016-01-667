@@ -1,4 +1,8 @@
+package data_mining.p2.drivers;
 import java.io.IOException;
+
+import data_mining.p2.miners.BayesClassifier;
+import data_mining.p2.util.ConfigurationObject;
 
 public class Section1Part2Driver {
 	private static final int QUESTION_NUM = 2;

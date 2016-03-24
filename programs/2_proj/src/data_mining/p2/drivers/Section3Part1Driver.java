@@ -1,4 +1,8 @@
+package data_mining.p2.drivers;
 import java.io.IOException;
+
+import data_mining.p2.miners.NeuralNetwork;
+import data_mining.p2.util.ConfigurationObject;
 
 public class Section3Part1Driver {
 	private static final int SECTION_NUM = 3;

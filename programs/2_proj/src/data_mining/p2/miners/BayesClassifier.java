@@ -1,3 +1,4 @@
+package data_mining.p2.miners;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,6 +8,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+
+import data_mining.p2.converters.BayesClassifierDataConverterInterface;
+import data_mining.p2.converters.DataConverterInterface;
+import data_mining.p2.converters.IntegerDataConverter;
 
 /**
  * Naive bayes classifier, original code presented by Dr Suchindran Maniccam.

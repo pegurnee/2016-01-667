@@ -1,3 +1,6 @@
+package data_mining.p2.converters;
+
+import data_mining.p2.util.ProjectTwoTools;
 
 public class LoanNeuralNetDataConverter
 	implements NeuralNetworkDataConverterInterface {

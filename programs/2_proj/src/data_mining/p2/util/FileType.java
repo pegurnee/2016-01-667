@@ -1,3 +1,4 @@
+package data_mining.p2.util;
 
 public enum FileType {
 	CLASSIFIED("classified"),
