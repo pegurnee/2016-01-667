@@ -74,7 +74,7 @@ public class ConfigurationObject
 				break;
 			case 3:
 				if (question == 2) {
-
+					converter = new StandardAndPoorsNeuralNetDataConverter();
 				} else if (question > 10) {
 					converter = new ContinuousValuesDataConverter(
 							this.ranges[question - 11]);
@@ -129,10 +129,10 @@ public class ConfigurationObject
 		String location = this.getSubfolder(section, question);
 		location += type.toString();
 
-		if ((section == 3) && (question != 2)) {
-			location += (question - 10);
-		} else {
+		if (section != 3) {
 			location += (question - 1);
+		} else if (question != 2) {
+			location += (question - 10);
 		}
 
 		return location;
