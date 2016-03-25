@@ -13,6 +13,7 @@ import java.util.Scanner;
  * Modified and expanded by Eddie Gurnee for use in Data Mining project 3.
  *
  * @author smaniccam
+ * @author eddie
  *
  */
 public class Kmeans {
@@ -70,6 +71,31 @@ public class Kmeans {
 
 			stopCondition = clusterChanges == 0;
 		}
+	}
+
+	/**
+	 * Computes the sum squared error of the values in a cluster compared to its
+	 * centroid.
+	 *
+	 * @param centroidNumber
+	 *            of the centroid to compute the error
+	 * @return the total sum squared distance of the given cluster
+	 */
+	public double computeSumSquaredErrorOfCluster(int centroidNumber) {
+		double sum = 0.0;
+
+		// go through each record and check cluster
+		for (int i = 0; i < this.clusters.length; i++) {
+			if (this.clusters[i] == centroidNumber) {
+				// get the distance from the centroid to each record in the
+				// cluster, and add it to the running distance total
+				final double distance = this.distance(this.records.get(i),
+					this.centroids.get(centroidNumber));
+				sum += distance * distance;
+			}
+		}
+
+		return sum;
 	}
 
 	/**
