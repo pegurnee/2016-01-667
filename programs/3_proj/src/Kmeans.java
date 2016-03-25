@@ -8,7 +8,20 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * K-means clusterer, original code presented by Dr Suchindran Maniccam.
+ * Modified and expanded by Eddie Gurnee for use in Data Mining project 3.
+ *
+ * @author smaniccam
+ *
+ */
 public class Kmeans {
+	/**
+	 * Record class that holds basic recod information.
+	 *
+	 * @author eddie
+	 *
+	 */
 	private class Record {
 		private final double[] attributes;
 
@@ -39,21 +52,32 @@ public class Kmeans {
 		this.rand = null;
 	}
 
+	/**
+	 * The actual algorithm that does the clustering.
+	 */
 	public void cluster() {
+		// first initialize the clusters and centroids
 		this.initializeClusters();
 		this.initializeCentroids();
 
 		boolean stopCondition = false;
-
+		// continue until the exit condition is reached
 		while (!stopCondition) {
-			int clusterChanges = this.assignClusters();
 
+			// get cluster changes and update new centroid location
+			int clusterChanges = this.assignClusters();
 			this.updateCentroids();
 
 			stopCondition = clusterChanges == 0;
 		}
 	}
 
+	/**
+	 * Prints the information regarding the clustering to a file
+	 *
+	 * @param outputFile
+	 * @throws IOException
+	 */
 	public void display(String outputFile) throws IOException {
 		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
 
@@ -68,6 +92,12 @@ public class Kmeans {
 		outFile.close();
 	}
 
+	/**
+	 * Loads data from a file into the k-means clusterer
+	 *
+	 * @param inputFile
+	 * @throws FileNotFoundException
+	 */
 	public void load(String inputFile) throws FileNotFoundException {
 		Scanner inFile = new Scanner(new File(inputFile));
 
@@ -90,21 +120,37 @@ public class Kmeans {
 		inFile.close();
 	}
 
+	/**
+	 * Sets parameters for the clusterer (only options are the number of
+	 * clusters and the random number generator seed.
+	 *
+	 * @param numberClusters
+	 * @param seed
+	 */
 	public void setParameters(int numberClusters, int seed) {
 		this.numberClusters = numberClusters;
 
 		this.rand = new Random(seed);
 	}
 
+	/**
+	 * Goes through each record, discovers the distance to each centroid, and
+	 * sets the cluster number for that record to the cluster number of the
+	 * nearest centroid.
+	 *
+	 * @return the number of records that changed clusters
+	 */
 	private int assignClusters() {
 		int clusterChanges = 0;
 
 		for (int i = 0; i < this.numberRecords; i++) {
+			// gets the record to compare cluster distances
 			Record record = this.records.get(i);
 
 			double minDistance = this.distance(record, this.centroids.get(0));
 			int minIndex = 0;
 
+			// discover all the distances, remember smallest one
 			for (int j = 0; j < this.numberClusters; j++) {
 				double distance = this.distance(record, this.centroids.get(j));
 
@@ -114,6 +160,7 @@ public class Kmeans {
 				}
 			}
 
+			// if there is a new closest centroid, change it and record change
 			if (this.clusters[i] != minIndex) {
 				this.clusters[i] = minIndex;
 				clusterChanges++;
@@ -123,6 +170,15 @@ public class Kmeans {
 		return clusterChanges;
 	}
 
+	/**
+	 * Private method to compute euclidean distance between two records.
+	 *
+	 * @param u
+	 *            record one
+	 * @param v
+	 *            record two
+	 * @return distance between records
+	 */
 	private double distance(Record u, Record v) {
 		double sum = 0;
 
@@ -134,6 +190,9 @@ public class Kmeans {
 		return sum;
 	}
 
+	/**
+	 * Initializes centroids to a random record in the set of records
+	 */
 	private void initializeCentroids() {
 		this.centroids = new ArrayList<Record>();
 
@@ -144,6 +203,10 @@ public class Kmeans {
 		}
 	}
 
+	/**
+	 * Initializes all of the cluster values for the records to be '-1'; aka, no
+	 * records have a cluster value at the start
+	 */
 	private void initializeClusters() {
 		this.clusters = new int[this.numberRecords];
 
@@ -152,6 +215,15 @@ public class Kmeans {
 		}
 	}
 
+	/**
+	 * Private method to apply a scalar to a record.
+	 *
+	 * @param u
+	 *            record
+	 * @param k
+	 *            scalar
+	 * @return the record with a scalar applied
+	 */
 	private Record scale(Record u, double k) {
 		double[] result = new double[u.attributes.length];
 
@@ -162,6 +234,15 @@ public class Kmeans {
 		return new Record(result);
 	}
 
+	/**
+	 * Private method to compute the in-position sums of two records.
+	 *
+	 * @param u
+	 *            record one
+	 * @param v
+	 *            record two
+	 * @return a record that is the sums of two records
+	 */
 	private Record sum(Record u, Record v) {
 		double[] result = new double[u.attributes.length];
 
@@ -172,9 +253,14 @@ public class Kmeans {
 		return new Record(result);
 	}
 
+	/**
+	 * Updates all centroid records to the average value of all of the clustered
+	 * records.
+	 */
 	private void updateCentroids() {
 		ArrayList<Record> clusterSum = new ArrayList<Record>();
 
+		// initialize an arraylist of records to hold the averages
 		for (int i = 0; i < this.numberClusters; i++) {
 			double[] attributes = new double[this.numberAttributes];
 			for (int j = 0; j < this.numberAttributes; j++) {
@@ -190,6 +276,7 @@ public class Kmeans {
 			clusterSize[i] = 0;
 		}
 
+		// get the summation of all of the cluster records
 		for (int i = 0; i < this.numberRecords; i++) {
 			int cluster = this.clusters[i];
 
@@ -199,6 +286,7 @@ public class Kmeans {
 			clusterSize[cluster] += 1;
 		}
 
+		// divide each cluster sum by the number of records in the cluster
 		for (int i = 0; i < this.numberClusters; i++) {
 			Record average =
 					this.scale(clusterSum.get(i), 1.0 / clusterSize[i]);
