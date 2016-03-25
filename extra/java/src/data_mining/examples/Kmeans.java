@@ -2,6 +2,9 @@ package data_mining.examples;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -201,5 +204,18 @@ public class Kmeans
 		return new Record(result);
 	}
 	
-	
+	public void display(String outputFile) throws IOException
+	{
+		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+		
+		for (int i = 0; i < numberRecords; i++)
+		{
+			for (int j = 0; j < numberAttributes; j++)
+				outFile.print(records.get(i).attributes[j] + " ");
+			
+			outFile.println(clusters[i] + 1);
+		}
+		
+		outFile.close();
+	}
 }
