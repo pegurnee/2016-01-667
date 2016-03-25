@@ -4,7 +4,7 @@ public class Part1Question2Driver {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String inputFile = "in/somefile", outputFile = "out/somefile";
+		String inputFile = "in/file1", outputFile = "out/file1";
 		int numberClusters = 3, randomSeed = 54269;
 
 		Kmeans clusterer = new Kmeans();
