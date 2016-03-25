@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 public class Kmeans {
 	/**
-	 * Record class that holds basic recod information.
+	 * Record class that holds basic record information.
 	 *
 	 * @author eddie
 	 *
