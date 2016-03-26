@@ -1,10 +1,14 @@
 import java.io.IOException;
 
 public class Part1Question2Driver {
+	private static final int PART = 1;
+	private static final int QUESTION = 2;
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		String inputFile = "in/file1", outputFile = "out/file1";
+		ConfigurationObject config = ConfigurationObject.getInstance();
+		String inputFile = config.getInFile(PART, QUESTION),
+				outputFile = config.getOutFile(PART, QUESTION);
 		int numberClusters = 3, randomSeed = 54269;
 
 		Kmeans clusterer = new Kmeans();

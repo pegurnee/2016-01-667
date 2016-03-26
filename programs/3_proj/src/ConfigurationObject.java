@@ -15,17 +15,19 @@ public class ConfigurationObject {
 		return instance;
 	}
 
-	private final int[][] FILE_NAMES = { { '1', '2' }, { '3', '4' } };
+	private final int[][] FILE_NAMES = { { 1, 2 }, { 3, 4 } };
 	private final String IN_FOLDER = "in/";
 	private final String OUT_FOLDER = "out/";
 
 	private ConfigurationObject() {}
 
 	public String getInFile(int part, int question) {
-		return this.IN_FOLDER + this.FILE_NAMES[part - 1][question - 2];
+		return this.IN_FOLDER+ "file"
+				+ this.FILE_NAMES[part - 1][question - 2];
 	}
 
 	public String getOutFile(int part, int question) {
-		return this.OUT_FOLDER + this.FILE_NAMES[part - 1][question - 2];
+		return this.OUT_FOLDER+ "file"
+				+ this.FILE_NAMES[part - 1][question - 2];
 	}
 }
