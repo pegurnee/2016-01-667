@@ -3,6 +3,7 @@ package data_mining.examples;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Graph 
@@ -106,5 +107,34 @@ public class Graph
 			return 1;
 		else
 			return 0;
+	}
+	
+	private void initializeClusters()
+	{
+		clusters = new int[numberRecords];
+		
+		for (int i = 0; i < numberRecords; i++)
+			clusters[i] = -1;
+	}
+	
+	private void assignCluster(int index, int clusterName)
+	{
+		clusters[index] = clusterName;
+		
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		
+		list.addLast(index);
+		
+		while (!list.isEmpty())
+		{
+			int i = list.removeFirst();
+			
+			for (int j = 0; j < numberRecords; j++)
+				if (matrix[i][j] == 1 && clusters[j] == -1)
+				{
+					clusters[j] = clusterName;
+					list.addLast(j);
+				}
+		}
 	}
 }
