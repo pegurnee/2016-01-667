@@ -82,4 +82,29 @@ public class Graph
 			index = index + 1;
 		}
 	}
+	
+	private void createMatrix()
+	{
+		matrix = new int[numberRecords][numberRecords];
+		
+		for (int i = 0; i < numberRecords; i++)
+			for (int j = 0; j < numberRecords; j++)
+				matrix[i][j] = neighbor(records.get(i), records.get(j));
+	}
+	
+	private int neighbor(Record u, Record v)
+	{
+		double distance = 0.0;
+		
+		for (int i = 0; i < u.attributes.length; i++)
+			distance += (u.attributes[i] - v.attributes[i]) * 
+						(u.attributes[i] - v.attributes[i]);
+		
+		distance = Math.sqrt(distance);
+		
+		if (distance <= delta)
+			return 1;
+		else
+			return 0;
+	}
 }
