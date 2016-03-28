@@ -5,8 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Graph clusterer, original code presented by Dr Suchindran Maniccam. Modified
@@ -97,6 +99,21 @@ public class Graph {
 		}
 
 		outFile.close();
+	}
+
+	/**
+	 * Gets the number of clusters that a given clustering produced.
+	 *
+	 * @return the number of clusters
+	 */
+	public int getNumClusters() {
+		Set<Integer> clusterOptions = new HashSet<>();
+
+		for (int i = 0; i < this.clusters.length; i++) {
+			clusterOptions.add(this.clusters[i]);
+		}
+
+		return clusterOptions.size();
 	}
 
 	/**
