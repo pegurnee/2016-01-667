@@ -36,3 +36,29 @@ if __name__ == '__main__':
 
   for i,p in enumerate(dpoints):
     print("R{} | {} | {}".format(i + 1, distance(p, c1), distance(p, c2)))
+
+  clus1 = []
+  clus2 = []
+  while True:
+    was_swap = False
+    for p in dpoints:
+      if (distance(p, c1) < distance(p, c2)):
+        if p in clus2:
+          clus1.append(p)
+          clus2.remove(p)
+          was_swap = True
+      else:
+        if p in clus1:
+          clus1.remove(p)
+          clus2.append(p)
+          was_swap = True
+    c1 = centroid(clus1)
+    c2 = centroid(clus2)
+
+    print("State:")
+    print("Clusters:")
+    print("Cluster1:\n\tCentroid:{}\n\tPoints: {}".format(c1, clus1))
+    print("Cluster2:\n\tCentroid:{}\n\tPoints: {}".format(c2, clus2))
+
+    if not was_swap:
+      break
