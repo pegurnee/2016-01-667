@@ -40,7 +40,7 @@ def is_core(point, distance_threshold, mincount, points):
 
 def is_boundary(point, distance_threshold, cores):
   for c in cores:
-    if (distance(c, point) < distance_threshold):
+    if (distance(c, point) <= distance_threshold):
       return True
   return False
 
@@ -50,6 +50,10 @@ if __name__ == '__main__':
 
   ugly_cheating = []
   cores = []
+
+  print((' ' * 4) + '  '.join(['R{}:'.format(x + 1) for x in range(9)]))
+  for i,p in enumerate(dpoints):
+    print('R{}: '.format(i + 1) + ' '.join([format(distance(p, x), '.2f') for x in dpoints]))
 
   for p in dpoints:
     if is_core(p, dist, count, dpoints):
