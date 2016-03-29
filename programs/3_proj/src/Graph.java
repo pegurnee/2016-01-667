@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -79,6 +80,38 @@ public class Graph {
 
 			index = index + 1;
 		}
+	}
+
+	/**
+	 * Computes the sum squared error of the values in a cluster compared to its
+	 * centroid.
+	 *
+	 * @param clusterNumber
+	 *            of the cluster to compute the error
+	 * @return the total sum squared distance of the given cluster
+	 */
+	public double computeSumSquaredErrorOfCluster(int clusterNumber) {
+		ArrayList<Record> clusteredRecords = new ArrayList<>();
+
+		// go through each record and check cluster
+		for (int i = 0; i < this.clusters.length; i++) {
+			if (this.clusters[i] == clusterNumber) {
+				// gather together each of the records to compute the centroid
+				clusteredRecords.add(this.records.get(i));
+			}
+		}
+
+		Record centroid = this.getCentroid(clusteredRecords);
+
+		double sum = 0.0;
+
+		// find the squared sum of the distances
+		for (Record record : clusteredRecords) {
+			final double distance = this.distance(record, centroid);
+			sum += distance * distance;
+		}
+
+		return sum;
 	}
 
 	/**
@@ -200,6 +233,55 @@ public class Graph {
 						this.neighbor(this.records.get(i), this.records.get(j));
 			}
 		}
+	}
+
+	/**
+	 * Private method to compute euclidean distance between two records.
+	 *
+	 * @param u
+	 *            record one
+	 * @param v
+	 *            record two
+	 * @return distance between records
+	 */
+	private double distance(Record u, Record v) {
+		double sum = 0;
+
+		for (int i = 0; i < u.attributes.length; i++) {
+			sum += (u.attributes[i] - v.attributes[i])
+					* (u.attributes[i] - v.attributes[i]);
+		}
+
+		return sum;
+	}
+
+	/**
+	 * Computes the centroid from a list of record objects.
+	 *
+	 * @param records
+	 *            a list of record objects
+	 * @return the centroid (or average) record of all the given records
+	 */
+	private Record getCentroid(List<Record> records) {
+		double[] attributes = new double[this.numberAttributes];
+
+		for (int i = 0; i < attributes.length; i++) {
+			attributes[i] = 0.0;
+		}
+
+		// compute the sum of each attribute
+		for (Record record : records) {
+			for (int i = 0; i < record.attributes.length; i++) {
+				attributes[i] += record.attributes[i];
+			}
+		}
+
+		// divide by the number of records for average
+		for (int i = 0; i < attributes.length; i++) {
+			attributes[i] /= records.size();
+		}
+
+		return new Record(attributes);
 	}
 
 	/**
