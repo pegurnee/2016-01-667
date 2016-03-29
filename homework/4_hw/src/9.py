@@ -34,7 +34,7 @@ def centroid(points):
 def is_core(point, distance_threshold, mincount, points):
   _num = 0
   for p in points:
-    if (distance(p, point) < distance_threshold):
+    if (distance(p, point) <= distance_threshold):
       _num += 1
   return True if _num >= mincount else False
 
