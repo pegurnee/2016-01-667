@@ -43,15 +43,17 @@ if __name__ == '__main__':
     was_swap = False
     for p in dpoints:
       if (distance(p, c1) < distance(p, c2)):
-        if p in clus2:
+        if p not in clus1:
           clus1.append(p)
-          clus2.remove(p)
           was_swap = True
+        if p in clus2:
+          clus2.remove(p)
       else:
-        if p in clus1:
-          clus1.remove(p)
+        if p not in clus2:
           clus2.append(p)
           was_swap = True
+        if p in clus1:
+          clus1.remove(p)
     c1 = centroid(clus1)
     c2 = centroid(clus2)
 
