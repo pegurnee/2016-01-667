@@ -10,13 +10,14 @@ public class Part1Question2Driver {
 		String inputFile = config.getInFile(PART, QUESTION), outputFile = config.getOutFile(PART, QUESTION);
 		int numberClusters = 3, randomSeed = 54269;
 		boolean trace = true;
+		boolean ordered = true;
 
 		Kmeans clusterer = new Kmeans();
 		clusterer.load(inputFile);
 		clusterer.setParameters(numberClusters, randomSeed, trace);
 		clusterer.cluster();
 
-		// TODO: output centroids at end of clustering
+		// output centroids at end of clustering
 
 		for (int cluster = 0; cluster < numberClusters; cluster++) {
 			System.out.println(String.format("Error rate for cluster %d: %.5f", cluster,
@@ -25,7 +26,7 @@ public class Part1Question2Driver {
 
 		// trace the centroid changes throughout the clustering
 
-		clusterer.display(outputFile);
+		clusterer.display(outputFile, ordered);
 
 		// repeat with different set of initial centroids
 		long[] seeds = { 0, 20_000, 10271990 };
@@ -36,7 +37,7 @@ public class Part1Question2Driver {
 
 			clusterer.cluster();
 
-			clusterer.display(outputFile + "seed" + seeds[i]);
+			clusterer.display(outputFile + "seed" + seeds[i], ordered);
 		}
 
 		// repeat with cluster number of 2, 5, 10
@@ -48,7 +49,7 @@ public class Part1Question2Driver {
 
 			clusterer.cluster();
 
-			clusterer.display(outputFile + "numclusters" + clusterNums[i]);
+			clusterer.display(outputFile + "numclusters" + clusterNums[i], ordered);
 		}
 
 	}

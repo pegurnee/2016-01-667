@@ -31,6 +31,7 @@ public class Kmeans {
 			this.attributes = attributes;
 		}
 
+		@Override
 		public String toString() {
 			return Arrays.toString(attributes);
 		}
@@ -124,6 +125,33 @@ public class Kmeans {
 		}
 
 		outFile.close();
+	}
+
+	/**
+	 * Prints the information regarding the clustering to a file, with an
+	 * optional ordering
+	 * 
+	 * @param outputFile
+	 * @param ordered
+	 * @throws IOException
+	 */
+	public void display(String outputFile, boolean ordered) throws IOException {
+		if (!ordered)
+			this.display(outputFile);
+		else {
+			PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+
+			for (int i = 0; i < this.numberClusters; i++) {
+				outFile.println(String.format("==== Cluster %d ==========: %s", (i + 1), this.centroids.get(i)));
+				for (int j = 0; j < this.numberRecords; j++) {
+					if (i == this.clusters[j])
+						outFile.println(this.records.get(j));
+				}
+				outFile.println();
+			}
+
+			outFile.close();
+		}
 	}
 
 	/**
