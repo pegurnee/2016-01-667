@@ -19,15 +19,14 @@ public class ConfigurationObject {
 	private final String IN_FOLDER = "in/";
 	private final String OUT_FOLDER = "out/";
 
-	private ConfigurationObject() {}
+	private ConfigurationObject() {
+	}
 
 	public String getInFile(int part, int question) {
-		return this.IN_FOLDER+ "file"
-				+ this.FILE_NAMES[part - 1][question - 2];
+		return this.IN_FOLDER + "file" + this.FILE_NAMES[part - 1][question - 2];
 	}
 
 	public String getOutFile(int part, int question) {
-		return this.OUT_FOLDER+ "file"
-				+ this.FILE_NAMES[part - 1][question - 2];
+		return this.OUT_FOLDER + "file" + this.FILE_NAMES[part - 1][question - 2];
 	}
 }

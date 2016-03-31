@@ -123,6 +123,11 @@ public class Kmeans {
 			}
 
 			outFile.println(this.clusters[i] + 1);
+
+			for (int cluster = 0; cluster < numberClusters; cluster++) {
+				outFile.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
+						this.computeSumSquaredErrorOfCluster(cluster)));
+			}
 		}
 
 		outFile.close();
@@ -151,8 +156,14 @@ public class Kmeans {
 				outFile.println();
 			}
 
+			for (int cluster = 0; cluster < numberClusters; cluster++) {
+				outFile.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
+						this.computeSumSquaredErrorOfCluster(cluster)));
+			}
+
 			outFile.close();
 		}
+
 	}
 
 	/**

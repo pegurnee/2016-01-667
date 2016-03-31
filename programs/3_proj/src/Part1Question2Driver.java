@@ -20,7 +20,7 @@ public class Part1Question2Driver {
 		// output centroids at end of clustering
 
 		for (int cluster = 0; cluster < numberClusters; cluster++) {
-			System.out.println(String.format("Error rate for cluster %d: %.5f", cluster,
+			System.out.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
 					clusterer.computeSumSquaredErrorOfCluster(cluster)));
 		}
 
