@@ -162,7 +162,7 @@ public class Kmeans {
 	 * @param numberClusters
 	 * @param seed
 	 */
-	public void setParameters(int numberClusters, int seed, boolean trace) {
+	public void setParameters(int numberClusters, long seed, boolean trace) {
 		this.numberClusters = numberClusters;
 
 		this.rand = new Random(seed);
@@ -176,7 +176,7 @@ public class Kmeans {
 	 * @param numberClusters
 	 * @param seed
 	 */
-	public void setParameters(int numberClusters, int seed) {
+	public void setParameters(int numberClusters, long seed) {
 		this.setParameters(numberClusters, seed, false);
 	}
 
