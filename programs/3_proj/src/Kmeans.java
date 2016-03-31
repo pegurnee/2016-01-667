@@ -188,6 +188,7 @@ public class Kmeans {
 				for (int j = 0; j < range.length; j++) {
 					ranges[i][j] = Integer.parseInt(range[j]);
 				}
+				System.out.println(Arrays.deepToString(ranges));
 			}
 
 		}
@@ -200,7 +201,7 @@ public class Kmeans {
 				double input = inFile.nextDouble();
 
 				if (null != ranges) {
-					input = ProjectThreeTools.normalize(input, ranges[j][0], ranges[j][0]);
+					input = ProjectThreeTools.normalize(input, ranges[j][0], ranges[j][1]);
 				}
 				attributes[j] = input;
 			}
