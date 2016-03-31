@@ -10,10 +10,11 @@ public class Part1Question2Driver {
 		String inputFile = config.getInFile(PART, QUESTION),
 				outputFile = config.getOutFile(PART, QUESTION);
 		int numberClusters = 3, randomSeed = 54269;
+		boolean trace = true;
 
 		Kmeans clusterer = new Kmeans();
 		clusterer.load(inputFile);
-		clusterer.setParameters(numberClusters, randomSeed);
+		clusterer.setParameters(numberClusters, randomSeed, trace);
 		clusterer.cluster();
 
 		// TODO: output centroids at end of clustering

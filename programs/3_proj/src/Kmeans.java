@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -29,6 +30,10 @@ public class Kmeans {
 		private Record(double[] attributes) {
 			this.attributes = attributes;
 		}
+
+		public String toString() {
+			return Arrays.toString(attributes);
+		}
 	}
 
 	private ArrayList<Record> centroids;
@@ -42,6 +47,8 @@ public class Kmeans {
 	private Random rand;
 	private ArrayList<Record> records;
 
+	private boolean trace;
+
 	public Kmeans() {
 		this.numberRecords = 0;
 		this.numberAttributes = 0;
@@ -51,6 +58,8 @@ public class Kmeans {
 		this.centroids = null;
 		this.clusters = null;
 		this.rand = null;
+
+		this.trace = false;
 	}
 
 	/**
@@ -89,8 +98,7 @@ public class Kmeans {
 			if (this.clusters[i] == centroidNumber) {
 				// get the distance from the centroid to each record in the
 				// cluster, and add it to the running distance total
-				final double distance = this.distance(this.records.get(i),
-					this.centroids.get(centroidNumber));
+				final double distance = this.distance(this.records.get(i), this.centroids.get(centroidNumber));
 				sum += distance * distance;
 			}
 		}
@@ -148,15 +156,28 @@ public class Kmeans {
 
 	/**
 	 * Sets parameters for the clusterer (only options are the number of
-	 * clusters and the random number generator seed.
+	 * clusters, the random number generator seed, and whether or not to trace
+	 * cluster changes).
 	 *
 	 * @param numberClusters
 	 * @param seed
 	 */
-	public void setParameters(int numberClusters, int seed) {
+	public void setParameters(int numberClusters, int seed, boolean trace) {
 		this.numberClusters = numberClusters;
 
 		this.rand = new Random(seed);
+
+		this.trace = trace;
+	}
+
+	/**
+	 * Sets parameters for the clusterer (defaults to no trace)
+	 * 
+	 * @param numberClusters
+	 * @param seed
+	 */
+	public void setParameters(int numberClusters, int seed) {
+		this.setParameters(numberClusters, seed, false);
 	}
 
 	/**
@@ -209,8 +230,7 @@ public class Kmeans {
 		double sum = 0;
 
 		for (int i = 0; i < u.attributes.length; i++) {
-			sum += (u.attributes[i] - v.attributes[i])
-					* (u.attributes[i] - v.attributes[i]);
+			sum += (u.attributes[i] - v.attributes[i]) * (u.attributes[i] - v.attributes[i]);
 		}
 
 		return sum;
@@ -314,9 +334,11 @@ public class Kmeans {
 
 		// divide each cluster sum by the number of records in the cluster
 		for (int i = 0; i < this.numberClusters; i++) {
-			Record average =
-					this.scale(clusterSum.get(i), 1.0 / clusterSize[i]);
+			Record average = this.scale(clusterSum.get(i), 1.0 / clusterSize[i]);
 
+			if (trace) {
+				System.out.println("Cluster " + (i + 1) + ": " + average);
+			}
 			this.centroids.set(i, average);
 		}
 	}
