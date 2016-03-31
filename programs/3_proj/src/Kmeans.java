@@ -46,6 +46,7 @@ public class Kmeans {
 	private int numberRecords;
 
 	private Random rand;
+	private int[][] ranges;
 	private ArrayList<Record> records;
 
 	private boolean trace;
@@ -166,12 +167,31 @@ public class Kmeans {
 		this.numberRecords = inFile.nextInt();
 		this.numberAttributes = inFile.nextInt();
 
+		boolean normal = "normal".equals(inFile.next());
+
+		if (!normal) {
+			ranges = new int[this.numberAttributes][2];
+
+			for (int i = 0; i < this.numberAttributes; i++) {
+				String[] range = inFile.next().split("-");
+				for (int j = 0; j < range.length; j++) {
+					ranges[i][j] = Integer.parseInt(range[j]);
+				}
+			}
+
+		}
+
 		this.records = new ArrayList<Record>();
 
 		for (int i = 0; i < this.numberRecords; i++) {
 			double[] attributes = new double[this.numberAttributes];
 			for (int j = 0; j < this.numberAttributes; j++) {
-				attributes[j] = inFile.nextDouble();
+				double input = inFile.nextDouble();
+
+				if (null != ranges) {
+					input = ProjectThreeTools.normalize(input, ranges[j][0], ranges[j][0]);
+				}
+				attributes[j] = input;
 			}
 
 			Record record = new Record(attributes);
