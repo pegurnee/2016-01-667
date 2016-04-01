@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +32,10 @@ public class Graph {
 
 		private Record(double[] attributes) {
 			this.attributes = attributes;
+		}
+
+		public String toString() {
+			return Arrays.toString(attributes);
 		}
 	}
 
@@ -123,6 +128,51 @@ public class Graph {
 	public void display(String outputFile) throws IOException {
 		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
 
+		writeRecordsOrderedByCluster(outFile);
+
+		outFile.close();
+	}
+
+	/**
+	 * Prints the clustered records along with cluster name to an output file.
+	 *
+	 * @param outputFile
+	 * @throws IOException
+	 */
+	public void display(String outputFile, boolean ordered) throws IOException {
+		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+
+		if (ordered)
+			writeRecordsOrderedByCluster(outFile);
+		else
+			writeRecordsUnordered(outFile);
+
+		outFile.close();
+	}
+
+	/**
+	 * Writes each record individually, ordered by each cluster where it appears
+	 * 
+	 * @param outFile
+	 */
+	private void writeRecordsOrderedByCluster(PrintWriter outFile) {
+		for (int i = 0; i < this.getNumClusters(); i++) {
+			outFile.println(String.format("==== Cluster %d ==========", (i + 1)));
+
+			for (int j = 0; j < clusters.length; j++) {
+				if (i == clusters[j])
+					outFile.println(this.records.get(j));
+			}
+			outFile.println();
+		}
+	}
+
+	/**
+	 * Writes each record and its cluster label
+	 * 
+	 * @param outFile
+	 */
+	private void writeRecordsUnordered(PrintWriter outFile) {
 		for (int i = 0; i < this.numberRecords; i++) {
 			for (int j = 0; j < this.numberAttributes; j++) {
 				outFile.print(this.records.get(i).attributes[j] + " ");
@@ -130,8 +180,6 @@ public class Graph {
 
 			outFile.println(this.clusters[i] + 1);
 		}
-
-		outFile.close();
 	}
 
 	/**
@@ -229,8 +277,7 @@ public class Graph {
 
 		for (int i = 0; i < this.numberRecords; i++) {
 			for (int j = 0; j < this.numberRecords; j++) {
-				this.matrix[i][j] =
-						this.neighbor(this.records.get(i), this.records.get(j));
+				this.matrix[i][j] = this.neighbor(this.records.get(i), this.records.get(j));
 			}
 		}
 	}
@@ -248,8 +295,7 @@ public class Graph {
 		double sum = 0;
 
 		for (int i = 0; i < u.attributes.length; i++) {
-			sum += (u.attributes[i] - v.attributes[i])
-					* (u.attributes[i] - v.attributes[i]);
+			sum += (u.attributes[i] - v.attributes[i]) * (u.attributes[i] - v.attributes[i]);
 		}
 
 		return sum;
@@ -309,8 +355,7 @@ public class Graph {
 		double distance = 0.0;
 
 		for (int i = 0; i < u.attributes.length; i++) {
-			distance += (u.attributes[i] - v.attributes[i])
-						* (u.attributes[i] - v.attributes[i]);
+			distance += (u.attributes[i] - v.attributes[i]) * (u.attributes[i] - v.attributes[i]);
 		}
 
 		distance = Math.sqrt(distance);
