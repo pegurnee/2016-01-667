@@ -7,9 +7,8 @@ public class Part1Question4Driver {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		ConfigurationObject config = ConfigurationObject.getInstance();
-		String inputFile = config.getInFile(PART, QUESTION),
-				outputFile = config.getOutFile(PART, QUESTION);
-		int numberClusters = 3, randomSeed = 54269;
+		String inputFile = config.getInFile(PART, QUESTION), outputFile = config.getOutFile(PART, QUESTION);
+		int numberClusters = 9, randomSeed = 54269;
 
 		Kmeans clusterer = new Kmeans();
 		clusterer.load(inputFile);
