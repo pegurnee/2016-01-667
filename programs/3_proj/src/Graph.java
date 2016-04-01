@@ -165,6 +165,8 @@ public class Graph {
 			}
 			outFile.println();
 		}
+
+		this.writeErrorRates(outFile);
 	}
 
 	/**
@@ -179,6 +181,21 @@ public class Graph {
 			}
 
 			outFile.println(this.clusters[i] + 1);
+		}
+
+		this.writeErrorRates(outFile);
+	}
+
+	/**
+	 * Writes the error rates for each cluster
+	 * 
+	 * @param outFile
+	 */
+	private void writeErrorRates(PrintWriter outFile) {
+		int numClusters = this.getNumClusters();
+		for (int cluster = 0; cluster < numClusters; cluster++) {
+			outFile.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
+					this.computeSumSquaredErrorOfCluster(cluster)));
 		}
 	}
 
