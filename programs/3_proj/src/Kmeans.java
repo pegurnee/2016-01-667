@@ -213,7 +213,6 @@ public class Kmeans {
 				for (int j = 0; j < range.length; j++) {
 					ranges[i][j] = Integer.parseInt(range[j]);
 				}
-				System.out.println(Arrays.deepToString(ranges));
 			}
 
 		}
