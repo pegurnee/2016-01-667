@@ -117,20 +117,26 @@ public class Kmeans {
 	public void display(String outputFile) throws IOException {
 		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
 
+		writeToFileOrdered(outFile);
+
+		outFile.close();
+	}
+
+	/**
+	 * Writes to a given PrintWriter the clustered data
+	 * 
+	 * @param outFile
+	 */
+	private void writeToFileUnordered(PrintWriter outFile) {
 		for (int i = 0; i < this.numberRecords; i++) {
 			for (int j = 0; j < this.numberAttributes; j++) {
 				outFile.print(this.records.get(i).attributes[j] + " ");
 			}
 
 			outFile.println(this.clusters[i] + 1);
-
-			for (int cluster = 0; cluster < numberClusters; cluster++) {
-				outFile.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
-						this.computeSumSquaredErrorOfCluster(cluster)));
-			}
 		}
 
-		outFile.close();
+		writeErrorRates(outFile);
 	}
 
 	/**
@@ -142,28 +148,47 @@ public class Kmeans {
 	 * @throws IOException
 	 */
 	public void display(String outputFile, boolean ordered) throws IOException {
+		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+
 		if (!ordered)
-			this.display(outputFile);
+			writeToFileUnordered(outFile);
 		else {
-			PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
 
-			for (int i = 0; i < this.numberClusters; i++) {
-				outFile.println(String.format("==== Cluster %d ==========: %s", (i + 1), this.centroids.get(i)));
-				for (int j = 0; j < this.numberRecords; j++) {
-					if (i == this.clusters[j])
-						outFile.println(this.records.get(j));
-				}
-				outFile.println();
-			}
-
-			for (int cluster = 0; cluster < numberClusters; cluster++) {
-				outFile.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
-						this.computeSumSquaredErrorOfCluster(cluster)));
-			}
-
-			outFile.close();
+			writeToFileOrdered(outFile);
 		}
 
+		outFile.close();
+	}
+
+	/**
+	 * Writes to the given PrintWriter the records clustered, ordered by cluster
+	 * label
+	 * 
+	 * @param outFile
+	 */
+	private void writeToFileOrdered(PrintWriter outFile) {
+		for (int i = 0; i < this.numberClusters; i++) {
+			outFile.println(String.format("==== Cluster %d ==========: %s", (i + 1), this.centroids.get(i)));
+			for (int j = 0; j < this.numberRecords; j++) {
+				if (i == this.clusters[j])
+					outFile.println(this.records.get(j));
+			}
+			outFile.println();
+		}
+
+		writeErrorRates(outFile);
+	}
+
+	/**
+	 * Writes the error rates for each cluster
+	 * 
+	 * @param outFile
+	 */
+	private void writeErrorRates(PrintWriter outFile) {
+		for (int cluster = 0; cluster < numberClusters; cluster++) {
+			outFile.println(String.format("Error rate for cluster %d: %.5f", cluster + 1,
+					this.computeSumSquaredErrorOfCluster(cluster)));
+		}
 	}
 
 	/**
