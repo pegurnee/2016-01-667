@@ -48,6 +48,8 @@ public class Graph {
 	private int numberAttributes;
 	private int numberRecords;
 
+	private int[][] ranges;
+
 	private ArrayList<Record> records;
 
 	/**
@@ -225,6 +227,20 @@ public class Graph {
 
 		this.numberRecords = inFile.nextInt();
 		this.numberAttributes = inFile.nextInt();
+
+		boolean normal = "normal".equals(inFile.next());
+
+		if (!normal) {
+			ranges = new int[this.numberAttributes][2];
+
+			for (int i = 0; i < this.numberAttributes; i++) {
+				String[] range = inFile.next().split("-");
+				for (int j = 0; j < range.length; j++) {
+					ranges[i][j] = Integer.parseInt(range[j]);
+				}
+			}
+
+		}
 
 		this.records = new ArrayList<Record>();
 
