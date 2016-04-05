@@ -23,10 +23,14 @@ public class ConfigurationObject {
 	}
 
 	public String getInFile(int part, int question) {
+		if (part == 3)
+			return this.IN_FOLDER + "imagefile";
 		return this.IN_FOLDER + "file" + this.FILE_NAMES[part - 1][question - 2];
 	}
 
 	public String getOutFile(int part, int question) {
+		if (part == 3)
+			return this.IN_FOLDER + "imagefile";
 		return this.OUT_FOLDER + "file" + this.FILE_NAMES[part - 1][question - 2];
 	}
 }
