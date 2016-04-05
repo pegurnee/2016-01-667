@@ -30,7 +30,7 @@ public class ConfigurationObject {
 
 	public String getOutFile(int part, int question) {
 		if (part == 3)
-			return this.IN_FOLDER + "imagefile";
+			return this.OUT_FOLDER + "imagefile";
 		return this.OUT_FOLDER + "file" + this.FILE_NAMES[part - 1][question - 2];
 	}
 }
