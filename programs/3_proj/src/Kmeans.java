@@ -238,6 +238,42 @@ public class Kmeans {
 		inFile.close();
 	}
 
+	public void loadImage(String inputFile, int recordSize) throws FileNotFoundException {
+		Scanner inFile = new Scanner(new File(inputFile));
+
+		this.records = new ArrayList<Record>();
+
+		while (inFile.hasNext()) {
+			double[] vals = new double[recordSize];
+			for (int i = 0; i < vals.length; i++) {
+				vals[i] = inFile.nextDouble();
+			}
+			this.records.add(new Record(vals));
+		}
+
+		this.numberAttributes = recordSize;
+		this.numberRecords = this.records.size();
+
+		// for (int i = 0; i < this.numberRecords; i++) {
+		// double[] attributes = new double[this.numberAttributes];
+		// for (int j = 0; j < this.numberAttributes; j++) {
+		// double input = inFile.nextDouble();
+		//
+		// if (null != ranges) {
+		// input = ProjectThreeTools.normalize(input, ranges[j][0],
+		// ranges[j][1]);
+		// }
+		// attributes[j] = input;
+		// }
+		//
+		// Record record = new Record(attributes);
+		//
+		// this.records.add(record);
+		// }
+
+		inFile.close();
+	}
+
 	/**
 	 * Sets parameters for the clusterer (only options are the number of
 	 * clusters, the random number generator seed, and whether or not to trace
