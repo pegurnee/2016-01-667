@@ -140,6 +140,35 @@ public class Kmeans {
 	}
 
 	/**
+	 * @param outputFile
+	 * @throws IOException
+	 */
+	public void compress(String outputFile) throws IOException {
+		PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+
+		Record[] centroids = this.centroids.toArray(new Record[this.centroids.size()]);
+
+		outFile.println(this.numberAttributes);
+		outFile.println(centroids.length);
+
+		for (int i = 0; i < centroids.length; i++) {
+			for (int j = 0; j < this.numberAttributes; j++) {
+				double currAtt = centroids[i].attributes[j];
+				centroids[i].attributes[j] = (int) Math.round(currAtt);
+				outFile.print(centroids[i].attributes[j] + " ");
+			}
+		}
+
+		for (int i = 0; i < numberRecords; i++) {
+			outFile.print(this.clusters[i] + " ");
+			if ((i + 1) % 32 == 0)
+				outFile.println();
+		}
+
+		outFile.close();
+	}
+
+	/**
 	 * Prints the information regarding the clustering to a file, with an
 	 * optional ordering
 	 * 

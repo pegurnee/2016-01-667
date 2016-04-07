@@ -8,15 +8,15 @@ public class Part3Question1Driver {
 		// TODO Auto-generated method stub
 		ConfigurationObject config = ConfigurationObject.getInstance();
 		String inputFile = config.getInFile(PART, QUESTION), outputFile = config.getOutFile(PART, QUESTION);
-		int numClusters = 8, seed = 54269;
+		int numClusters = 128, seed = 54269;
 
 		Kmeans clusterer = new Kmeans();
 		clusterer.loadImage(inputFile, 2);
 
-		// TODO: Was a distance specced?
 		clusterer.setParameters(numClusters, seed);
 		clusterer.cluster();
 
 		clusterer.display(outputFile);
+		clusterer.compress(outputFile + ".min");
 	}
 }
