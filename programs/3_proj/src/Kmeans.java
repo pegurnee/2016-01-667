@@ -122,6 +122,11 @@ public class Kmeans {
         outFile.close();
     }
 
+    public double compressionRatio(String realFile, String compressedFile) {
+        final long realFileSize = new File(realFile).length(), compressedFileSize = new File(compressedFile).length();
+        return compressedFileSize / (double) realFileSize;
+    }
+
     /**
      * Computes the sum squared error of the values in a cluster compared to its
      * centroid.
