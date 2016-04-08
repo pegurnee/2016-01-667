@@ -91,12 +91,17 @@ public class Kmeans {
      * @param outputFile
      * @throws IOException
      */
-    public void compress(String outputFile) throws IOException {
+    public void compress(String inputFile, String outputFile) throws IOException {
+        final int recordSize = 2;
+        final int imgSize = this.loadImage(inputFile, recordSize);
+
+        this.cluster();
+
         final PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
 
         final Record[] centroids = this.centroids.toArray(new Record[this.centroids.size()]);
 
-        outFile.println(this.numberAttributes);
+        outFile.println(this.numberAttributes + " " + (imgSize / recordSize));
         outFile.println(centroids.length);
 
         for (int i = 0; i < centroids.length; i++) {
@@ -109,7 +114,7 @@ public class Kmeans {
 
         for (int i = 0; i < this.numberRecords; i++) {
             outFile.print(this.clusters[i] + " ");
-            if (((i + 1) % 32) == 0) {
+            if (0 == ((i + 1) % (imgSize / recordSize))) {
                 outFile.println();
             }
         }
@@ -181,7 +186,7 @@ public class Kmeans {
     /**
      * Prints the information regarding the clustering to a file, with an
      * optional ordering
-     * 
+     *
      * @param outputFile
      * @param ordered
      * @throws IOException
@@ -245,30 +250,9 @@ public class Kmeans {
         inFile.close();
     }
 
-    public int loadImage(String inputFile, int recordSize) throws IOException {
-        final Scanner inFile = new Scanner(new File(inputFile));
-
-        this.records = new ArrayList<Record>();
-
-        while (inFile.hasNext()) {
-            final double[] vals = new double[recordSize];
-            for (int i = 0; i < vals.length; i++) {
-                vals[i] = inFile.nextDouble();
-            }
-            this.records.add(new Record(vals));
-        }
-
-        this.numberAttributes = recordSize;
-        this.numberRecords = this.records.size();
-
-        inFile.close();
-
-        return (int) Files.lines(Paths.get(inputFile)).count();
-    }
-
     /**
      * Sets parameters for the clusterer (defaults to no trace)
-     * 
+     *
      * @param numberClusters
      * @param seed
      */
@@ -373,6 +357,27 @@ public class Kmeans {
         }
     }
 
+    private int loadImage(String inputFile, int recordSize) throws IOException {
+        final Scanner inFile = new Scanner(new File(inputFile));
+
+        this.records = new ArrayList<Record>();
+
+        while (inFile.hasNext()) {
+            final double[] vals = new double[recordSize];
+            for (int i = 0; i < vals.length; i++) {
+                vals[i] = inFile.nextDouble();
+            }
+            this.records.add(new Record(vals));
+        }
+
+        this.numberAttributes = recordSize;
+        this.numberRecords = this.records.size();
+
+        inFile.close();
+
+        return (int) Files.lines(Paths.get(inputFile)).count();
+    }
+
     /**
      * Private method to apply a scalar to a record.
      *
@@ -457,7 +462,7 @@ public class Kmeans {
 
     /**
      * Writes the error rates for each cluster
-     * 
+     *
      * @param outFile
      */
     private void writeErrorRates(PrintWriter outFile) {
@@ -470,7 +475,7 @@ public class Kmeans {
     /**
      * Writes to the given PrintWriter the records clustered, ordered by cluster
      * label
-     * 
+     *
      * @param outFile
      */
     private void writeToFileOrdered(PrintWriter outFile) {
@@ -489,7 +494,7 @@ public class Kmeans {
 
     /**
      * Writes to a given PrintWriter the clustered data
-     * 
+     *
      * @param outFile
      */
     private void writeToFileUnordered(PrintWriter outFile) {
