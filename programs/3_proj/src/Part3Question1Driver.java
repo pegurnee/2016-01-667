@@ -17,6 +17,6 @@ public class Part3Question1Driver {
         clusterer.compress(inputFile, outputFile + ".min");
         clusterer.decompress(outputFile + ".min", outputFile + ".fix");
 
-        System.out.println(clusterer.compressionRatio(inputFile, outputFile + ".min"));
+        System.out.println(Kmeans.compressionRatio(inputFile, outputFile + ".min"));
     }
 }
