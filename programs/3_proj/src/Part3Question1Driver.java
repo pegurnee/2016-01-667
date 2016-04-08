@@ -15,7 +15,6 @@ public class Part3Question1Driver {
         clusterer.setParameters(numClusters, seed);
 
         clusterer.compress(inputFile, outputFile + ".min");
-
-        clusterer.display(outputFile);
+        clusterer.decompress(outputFile + ".min", outputFile + ".fix");
     }
 }

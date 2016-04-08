@@ -146,16 +146,17 @@ public class Kmeans {
         return sum;
     }
 
-    public void decompress(String inputFile, String outputFile) throws FileNotFoundException {
+    public void decompress(String inputFile, String outputFile) throws IOException {
         final Scanner inFile = new Scanner(new File(inputFile));
 
-        this.numberAttributes = inFile.nextInt();
+        final int numAttributes = inFile.nextInt();
+        final int numPerRow = inFile.nextInt();
         final int numberOfCentroids = inFile.nextInt();
 
         final ArrayList<Record> centroids = new ArrayList<>();
 
         for (int i = 0; i < numberOfCentroids; i++) {
-            final double[] attributes = new double[this.numberAttributes];
+            final double[] attributes = new double[numAttributes];
 
             for (int j = 0; j < attributes.length; j++) {
                 attributes[j] = inFile.nextDouble();
@@ -165,8 +166,27 @@ public class Kmeans {
         }
 
         final ArrayDeque<Integer> points = new ArrayDeque<>();
+        while (inFile.hasNext()) {
+            points.add(inFile.nextInt());
+        }
 
         inFile.close();
+
+        final PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
+
+        int j = 0;
+        Integer curPoint;
+        while ((curPoint = points.poll()) != null) {
+            final Record centroid = centroids.get(curPoint.intValue());
+            for (int i = 0; i < numAttributes; i++) {
+                outFile.print(centroid.attributes[i] + " ");
+            }
+            if ((++j % numPerRow) == 0) {
+                outFile.println();
+            }
+        }
+
+        outFile.close();
     }
 
     /**
