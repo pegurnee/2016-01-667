@@ -14,8 +14,11 @@ public class Part3Question2Driver {
             final double compressionRatio =
                     Kmeans.compressionRatio(inputFile, outputFile + ".min." + numClusters[i]) * 100.0;
 
-            System.out.println(String.format("Using %d clusters, the compression ratio was: %.5f%%%n", numClusters[i],
-                    compressionRatio));
+            final double loss = Kmeans.loss(inputFile, outputFile + ".min." + numClusters[i]) * 100.0;
+
+            System.out.println(
+                    String.format("Using %d clusters, the compression ratio was: %.5f%%%nWith a %.5f%% data loss",
+                            numClusters[i], compressionRatio, loss));
         }
 
     }

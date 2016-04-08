@@ -45,6 +45,22 @@ public class Kmeans {
         return compressedFileSize / (double) realFileSize;
     }
 
+    public static double loss(String realFile, String restoredFile) throws FileNotFoundException {
+        final Scanner inReal = new Scanner(new File(realFile)), inRestored = new Scanner(new File(restoredFile));
+
+        int numpoints = 0;
+        double distance = 0.0;
+        while (inReal.hasNext() && inRestored.hasNext()) {
+            distance += ProjectThreeTools.distance(inReal.nextDouble(), inRestored.nextDouble());
+            numpoints += 1;
+        }
+
+        inReal.close();
+        inRestored.close();
+
+        return distance / (numpoints * 256);
+    }
+
     private ArrayList<Record> centroids;
 
     private int[] clusters;
