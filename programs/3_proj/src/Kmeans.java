@@ -107,8 +107,8 @@ public class Kmeans {
         for (int i = 0; i < centroids.length; i++) {
             for (int j = 0; j < this.numberAttributes; j++) {
                 final double currAtt = centroids[i].attributes[j];
-                centroids[i].attributes[j] = (int) Math.round(currAtt);
-                outFile.print(centroids[i].attributes[j] + " ");
+                centroids[i].attributes[j] = Math.round(currAtt);
+                outFile.print((int) centroids[i].attributes[j] + " ");
             }
         }
 
@@ -179,7 +179,7 @@ public class Kmeans {
         while ((curPoint = points.poll()) != null) {
             final Record centroid = centroids.get(curPoint.intValue());
             for (int i = 0; i < numAttributes; i++) {
-                outFile.print(centroid.attributes[i] + " ");
+                outFile.print((int) centroid.attributes[i] + " ");
             }
             if ((++j % numPerRow) == 0) {
                 outFile.println();
