@@ -40,16 +40,21 @@ public class Kmeans {
         }
     }
 
+    public static double compressionRatio(String realFile, String compressedFile) {
+        final long realFileSize = new File(realFile).length(), compressedFileSize = new File(compressedFile).length();
+        return compressedFileSize / (double) realFileSize;
+    }
+
     private ArrayList<Record> centroids;
 
     private int[] clusters;
-
     private int numberAttributes;
     private int numberClusters;
-    private int numberRecords;
 
+    private int numberRecords;
     private Random rand;
     private int[][] ranges;
+
     private ArrayList<Record> records;
 
     private boolean trace;
@@ -120,11 +125,6 @@ public class Kmeans {
         }
 
         outFile.close();
-    }
-
-    public double compressionRatio(String realFile, String compressedFile) {
-        final long realFileSize = new File(realFile).length(), compressedFileSize = new File(compressedFile).length();
-        return compressedFileSize / (double) realFileSize;
     }
 
     /**
