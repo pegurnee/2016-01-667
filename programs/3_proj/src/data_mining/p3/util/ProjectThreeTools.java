@@ -1,3 +1,4 @@
+package data_mining.p3.util;
 
 /**
  * This class contains a number of static methods that are used in various

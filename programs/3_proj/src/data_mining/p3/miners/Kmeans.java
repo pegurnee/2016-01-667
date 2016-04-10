@@ -1,3 +1,4 @@
+package data_mining.p3.miners;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+
+import data_mining.p3.util.ProjectThreeTools;
 
 /**
  * K-means clusterer, original code presented by Dr Suchindran Maniccam.

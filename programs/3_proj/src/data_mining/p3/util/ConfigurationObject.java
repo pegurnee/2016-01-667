@@ -1,3 +1,4 @@
+package data_mining.p3.util;
 /**
  * This singleton object holds all of the data used to run and interact with
  * data mining project 3.

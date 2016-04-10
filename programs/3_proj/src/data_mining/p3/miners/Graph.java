@@ -1,3 +1,4 @@
+package data_mining.p3.miners;
 
 import java.io.File;
 import java.io.FileNotFoundException;

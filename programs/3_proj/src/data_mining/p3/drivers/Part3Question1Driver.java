@@ -1,4 +1,9 @@
+package data_mining.p3.drivers;
+
 import java.io.IOException;
+
+import data_mining.p3.miners.Kmeans;
+import data_mining.p3.util.ConfigurationObject;
 
 public class Part3Question1Driver {
     private static final int PART = 3;
