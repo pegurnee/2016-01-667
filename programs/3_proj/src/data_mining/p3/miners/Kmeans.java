@@ -43,11 +43,27 @@ public class Kmeans {
         }
     }
 
+    /**
+     * Given a file and its compressed version, compute the compression ratio
+     *
+     * @param realFile
+     * @param compressedFile
+     * @return
+     */
     public static double compressionRatio(String realFile, String compressedFile) {
         final long realFileSize = new File(realFile).length(), compressedFileSize = new File(compressedFile).length();
         return compressedFileSize / (double) realFileSize;
     }
 
+    /**
+     * Compute the data lost for the compressed file. TODO: the number returned
+     * might not be useful
+     *
+     * @param realFile
+     * @param restoredFile
+     * @return
+     * @throws FileNotFoundException
+     */
     public static double loss(String realFile, String restoredFile) throws FileNotFoundException {
         final Scanner inReal = new Scanner(new File(realFile)), inRestored = new Scanner(new File(restoredFile));
 
@@ -112,6 +128,9 @@ public class Kmeans {
     }
 
     /**
+     * Compresses an image file using clustering
+     *
+     * @param inputFile
      * @param outputFile
      * @throws IOException
      */
@@ -123,11 +142,15 @@ public class Kmeans {
 
         final PrintWriter outFile = new PrintWriter(new FileWriter(outputFile));
 
+        // get an array that is a copy of the clustered centroids
         final Record[] centroids = this.centroids.toArray(new Record[this.centroids.size()]);
 
+        // print the headers to the file (number of attributes per record,
+        // number of records per line, number of centroids)
         outFile.println(this.numberAttributes + " " + (imgSize / recordSize));
         outFile.println(centroids.length);
 
+        // store all the centroids into the compressed file
         for (int i = 0; i < centroids.length; i++) {
             for (int j = 0; j < this.numberAttributes; j++) {
                 final double currAtt = centroids[i].attributes[j];
@@ -136,6 +159,7 @@ public class Kmeans {
             }
         }
 
+        // store all of the centroid labels to the compressed file
         for (int i = 0; i < this.numberRecords; i++) {
             outFile.print(this.clusters[i] + " ");
             if (0 == ((i + 1) % (imgSize / recordSize))) {
@@ -170,15 +194,27 @@ public class Kmeans {
         return sum;
     }
 
+    /**
+     * Given a compressed file, and a target location to decompress the file,
+     * decompresses said file
+     *
+     * @param inputFile
+     *            the compressed file
+     * @param outputFile
+     *            the location to save the decompressed file
+     * @throws IOException
+     */
     public void decompress(String inputFile, String outputFile) throws IOException {
         final Scanner inFile = new Scanner(new File(inputFile));
 
+        // read in headers
         final int numAttributes = inFile.nextInt();
         final int numPerRow = inFile.nextInt();
         final int numberOfCentroids = inFile.nextInt();
 
         final ArrayList<Record> centroids = new ArrayList<>();
 
+        // read in all of the centroids
         for (int i = 0; i < numberOfCentroids; i++) {
             final double[] attributes = new double[numAttributes];
 
@@ -189,6 +225,7 @@ public class Kmeans {
             centroids.add(new Record(attributes));
         }
 
+        // read in all of the points (centroid labels)
         final ArrayDeque<Integer> points = new ArrayDeque<>();
         while (inFile.hasNext()) {
             points.add(inFile.nextInt());
@@ -201,6 +238,7 @@ public class Kmeans {
         int j = 0;
         Integer curPoint;
         while ((curPoint = points.poll()) != null) {
+            // get the centroid from the centroid label
             final Record centroid = centroids.get(curPoint.intValue());
             for (int i = 0; i < numAttributes; i++) {
                 outFile.print((int) centroid.attributes[i] + " ");
@@ -259,8 +297,10 @@ public class Kmeans {
         this.numberRecords = inFile.nextInt();
         this.numberAttributes = inFile.nextInt();
 
+        // data could be normalized or not
         final boolean normal = "normal".equals(inFile.next());
 
+        // if data is not normalized, load and apply ranges
         if (!normal) {
             this.ranges = new int[this.numberAttributes][2];
 
@@ -311,6 +351,7 @@ public class Kmeans {
      *
      * @param numberClusters
      * @param seed
+     * @param trace
      */
     public void setParameters(int numberClusters, long seed, boolean trace) {
         this.numberClusters = numberClusters;
@@ -401,6 +442,17 @@ public class Kmeans {
         }
     }
 
+    /**
+     * Given an input size and the size of a record, loads an image file,
+     * returns the number of points per line in the original file
+     *
+     * @param inputFile
+     *            image file to load
+     * @param recordSize
+     *            size of record
+     * @return
+     * @throws IOException
+     */
     private int loadImage(String inputFile, int recordSize) throws IOException {
         final Scanner inFile = new Scanner(new File(inputFile));
 

@@ -6,8 +6,6 @@ import java.util.Scanner;
 import data_mining.p3.miners.Kmeans;
 
 public class Part3Application {
-    private static final int PART = 3;
-    private static final int QUESTION = 1;
 
     public static void main(String[] args) throws IOException {
         // TODO Auto-generated method stub
