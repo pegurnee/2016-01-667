@@ -1,0 +1,14 @@
+Using 2 clusters, the compression ratio was: 26.98318%
+With a 51.23925% loss
+Using 4 clusters, the compression ratio was: 26.98482%
+With a 50.73615% loss
+Using 8 clusters, the compression ratio was: 26.98790%
+With a 50.03867% loss
+Using 16 clusters, the compression ratio was: 32.22146%
+With a 48.48544% loss
+Using 32 clusters, the compression ratio was: 36.14128%
+With a 45.48398% loss
+Using 64 clusters, the compression ratio was: 37.71983%
+With a 39.36800% loss
+Using 128 clusters, the compression ratio was: 41.68742%
+With a 30.22963% loss
