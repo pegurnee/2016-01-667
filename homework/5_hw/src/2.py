@@ -22,11 +22,15 @@ def support(vals, trans):
 def support_val(vals, trans):
     return support(vals, trans) / len(trans)
 
+def confidence(inv, outv, trans):
+    sin = support(inv + outv, trans)
+    sout = support(inv, trans)
+    return sin / sout
+
 def freqset(trans, support_delta, elems):
     _freq = []
     _infreq = []
     _svals = {}
-
 
     _els = []
     for x in elems:
@@ -46,6 +50,7 @@ def freqset(trans, support_delta, elems):
             sval = support_val(f, trans)
             if not sval < support_delta:
                 potential_new.append(f)
+                _svals[f] = sval
             else:
                 _infreq.append(f)
 
@@ -55,11 +60,25 @@ def freqset(trans, support_delta, elems):
         _freq.append(potential_new)
         k += 1
 
-    return _freq
+    return _freq, _svals
 
 
 
 if __name__ == '__main__':
     print(support('bc', trans))
+    print(support('acd', trans))
 
-    print(freqset(trans, .5, elems))
+    fset, fval = freqset(trans, .5, elems)
+
+    for s in fset:
+        for x in s:
+            print('{}: {}'.format(x, fval[x]))
+
+    print(confidence('a','c',trans))
+    print(confidence('c','a',trans))
+    print(confidence('a','d',trans))
+    print(confidence('d','a',trans))
+    print(confidence('b','c',trans))
+    print(confidence('c','b',trans))
+    print(confidence('c','d',trans))
+    print(confidence('d','c',trans))
