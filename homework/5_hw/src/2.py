@@ -22,7 +22,8 @@ def support(vals, trans):
 def support_val(vals, trans):
     return support(vals, trans) / len(trans)
 
-def confidence(inv, outv, trans):
+def confidence(rule, trans):
+    inv, outv = rule.split('->')
     sin = support(inv + outv, trans)
     sout = support(inv, trans)
     return sin / sout
@@ -44,7 +45,8 @@ def freqset(trans, support_delta, elems):
     k = 0
     while True:
         potential_new = []
-        for f in combinations(_freq[k], k + 2):
+        for f in combinations(sorted(set(''.join(_freq[k]))), k + 2):
+            f = ''.join(sorted(set(f)))
             if f in _infreq:
                 continue
             sval = support_val(f, trans)
@@ -74,11 +76,25 @@ if __name__ == '__main__':
         for x in s:
             print('{}: {}'.format(x, fval[x]))
 
-    print(confidence('a','c',trans))
-    print(confidence('c','a',trans))
-    print(confidence('a','d',trans))
-    print(confidence('d','a',trans))
-    print(confidence('b','c',trans))
-    print(confidence('c','b',trans))
-    print(confidence('c','d',trans))
-    print(confidence('d','c',trans))
+    print(confidence('a->c',trans))
+    print(confidence('c->a',trans))
+    print(confidence('a->d',trans))
+    print(confidence('d->a',trans))
+    print(confidence('b->c',trans))
+    print(confidence('c->b',trans))
+    print(confidence('c->d',trans))
+    print(confidence('d->c',trans))
+
+    fset, fval = freqset(trans, .25, elems)
+
+    for s in fset:
+        for x in s:
+            print('{}: {}'.format(x, fval[x]))
+
+    print(support_val('ab', trans))
+    print(support_val('ae', trans))
+    print(support_val('af', trans))
+    print(support_val('be', trans))
+    print(support_val('bf', trans))
+    print(support_val('df', trans))
+    print(support_val('ef', trans))
