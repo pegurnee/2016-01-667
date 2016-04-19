@@ -18,8 +18,10 @@ def mean_adjusted(matrix):
         for i,c in enumerate(r):
              _means[i] += c
 
+    print(_means)
     _means = [ x/len(matrix) for x in _means]
 
+    print(_means)
     new_data = []
 
     for row in matrix:
