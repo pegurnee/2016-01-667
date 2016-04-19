@@ -27,6 +27,12 @@ def distance(rec1, rec2):
     return dist ** (1 / 2)
 
 if __name__ == '__main__':
+    distances = {}
     for cen,g in zip(centroids, recs):
+        distances[cen] = {}
         for r in g:
-            print('{}: {}'.format(r, distance(cen, r)))
+            #print('{}: {}'.format(r, distance(cen, r)))
+            distances[cen][r] = distance(cen, r)
+
+    for cen,dists in distances.items():
+        print('avg dist for {}: {}'.format(cen, sum(dists.values()) / len(dists)))
